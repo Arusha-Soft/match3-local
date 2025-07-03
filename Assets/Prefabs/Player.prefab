@@ -171,6 +171,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d3de61fa-e7e5-4b02-a6a8-757152ac7e48
     m_ActionName: 'GamePlay/Jump[/Keyboard/space,/Keyboard/ctrl]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6cdfabc4-a969-437b-acdc-63eb42fb8500
+    m_ActionName: GamePlay/Undo
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePlay
@@ -198,3 +202,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iconImage: {fileID: 8436128297143467110}
   iconRectTransform: {fileID: 1408219328349442498}
+  tilePrefabs:
+  - {fileID: 8406287440110300511, guid: 53dfb7e29513c7f43811466957bfde27, type: 3}
+  - {fileID: 22866560867944927, guid: ce234bc39eb976b45bdd8198d39c7f02, type: 3}
+  - {fileID: 1593272029224600681, guid: d2f8d1403ce327e4b9febea986fc2223, type: 3}
+  - {fileID: 151813487170663540, guid: 710ca7a35c58b8044a2c8e611a087b82, type: 3}
+  - {fileID: 3305036767404787046, guid: 23ccbec419a934941af91b6bb8ef0da8, type: 3}
+  - {fileID: 8087436114528769205, guid: 5bde6aaa8df1f054da084ace724035df, type: 3}
+  tileParent: {fileID: 0}
+  selectorPrefab: {fileID: 5731782572459054030, guid: 4420f455fd451b5418431114fa9dd16e, type: 3}
