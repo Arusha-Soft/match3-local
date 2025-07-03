@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerIconController : MonoBehaviour
 {
@@ -287,9 +288,10 @@ public class PlayerIconController : MonoBehaviour
 
         while (foundMatch)
         {
-            yield return null; // wait a frame
+            yield return null;
 
-            var matchedPositions = GetMatchedPositions();
+            bool foundFour, foundFive;
+            var matchedPositions = GetMatchedPositions(out foundFour, out foundFive);
 
             if (matchedPositions.Count == 0)
             {
@@ -300,6 +302,10 @@ public class PlayerIconController : MonoBehaviour
             ClearTiles(matchedPositions);
             RespawnTilesAtPositions(matchedPositions);
 
+            if (foundFour) Debug.Log("Four in a row");
+            if (foundFive) Debug.Log("Five in a row");
+            if (foundFour && foundFive) Debug.Log("Combo");
+
             Debug.Log("+10 point score added");
 
             yield return new WaitForSeconds(0.2f);
@@ -308,20 +314,23 @@ public class PlayerIconController : MonoBehaviour
         inputLocked = false;
     }
 
-    private List<(int x, int y)> GetMatchedPositions()
+
+    private List<(int x, int y)> GetMatchedPositions(out bool foundFour, out bool foundFive)
     {
         List<(int, int)> matches = new List<(int, int)>();
+        foundFour = false;
+        foundFive = false;
 
-        // Horizontal matches (4 or 5 in a row)
+        // Horizontal
         for (int y = 0; y < 5; y++)
         {
             int count = 1;
             for (int x = 1; x < 5; x++)
             {
-                var prevTile = tileGrid[x - 1, y].GetComponent<Tile>();
-                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+                int prev = tileGrid[x - 1, y].GetComponent<Tile>().tileID;
+                int curr = tileGrid[x, y].GetComponent<Tile>().tileID;
 
-                if (currentTile.tileID == prevTile.tileID)
+                if (prev == curr)
                 {
                     count++;
                 }
@@ -331,6 +340,8 @@ public class PlayerIconController : MonoBehaviour
                     {
                         for (int k = x - count; k < x; k++)
                             matches.Add((k, y));
+                        if (count == 4) foundFour = true;
+                        if (count >= 5) foundFive = true;
                     }
                     count = 1;
                 }
@@ -339,19 +350,21 @@ public class PlayerIconController : MonoBehaviour
             {
                 for (int k = 5 - count; k < 5; k++)
                     matches.Add((k, y));
+                if (count == 4) foundFour = true;
+                if (count >= 5) foundFive = true;
             }
         }
 
-        // Vertical matches (4 or 5 in a column)
+        // Vertical
         for (int x = 0; x < 5; x++)
         {
             int count = 1;
             for (int y = 1; y < 5; y++)
             {
-                var prevTile = tileGrid[x, y - 1].GetComponent<Tile>();
-                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+                int prev = tileGrid[x, y - 1].GetComponent<Tile>().tileID;
+                int curr = tileGrid[x, y].GetComponent<Tile>().tileID;
 
-                if (currentTile.tileID == prevTile.tileID)
+                if (prev == curr)
                 {
                     count++;
                 }
@@ -361,6 +374,8 @@ public class PlayerIconController : MonoBehaviour
                     {
                         for (int k = y - count; k < y; k++)
                             matches.Add((x, k));
+                        if (count == 4) foundFour = true;
+                        if (count >= 5) foundFive = true;
                     }
                     count = 1;
                 }
@@ -369,6 +384,8 @@ public class PlayerIconController : MonoBehaviour
             {
                 for (int k = 5 - count; k < 5; k++)
                     matches.Add((x, k));
+                if (count == 4) foundFour = true;
+                if (count >= 5) foundFive = true;
             }
         }
 
@@ -379,11 +396,31 @@ public class PlayerIconController : MonoBehaviour
     {
         foreach (var pos in positions)
         {
-            var tileComp = tileGrid[pos.x, pos.y].GetComponent<Tile>();
-            int randomIndex = Random.Range(0, tilePrefabs.Length);
-            tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+            GameObject tileObj = tileGrid[pos.x, pos.y];
+            Tile tileComp = tileObj.GetComponent<Tile>();
+            RectTransform tileRT = tileObj.GetComponent<RectTransform>();
+
+            // Animate scale down before replacing tile
+            tileRT.DOScale(Vector3.zero, 0.2f)
+                  .SetEase(Ease.InBack)
+                  .OnComplete(() =>
+                  {
+                      int randomIndex = Random.Range(0, tilePrefabs.Length);
+                      tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+
+                      // Scale back to normal
+                      tileRT.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack);
+                  });
         }
     }
+
+    private IEnumerator ReplaceTileAfterDelay(Tile tile, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        int randomIndex = Random.Range(0, tilePrefabs.Length);
+        tile.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+    }
+
 
     private void RespawnTilesAtPositions(List<(int x, int y)> positions)
     {
