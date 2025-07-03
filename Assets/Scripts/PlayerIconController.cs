@@ -6,13 +6,14 @@ public class PlayerIconController : MonoBehaviour
 {
     public Image iconImage;
     public RectTransform iconRectTransform;
-    public GameObject[] tilePrefabs; // assign your 6 tile prefabs in inspector
+    public GameObject[] tilePrefabs;
 
     private RectTransform[] boards;
     private int currentIndex = 0;
     private bool hasClaimed = false;
     private bool puzzleSpawned = false;
     private bool inPuzzleMode = false;
+    private bool inEditMode = false;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -22,7 +23,7 @@ public class PlayerIconController : MonoBehaviour
     private bool isMoving = false;
     private float moveSpeed = 500f;
 
-    private float moveCooldown = 0.25f;
+    private float moveCooldown = 0.2f;
     private float lastMoveTime = 0f;
 
     private Transform tileParent;
@@ -84,11 +85,10 @@ public class PlayerIconController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
-        if (Time.time - lastMoveTime < moveCooldown)
-            return;
+        if (Time.time - lastMoveTime < moveCooldown) return;
+        lastMoveTime = Time.time;
 
         Vector2 direction = ctx.ReadValue<Vector2>();
-        lastMoveTime = Time.time;
 
         if (!hasClaimed || !puzzleSpawned)
         {
@@ -104,32 +104,44 @@ public class PlayerIconController : MonoBehaviour
         }
         else if (inPuzzleMode)
         {
-            if (direction.x > 0.5f)
-                cursorX = (cursorX + 1) % 5;
-            else if (direction.x < -0.5f)
-                cursorX = (cursorX - 1 + 5) % 5;
+            if (!inEditMode)
+            {
+                // Just move selector cursor
+                if (direction.x > 0.5f)
+                    cursorX = (cursorX + 1) % 5;
+                else if (direction.x < -0.5f)
+                    cursorX = (cursorX - 1 + 5) % 5;
+                else if (direction.y > 0.5f)
+                    cursorY = (cursorY - 1 + 5) % 5;
+                else if (direction.y < -0.5f)
+                    cursorY = (cursorY + 1) % 5;
 
-            if (direction.y > 0.5f)
-                cursorY = (cursorY - 1 + 5) % 5;
-            else if (direction.y < -0.5f)
-                cursorY = (cursorY + 1) % 5;
-
-            UpdateSelector();
+                UpdateSelector();
+            }
+            else
+            {
+                // In edit mode: roll row/column of current cursor position
+                if (direction.x > 0.5f)
+                    RollRow(cursorY, true);
+                else if (direction.x < -0.5f)
+                    RollRow(cursorY, false);
+                else if (direction.y > 0.5f)
+                    RollColumn(cursorX, false);
+                else if (direction.y < -0.5f)
+                    RollColumn(cursorX, true);
+            }
         }
     }
 
     private void OnJump(InputAction.CallbackContext ctx)
     {
-        if (boards == null || boards.Length == 0)
-            return;
+        if (boards == null || boards.Length == 0) return;
 
         if (!hasClaimed)
         {
             Image boardImage = boards[currentIndex].GetComponent<Image>();
             boardImage.color = iconImage.color;
             hasClaimed = true;
-
-            Debug.Log($"{gameObject.name} claimed board {currentIndex}");
         }
         else if (!puzzleSpawned)
         {
@@ -137,30 +149,38 @@ public class PlayerIconController : MonoBehaviour
             tileParent = boardTransform.Find("TileParent");
             if (tileParent == null)
             {
-                Debug.LogError("TileParent not found inside board. Make sure your Board prefab has a child named 'TileParent'");
+                Debug.LogError("TileParent not found");
                 return;
             }
 
             SpawnPuzzleGrid();
             puzzleSpawned = true;
             inPuzzleMode = true;
-
             iconImage.enabled = false;
-
-            Debug.Log($"{gameObject.name} spawned puzzle on board {currentIndex}");
+        }
+        else if (inPuzzleMode && !inEditMode)
+        {
+            // Enter edit mode for current tile
+            inEditMode = true;
         }
     }
 
     private void OnUndo(InputAction.CallbackContext ctx)
     {
+        if (inPuzzleMode && inEditMode)
+        {
+            // Exit edit mode
+            inEditMode = false;
+            Debug.Log("Exited edit mode");
+            return;
+        }
+
         if (!hasClaimed || puzzleSpawned)
             return;
 
         Image boardImage = boards[currentIndex].GetComponent<Image>();
         boardImage.color = Color.white;
         hasClaimed = false;
-
-        Debug.Log($"{gameObject.name} unclaimed board {currentIndex}");
     }
 
     private void SpawnPuzzleGrid()
@@ -180,12 +200,6 @@ public class PlayerIconController : MonoBehaviour
                 GameObject tile = Instantiate(tilePrefabs[randomIndex], tileParent);
 
                 RectTransform tileRT = tile.GetComponent<RectTransform>();
-                if (tileRT == null)
-                {
-                    Debug.LogError("Tile prefab missing RectTransform component!");
-                    continue;
-                }
-
                 tileRT.anchoredPosition = startPos + new Vector2(x * (tileSize + spacing), -y * (tileSize + spacing));
                 tileRT.sizeDelta = new Vector2(tileSize, tileSize);
 
@@ -204,15 +218,37 @@ public class PlayerIconController : MonoBehaviour
         {
             for (int x = 0; x < 5; x++)
             {
-                GameObject tile = tileGrid[x, y];
-                if (tile == null) continue;
-
+                var tile = tileGrid[x, y];
                 Transform selector = tile.transform.Find("Selector");
-                if (selector != null)
-                {
+                if (selector)
                     selector.gameObject.SetActive(x == cursorX && y == cursorY);
-                }
             }
+        }
+    }
+
+    private void RollRow(int rowIndex, bool toRight)
+    {
+        Sprite[] rowSprites = new Sprite[5];
+        for (int x = 0; x < 5; x++)
+            rowSprites[x] = tileGrid[x, rowIndex].GetComponent<Image>().sprite;
+
+        for (int x = 0; x < 5; x++)
+        {
+            int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
+            tileGrid[x, rowIndex].GetComponent<Image>().sprite = rowSprites[from];
+        }
+    }
+
+    private void RollColumn(int colIndex, bool toDown)
+    {
+        Sprite[] colSprites = new Sprite[5];
+        for (int y = 0; y < 5; y++)
+            colSprites[y] = tileGrid[colIndex, y].GetComponent<Image>().sprite;
+
+        for (int y = 0; y < 5; y++)
+        {
+            int from = toDown ? (y + 4) % 5 : (y + 1) % 5;
+            tileGrid[colIndex, y].GetComponent<Image>().sprite = colSprites[from];
         }
     }
 }
