@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -30,6 +32,8 @@ public class PlayerIconController : MonoBehaviour
     private GameObject[,] tileGrid = new GameObject[5, 5];
     private int cursorX = 0;
     private int cursorY = 0;
+
+    private bool inputLocked = false;
 
     private void Awake()
     {
@@ -85,6 +89,8 @@ public class PlayerIconController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
+        if (inputLocked) return;
+
         if (Time.time - lastMoveTime < moveCooldown) return;
         lastMoveTime = Time.time;
 
@@ -106,7 +112,7 @@ public class PlayerIconController : MonoBehaviour
         {
             if (!inEditMode)
             {
-                // Just move selector cursor
+                // Move selector cursor inside puzzle grid
                 if (direction.x > 0.5f)
                     cursorX = (cursorX + 1) % 5;
                 else if (direction.x < -0.5f)
@@ -160,7 +166,7 @@ public class PlayerIconController : MonoBehaviour
         }
         else if (inPuzzleMode && !inEditMode)
         {
-            // Enter edit mode for current tile
+            // Enter edit mode for current tile (start rolling)
             inEditMode = true;
         }
     }
@@ -203,6 +209,9 @@ public class PlayerIconController : MonoBehaviour
                 tileRT.anchoredPosition = startPos + new Vector2(x * (tileSize + spacing), -y * (tileSize + spacing));
                 tileRT.sizeDelta = new Vector2(tileSize, tileSize);
 
+                var tileComp = tile.GetComponent<Tile>();
+                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+
                 tileGrid[x, y] = tile;
             }
         }
@@ -229,26 +238,157 @@ public class PlayerIconController : MonoBehaviour
     private void RollRow(int rowIndex, bool toRight)
     {
         Sprite[] rowSprites = new Sprite[5];
+        int[] rowTileIDs = new int[5];
+
         for (int x = 0; x < 5; x++)
-            rowSprites[x] = tileGrid[x, rowIndex].GetComponent<Image>().sprite;
+        {
+            var tileComp = tileGrid[x, rowIndex].GetComponent<Tile>();
+            rowSprites[x] = tileComp.tileImage.sprite;
+            rowTileIDs[x] = tileComp.tileID;
+        }
 
         for (int x = 0; x < 5; x++)
         {
             int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
-            tileGrid[x, rowIndex].GetComponent<Image>().sprite = rowSprites[from];
+            var tileComp = tileGrid[x, rowIndex].GetComponent<Tile>();
+            tileComp.SetTile(rowTileIDs[from], rowSprites[from]);
         }
+
+        StartCoroutine(ClearMatchesAndRespawnRoutine());
     }
 
     private void RollColumn(int colIndex, bool toDown)
     {
         Sprite[] colSprites = new Sprite[5];
+        int[] colTileIDs = new int[5];
+
         for (int y = 0; y < 5; y++)
-            colSprites[y] = tileGrid[colIndex, y].GetComponent<Image>().sprite;
+        {
+            var tileComp = tileGrid[colIndex, y].GetComponent<Tile>();
+            colSprites[y] = tileComp.tileImage.sprite;
+            colTileIDs[y] = tileComp.tileID;
+        }
 
         for (int y = 0; y < 5; y++)
         {
             int from = toDown ? (y + 4) % 5 : (y + 1) % 5;
-            tileGrid[colIndex, y].GetComponent<Image>().sprite = colSprites[from];
+            var tileComp = tileGrid[colIndex, y].GetComponent<Tile>();
+            tileComp.SetTile(colTileIDs[from], colSprites[from]);
         }
+
+        StartCoroutine(ClearMatchesAndRespawnRoutine());
+    }
+
+    private IEnumerator ClearMatchesAndRespawnRoutine()
+    {
+        inputLocked = true;
+
+        bool foundMatch = true;
+
+        while (foundMatch)
+        {
+            yield return null; // wait a frame
+
+            var matchedPositions = GetMatchedPositions();
+
+            if (matchedPositions.Count == 0)
+            {
+                foundMatch = false;
+                break;
+            }
+
+            ClearTiles(matchedPositions);
+            RespawnTilesAtPositions(matchedPositions);
+
+            Debug.Log("+10 point score added");
+
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        inputLocked = false;
+    }
+
+    private List<(int x, int y)> GetMatchedPositions()
+    {
+        List<(int, int)> matches = new List<(int, int)>();
+
+        // Horizontal matches (4 or 5 in a row)
+        for (int y = 0; y < 5; y++)
+        {
+            int count = 1;
+            for (int x = 1; x < 5; x++)
+            {
+                var prevTile = tileGrid[x - 1, y].GetComponent<Tile>();
+                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+
+                if (currentTile.tileID == prevTile.tileID)
+                {
+                    count++;
+                }
+                else
+                {
+                    if (count >= 4)
+                    {
+                        for (int k = x - count; k < x; k++)
+                            matches.Add((k, y));
+                    }
+                    count = 1;
+                }
+            }
+            if (count >= 4)
+            {
+                for (int k = 5 - count; k < 5; k++)
+                    matches.Add((k, y));
+            }
+        }
+
+        // Vertical matches (4 or 5 in a column)
+        for (int x = 0; x < 5; x++)
+        {
+            int count = 1;
+            for (int y = 1; y < 5; y++)
+            {
+                var prevTile = tileGrid[x, y - 1].GetComponent<Tile>();
+                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+
+                if (currentTile.tileID == prevTile.tileID)
+                {
+                    count++;
+                }
+                else
+                {
+                    if (count >= 4)
+                    {
+                        for (int k = y - count; k < y; k++)
+                            matches.Add((x, k));
+                    }
+                    count = 1;
+                }
+            }
+            if (count >= 4)
+            {
+                for (int k = 5 - count; k < 5; k++)
+                    matches.Add((x, k));
+            }
+        }
+
+        return matches;
+    }
+
+    private void ClearTiles(List<(int x, int y)> positions)
+    {
+        foreach (var pos in positions)
+        {
+            var tileComp = tileGrid[pos.x, pos.y].GetComponent<Tile>();
+            int randomIndex = Random.Range(0, tilePrefabs.Length);
+            tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+        }
+    }
+
+    private void RespawnTilesAtPositions(List<(int x, int y)> positions)
+    {
+        // In this version, ClearTiles already replaced tiles,
+        // so this function is not needed separately.
+        // You can merge ClearTiles and RespawnTilesAtPositions if you want.
     }
 }

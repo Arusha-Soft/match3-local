@@ -209,5 +209,10 @@ MonoBehaviour:
   - {fileID: 151813487170663540, guid: 710ca7a35c58b8044a2c8e611a087b82, type: 3}
   - {fileID: 3305036767404787046, guid: 23ccbec419a934941af91b6bb8ef0da8, type: 3}
   - {fileID: 8087436114528769205, guid: 5bde6aaa8df1f054da084ace724035df, type: 3}
-  tileParent: {fileID: 0}
-  selectorPrefab: {fileID: 5731782572459054030, guid: 4420f455fd451b5418431114fa9dd16e, type: 3}
+  tileSprites:
+  - {fileID: 21300000, guid: 4bf93fd85dd9ea7409490ca0370ac196, type: 3}
+  - {fileID: 21300000, guid: c73f1532b73f30e48a6675f3c46ee96e, type: 3}
+  - {fileID: 21300000, guid: 4a7f279bf48e2a44d9a5cd88e4d4c15a, type: 3}
+  - {fileID: 21300000, guid: 495512c39b723f643839cfd18896624c, type: 3}
+  - {fileID: 21300000, guid: e0ef9ea87b24b3f47a31676376bfa6de, type: 3}
+  - {fileID: 21300000, guid: 18fc7ca3f0ae96747b33a3d639427d8d, type: 3}
