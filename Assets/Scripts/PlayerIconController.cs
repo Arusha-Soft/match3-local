@@ -12,6 +12,7 @@ public class PlayerIconController : MonoBehaviour
     private int currentIndex = 0;
     private bool hasClaimed = false;
     private bool puzzleSpawned = false;
+    private bool inPuzzleMode = false;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -25,6 +26,9 @@ public class PlayerIconController : MonoBehaviour
     private float lastMoveTime = 0f;
 
     private Transform tileParent;
+    private GameObject[,] tileGrid = new GameObject[5, 5];
+    private int cursorX = 0;
+    private int cursorY = 0;
 
     private void Awake()
     {
@@ -72,35 +76,46 @@ public class PlayerIconController : MonoBehaviour
     {
         boards = boardRects;
         if (boards.Length > 0)
+        {
             iconRectTransform.position = boards[0].position;
-
-        targetPosition = boards[0].position;
-        iconRectTransform.position = targetPosition;
+            targetPosition = boards[0].position;
+        }
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
-        if (hasClaimed || boards == null || boards.Length == 0)
-            return;
-
         if (Time.time - lastMoveTime < moveCooldown)
             return;
 
         Vector2 direction = ctx.ReadValue<Vector2>();
+        lastMoveTime = Time.time;
 
-        if (direction.x > 0.5f)
+        if (!hasClaimed || !puzzleSpawned)
         {
-            currentIndex = (currentIndex + 1) % boards.Length;
-            lastMoveTime = Time.time;
-        }
-        else if (direction.x < -0.5f)
-        {
-            currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
-            lastMoveTime = Time.time;
-        }
+            if (boards == null || boards.Length == 0) return;
 
-        targetPosition = boards[currentIndex].position;
-        isMoving = true;
+            if (direction.x > 0.5f)
+                currentIndex = (currentIndex + 1) % boards.Length;
+            else if (direction.x < -0.5f)
+                currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
+
+            targetPosition = boards[currentIndex].position;
+            isMoving = true;
+        }
+        else if (inPuzzleMode)
+        {
+            if (direction.x > 0.5f)
+                cursorX = (cursorX + 1) % 5;
+            else if (direction.x < -0.5f)
+                cursorX = (cursorX - 1 + 5) % 5;
+
+            if (direction.y > 0.5f)
+                cursorY = (cursorY - 1 + 5) % 5;
+            else if (direction.y < -0.5f)
+                cursorY = (cursorY + 1) % 5;
+
+            UpdateSelector();
+        }
     }
 
     private void OnJump(InputAction.CallbackContext ctx)
@@ -128,8 +143,9 @@ public class PlayerIconController : MonoBehaviour
 
             SpawnPuzzleGrid();
             puzzleSpawned = true;
+            inPuzzleMode = true;
 
-            iconImage.enabled = false; // 👈 Hides the icon after puzzle spawn
+            iconImage.enabled = false;
 
             Debug.Log($"{gameObject.name} spawned puzzle on board {currentIndex}");
         }
@@ -137,7 +153,7 @@ public class PlayerIconController : MonoBehaviour
 
     private void OnUndo(InputAction.CallbackContext ctx)
     {
-        if (!hasClaimed || puzzleSpawned) // 👈 Prevent undo after puzzle is placed
+        if (!hasClaimed || puzzleSpawned)
             return;
 
         Image boardImage = boards[currentIndex].GetComponent<Image>();
@@ -172,6 +188,30 @@ public class PlayerIconController : MonoBehaviour
 
                 tileRT.anchoredPosition = startPos + new Vector2(x * (tileSize + spacing), -y * (tileSize + spacing));
                 tileRT.sizeDelta = new Vector2(tileSize, tileSize);
+
+                tileGrid[x, y] = tile;
+            }
+        }
+
+        cursorX = 0;
+        cursorY = 0;
+        UpdateSelector();
+    }
+
+    private void UpdateSelector()
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                GameObject tile = tileGrid[x, y];
+                if (tile == null) continue;
+
+                Transform selector = tile.transform.Find("Selector");
+                if (selector != null)
+                {
+                    selector.gameObject.SetActive(x == cursorX && y == cursorY);
+                }
             }
         }
     }
