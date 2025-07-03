@@ -26,7 +26,9 @@ public class PlayerIconController : MonoBehaviour
     private bool isMoving = false;
     private float moveSpeed = 500f;
 
-    private float moveCooldown = 0.2f;
+    [Space]
+    [Header("D-Pad Controller")]
+    private float moveCooldown = 0.075f; // faster move cooldown for D-pad responsiveness
     private float lastMoveTime = 0f;
 
     private Transform tileParent;
@@ -169,6 +171,7 @@ public class PlayerIconController : MonoBehaviour
         {
             // Enter edit mode for current tile (start rolling)
             inEditMode = true;
+            SetSelectorHighlight(true);
         }
     }
 
@@ -178,6 +181,7 @@ public class PlayerIconController : MonoBehaviour
         {
             // Exit edit mode
             inEditMode = false;
+            SetSelectorHighlight(false);
             Debug.Log("Exited edit mode");
             return;
         }
@@ -210,6 +214,10 @@ public class PlayerIconController : MonoBehaviour
                 tileRT.anchoredPosition = startPos + new Vector2(x * (tileSize + spacing), -y * (tileSize + spacing));
                 tileRT.sizeDelta = new Vector2(tileSize, tileSize);
 
+                // Animate pop-in scale from zero to one
+                tileRT.localScale = Vector3.zero;
+                tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+
                 var tileComp = tile.GetComponent<Tile>();
                 tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
 
@@ -231,9 +239,32 @@ public class PlayerIconController : MonoBehaviour
                 var tile = tileGrid[x, y];
                 Transform selector = tile.transform.Find("Selector");
                 if (selector)
-                    selector.gameObject.SetActive(x == cursorX && y == cursorY);
+                {
+                    bool isSelected = (x == cursorX && y == cursorY);
+                    selector.gameObject.SetActive(isSelected);
+
+                    var highlight = selector.Find("Highlight");
+                    if (highlight != null)
+                    {
+                        // Highlight only ON if selected AND in edit mode
+                        highlight.gameObject.SetActive(isSelected && inEditMode);
+                    }
+                }
             }
         }
+    }
+
+    private void SetSelectorHighlight(bool on)
+    {
+        if (boards == null || !puzzleSpawned) return;
+
+        var selector = tileGrid[cursorX, cursorY].transform.Find("Selector");
+        if (selector == null) return;
+
+        var highlight = selector.Find("Highlight");
+        if (highlight == null) return;
+
+        highlight.gameObject.SetActive(on);
     }
 
     private void RollRow(int rowIndex, bool toRight)
@@ -313,7 +344,6 @@ public class PlayerIconController : MonoBehaviour
 
         inputLocked = false;
     }
-
 
     private List<(int x, int y)> GetMatchedPositions(out bool foundFour, out bool foundFive)
     {
@@ -400,7 +430,6 @@ public class PlayerIconController : MonoBehaviour
             Tile tileComp = tileObj.GetComponent<Tile>();
             RectTransform tileRT = tileObj.GetComponent<RectTransform>();
 
-            // Animate scale down before replacing tile
             tileRT.DOScale(Vector3.zero, 0.2f)
                   .SetEase(Ease.InBack)
                   .OnComplete(() =>
@@ -408,24 +437,15 @@ public class PlayerIconController : MonoBehaviour
                       int randomIndex = Random.Range(0, tilePrefabs.Length);
                       tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
 
-                      // Scale back to normal
-                      tileRT.DOScale(Vector3.one, 0.25f).SetEase(Ease.OutBack);
+                      // Animate pop-in scale
+                      tileRT.localScale = Vector3.zero;
+                      tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
                   });
         }
     }
 
-    private IEnumerator ReplaceTileAfterDelay(Tile tile, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        int randomIndex = Random.Range(0, tilePrefabs.Length);
-        tile.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
-    }
-
-
     private void RespawnTilesAtPositions(List<(int x, int y)> positions)
     {
-        // In this version, ClearTiles already replaced tiles,
-        // so this function is not needed separately.
-        // You can merge ClearTiles and RespawnTilesAtPositions if you want.
+        // No additional logic needed here; ClearTiles already handles replacement and animation
     }
 }
