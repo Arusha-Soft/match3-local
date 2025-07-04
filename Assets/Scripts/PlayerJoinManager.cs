@@ -39,6 +39,7 @@ public class PlayerJoinManager : MonoBehaviour
 
     private bool gameOver = false;
     private bool waitingForRestart = false;
+    private bool gameStarted = false; // 🚫 NEW: Flag to lock out new players
 
     private void Start()
     {
@@ -82,8 +83,8 @@ public class PlayerJoinManager : MonoBehaviour
             return;
         }
 
-        // ✅ Prevent new players from joining after countdown has started
-        if (countdownCoroutine != null) return;
+        // ✅ Prevent new players from joining after the game has started
+        if (gameStarted) return;
 
         foreach (var gamepad in Gamepad.all)
         {
@@ -208,16 +209,17 @@ public class PlayerJoinManager : MonoBehaviour
 
     private IEnumerator StartCountdown()
     {
+        gameStarted = true; // ✅ Prevent new players from joining now
+
         float timer = countdownDuration;
 
         while (timer > 0f)
         {
             Debug.Log($"Game starting in {timer:F0}...");
-            UIManager.Instance.SetTimer(timer.ToString());
             yield return new WaitForSeconds(1f);
             timer -= 1f;
         }
-        UIManager.Instance.HideTimer();
+
         Debug.Log("Countdown finished! Spawning puzzles...");
 
         foreach (var playerInput in players)
