@@ -19,9 +19,9 @@ public class PlayerJoinManager : MonoBehaviour
     public Sprite[] playerSprites;
 
     [Header("Fuse Settings")]
-    public float fuseDurationSeconds = 10f; // total fuse countdown duration
-    private float fuseTickInterval = 1f;    // decrease fuse every 1 second
-    private float fuseDecreasePercentPerTick; // calculated from duration
+    public float fuseDurationSeconds = 10f;
+    private float fuseTickInterval = 1f;
+    private float fuseDecreasePercentPerTick;
 
     private List<PlayerInput> players = new List<PlayerInput>();
     private List<Gamepad> joinedDevices = new List<Gamepad>();
@@ -31,11 +31,9 @@ public class PlayerJoinManager : MonoBehaviour
     private Coroutine countdownCoroutine;
     private float countdownDuration = 5f;
 
-    // Track claims: index = boardIndex, value = playerIndex or null if unclaimed
     private int?[] initiallyClaimedByPlayer;
     private int?[] fullyClaimedByPlayer;
 
-    // Fuse tracking
     private float[] fuseAmounts;
     private Image[] fuseImages;
 
@@ -54,17 +52,16 @@ public class PlayerJoinManager : MonoBehaviour
         fuseImages = new Image[count];
         fuseDecreasePercentPerTick = 1f / fuseDurationSeconds;
 
-        // Initialize fuse amounts & images, disable fuse images initially
         for (int i = 0; i < count; i++)
         {
-            fuseAmounts[i] = 1f; // full fuse
+            fuseAmounts[i] = 1f;
 
             var fuseImageTransform = boards[i].transform.Find("Fuse");
             if (fuseImageTransform != null)
             {
                 fuseImages[i] = fuseImageTransform.GetComponent<Image>();
                 fuseImages[i].fillAmount = 1f;
-                fuseImages[i].gameObject.SetActive(false); // Disable fuse image at start
+                fuseImages[i].gameObject.SetActive(false);
             }
             else
             {
@@ -84,6 +81,9 @@ public class PlayerJoinManager : MonoBehaviour
             }
             return;
         }
+
+        // ✅ Prevent new players from joining after countdown has started
+        if (countdownCoroutine != null) return;
 
         foreach (var gamepad in Gamepad.all)
         {
@@ -112,7 +112,7 @@ public class PlayerJoinManager : MonoBehaviour
 
         var icon = playerInput.GetComponent<PlayerIconController>();
 
-        icon.playerIndex = players.Count - 1; // assign player index (0-based)
+        icon.playerIndex = players.Count - 1;
         icon.SetColor(playerColors[icon.playerIndex]);
         icon.SetBoards(boards.ConvertAll(b => b.GetComponent<RectTransform>()).ToArray());
         icon.SetJoinManager(this);
@@ -223,14 +223,12 @@ public class PlayerJoinManager : MonoBehaviour
             }
         }
 
-        // Enable fuse images now
         for (int i = 0; i < fuseImages.Length; i++)
         {
             if (fuseImages[i] != null)
                 fuseImages[i].gameObject.SetActive(true);
         }
 
-        // Start fuse countdown now
         StartCoroutine(FuseCountdown());
     }
 
