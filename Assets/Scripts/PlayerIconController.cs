@@ -121,24 +121,18 @@ public class PlayerIconController : MonoBehaviour
         {
             if (boards == null || boards.Length == 0) return;
 
+            // Only allow moving to boards player can claim (check via joinManager)
+            if (direction.x > 0.5f)
+                currentIndex = (currentIndex + 1) % boards.Length;
+            else if (direction.x < -0.5f)
+                currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
+
+            // Check if player can claim this board, skip if can't
             int attempts = 0;
-            int previousIndex = currentIndex;
-
-            do
+            while (!joinManager.CanClaimBoard(currentIndex, playerIndex) && attempts < boards.Length)
             {
-                if (direction.x > 0.5f)
-                    currentIndex = (currentIndex + 1) % boards.Length;
-                else if (direction.x < -0.5f)
-                    currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
-
+                currentIndex = (currentIndex + 1) % boards.Length;
                 attempts++;
-            }
-            while (!joinManager.CanClaimBoard(currentIndex, playerIndex) && attempts < boards.Length);
-
-            if (!joinManager.CanClaimBoard(currentIndex, playerIndex))
-            {
-                currentIndex = previousIndex;
-                return;
             }
 
             targetPosition = boards[currentIndex].position;
@@ -171,16 +165,21 @@ public class PlayerIconController : MonoBehaviour
 
         if (!hasClaimed)
         {
-            bool success = joinManager != null && joinManager.ClaimBoard(currentIndex, playerIndex);
-            if (!success)
+            // Check if board can be claimed
+            if (joinManager.CanClaimBoard(currentIndex, playerIndex))
             {
-                Debug.Log($"Board {currentIndex} already claimed by another player. Cannot claim.");
-                return;
+                bool success = joinManager.ClaimBoard(currentIndex, playerIndex);
+                if (success)
+                {
+                    hasClaimed = true;
+                    inputLocked = true;
+                    Debug.Log($"{gameObject.name} initially claimed board {currentIndex}. Press again to confirm.");
+                }
             }
-
-            hasClaimed = true;
-            inputLocked = true;
-            Debug.Log($"{gameObject.name} selected board {currentIndex}. Press again to confirm.");
+            else
+            {
+                Debug.Log($"{gameObject.name} cannot claim board {currentIndex} - already claimed by another player.");
+            }
         }
         else if (hasClaimed && !isBoardLocked)
         {
@@ -188,11 +187,12 @@ public class PlayerIconController : MonoBehaviour
             inputLocked = true;
             Debug.Log($"{gameObject.name} fully claimed board {currentIndex}.");
 
+            // Link health bar
             var board = boards[currentIndex];
             var hb = board.Find("HealthBar");
             if (hb != null) healthBar = hb.GetComponent<Image>();
 
-            joinManager?.OnPlayerClaimed(currentIndex, playerIndex);
+            joinManager.OnPlayerClaimed(currentIndex, playerIndex);
         }
         else if (inPuzzleMode && !inEditMode)
         {
@@ -213,7 +213,7 @@ public class PlayerIconController : MonoBehaviour
 
         if (hasClaimed && !isBoardLocked)
         {
-            joinManager?.ResetBoard(currentIndex);
+            joinManager.ResetBoard(currentIndex);
             hasClaimed = false;
             inputLocked = false;
             Debug.Log($"{gameObject.name} undid board claim.");
@@ -381,6 +381,16 @@ public class PlayerIconController : MonoBehaviour
             if (foundFour) gain += 4 * unit;
             if (foundFive) gain += 5 * unit;
 
+            // Add fuse boost if combos found
+            if (foundFour)
+            {
+                joinManager?.AddFuseAmount(playerIndex, 0.4f);
+            }
+            if (foundFive)
+            {
+                joinManager?.AddFuseAmount(playerIndex, 0.5f);
+            }
+
             if (healthBar != null && !gameWon)
             {
                 healthBar.fillAmount += gain;
@@ -485,4 +495,11 @@ public class PlayerIconController : MonoBehaviour
     }
 
     private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
+
+    // Helper to get player score - adjust with your real score logic
+    public int GetScore()
+    {
+        // Placeholder: return 0 or actual score tracking
+        return 0;
+    }
 }

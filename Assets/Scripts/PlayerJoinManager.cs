@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerJoinManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class PlayerJoinManager : MonoBehaviour
     [Header("Player Sprites (Match order of playerColors)")]
     public Sprite[] playerSprites;
 
+    [Header("Fuse Settings")]
+    public float fuseDurationSeconds = 10f; // total fuse countdown duration
+    private float fuseTickInterval = 1f;    // decrease fuse every 1 second
+    private float fuseDecreasePercentPerTick; // calculated from duration
+
     private List<PlayerInput> players = new List<PlayerInput>();
     private List<Gamepad> joinedDevices = new List<Gamepad>();
 
@@ -29,6 +35,13 @@ public class PlayerJoinManager : MonoBehaviour
     private int?[] initiallyClaimedByPlayer;
     private int?[] fullyClaimedByPlayer;
 
+    // Fuse tracking
+    private float[] fuseAmounts;
+    private Image[] fuseImages;
+
+    private bool gameOver = false;
+    private bool waitingForRestart = false;
+
     private void Start()
     {
         boards = GameManager.instance.GetBoards();
@@ -36,10 +49,42 @@ public class PlayerJoinManager : MonoBehaviour
         int count = boards.Count;
         initiallyClaimedByPlayer = new int?[count];
         fullyClaimedByPlayer = new int?[count];
+
+        fuseAmounts = new float[count];
+        fuseImages = new Image[count];
+        fuseDecreasePercentPerTick = 1f / fuseDurationSeconds;
+
+        // Initialize fuse amounts & images, disable fuse images initially
+        for (int i = 0; i < count; i++)
+        {
+            fuseAmounts[i] = 1f; // full fuse
+
+            var fuseImageTransform = boards[i].transform.Find("Fuse");
+            if (fuseImageTransform != null)
+            {
+                fuseImages[i] = fuseImageTransform.GetComponent<Image>();
+                fuseImages[i].fillAmount = 1f;
+                fuseImages[i].gameObject.SetActive(false); // Disable fuse image at start
+            }
+            else
+            {
+                Debug.LogWarning($"Board {i} missing Fuse Image child");
+            }
+        }
     }
 
     private void Update()
     {
+        if (gameOver)
+        {
+            if (waitingForRestart && Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                Debug.Log("Restarting game...");
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            return;
+        }
+
         foreach (var gamepad in Gamepad.all)
         {
             if (!joinedDevices.Contains(gamepad) && gamepad.buttonSouth.wasPressedThisFrame)
@@ -75,13 +120,11 @@ public class PlayerJoinManager : MonoBehaviour
         Debug.Log($"{playerInput.name} joined using {gamepad.displayName}");
     }
 
-    // Initial claim (called on first click)
     public bool ClaimBoard(int boardIndex, int playerIndex)
     {
         if (boards == null || boardIndex < 0 || boardIndex >= boards.Count) return false;
         if (playerIndex < 0 || playerIndex >= playerSprites.Length) return false;
 
-        // If already claimed by someone else initially or fully, can't claim
         if (initiallyClaimedByPlayer[boardIndex].HasValue && initiallyClaimedByPlayer[boardIndex].Value != playerIndex)
             return false;
 
@@ -94,19 +137,17 @@ public class PlayerJoinManager : MonoBehaviour
         var image = board.GetComponent<Image>();
         if (image != null)
         {
-            image.sprite = playerSprites[playerIndex]; // Show player's sprite to indicate claim
+            image.sprite = playerSprites[playerIndex];
         }
 
         return true;
     }
 
-    // Full claim (called on second confirm)
     public void LockBoard(int boardIndex, int playerIndex)
     {
         if (boards == null || boardIndex < 0 || boardIndex >= boards.Count) return;
         if (playerIndex < 0 || playerIndex >= playerSprites.Length) return;
 
-        // Must be initially claimed by same player
         if (initiallyClaimedByPlayer[boardIndex] != playerIndex) return;
 
         fullyClaimedByPlayer[boardIndex] = playerIndex;
@@ -114,7 +155,6 @@ public class PlayerJoinManager : MonoBehaviour
         Debug.Log($"Board {boardIndex} fully claimed by player {playerIndex}");
     }
 
-    // Undo initial claim (before full lock)
     public void ResetBoard(int boardIndex)
     {
         if (boards == null || boardIndex < 0 || boardIndex >= boards.Count) return;
@@ -128,28 +168,29 @@ public class PlayerJoinManager : MonoBehaviour
         {
             image.sprite = defaulBoard;
         }
+
+        fuseAmounts[boardIndex] = 1f;
+        if (fuseImages[boardIndex] != null)
+        {
+            fuseImages[boardIndex].fillAmount = 1f;
+            fuseImages[boardIndex].gameObject.SetActive(false);
+        }
     }
 
-    // Check if a player can select/claim the board
-    // Return true if board is unclaimed or claimed by this player (initial or full)
     public bool CanClaimBoard(int boardIndex, int playerIndex)
     {
         if (boards == null || boardIndex < 0 || boardIndex >= boards.Count) return false;
         if (playerIndex < 0 || playerIndex >= playerSprites.Length) return false;
 
-        // Allowed if unclaimed fully and initially
         if (!initiallyClaimedByPlayer[boardIndex].HasValue && !fullyClaimedByPlayer[boardIndex].HasValue)
             return true;
 
-        // Allowed if claimed initially or fully by this same player
         if (initiallyClaimedByPlayer[boardIndex] == playerIndex) return true;
         if (fullyClaimedByPlayer[boardIndex] == playerIndex) return true;
 
-        // Otherwise no
         return false;
     }
 
-    // Called by PlayerIconController when a player confirms (full claim)
     public void OnPlayerClaimed(int boardIndex, int playerIndex)
     {
         LockBoard(boardIndex, playerIndex);
@@ -179,6 +220,80 @@ public class PlayerJoinManager : MonoBehaviour
             if (icon != null && icon.HasClaimed)
             {
                 icon.SpawnPuzzleAfterCountdown();
+            }
+        }
+
+        // Enable fuse images now
+        for (int i = 0; i < fuseImages.Length; i++)
+        {
+            if (fuseImages[i] != null)
+                fuseImages[i].gameObject.SetActive(true);
+        }
+
+        // Start fuse countdown now
+        StartCoroutine(FuseCountdown());
+    }
+
+    private IEnumerator FuseCountdown()
+    {
+        while (!gameOver)
+        {
+            yield return new WaitForSeconds(fuseTickInterval);
+
+            for (int i = 0; i < fuseAmounts.Length; i++)
+            {
+                if (fullyClaimedByPlayer[i].HasValue)
+                {
+                    fuseAmounts[i] -= fuseDecreasePercentPerTick * fuseTickInterval;
+                    fuseAmounts[i] = Mathf.Clamp01(fuseAmounts[i]);
+                    if (fuseImages[i] != null)
+                    {
+                        fuseImages[i].fillAmount = fuseAmounts[i];
+                    }
+
+                    if (fuseAmounts[i] <= 0f)
+                    {
+                        gameOver = true;
+                        waitingForRestart = true;
+                        Debug.Log($"Game Over! Player {fullyClaimedByPlayer[i].Value} fuse reached 0.");
+                        PrintFuseAndScores();
+                        yield break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void AddFuseAmount(int playerIndex, float amount)
+    {
+        if (gameOver) return;
+        if (playerIndex < 0 || playerIndex >= fuseAmounts.Length) return;
+
+        if (fuseAmounts[playerIndex] < 1f)
+        {
+            fuseAmounts[playerIndex] += amount;
+            fuseAmounts[playerIndex] = Mathf.Clamp01(fuseAmounts[playerIndex]);
+
+            if (fuseImages[playerIndex] != null)
+            {
+                fuseImages[playerIndex].fillAmount = fuseAmounts[playerIndex];
+            }
+
+            Debug.Log($"Player {playerIndex} fuse increased by {amount * 100f}%. New fuse: {fuseAmounts[playerIndex] * 100f}%");
+        }
+    }
+
+    private void PrintFuseAndScores()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            float fuse = (i < fuseAmounts.Length) ? fuseAmounts[i] : 0f;
+            Debug.Log($"Player {i} fuse left: {fuse * 100f}%");
+
+            var icon = players[i].GetComponent<PlayerIconController>();
+            if (icon != null)
+            {
+                Debug.Log($"Player {i} score: {icon.GetScore()}");
             }
         }
     }

@@ -509,6 +509,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b412e62b8e50435478d449e2a2401091, type: 3}
   - {fileID: 21300000, guid: 1a0d948f1799b964db1219ca6ddddcda, type: 3}
   - {fileID: 21300000, guid: 85a022d2497cd8f478cef4dc2373b92e, type: 3}
+  fuseDurationSeconds: 10
 --- !u!4 &446406482
 Transform:
   m_ObjectHideFlags: 0
@@ -1028,6 +1029,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b412e62b8e50435478d449e2a2401091, type: 3}
   - {fileID: 21300000, guid: 1a0d948f1799b964db1219ca6ddddcda, type: 3}
   - {fileID: 21300000, guid: 85a022d2497cd8f478cef4dc2373b92e, type: 3}
+  fuseDurationSeconds: 10
 --- !u!1 &1413914127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1432,6 +1434,7 @@ MonoBehaviour:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.5, g: 0.5, b: 0.5, a: 1}
   playerSprites: []
+  fuseDurationSeconds: 10
 --- !u!114 &2130982957
 MonoBehaviour:
   m_ObjectHideFlags: 0
