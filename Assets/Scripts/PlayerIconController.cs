@@ -80,7 +80,6 @@ public class PlayerIconController : MonoBehaviour
             }
         }
 
-        // Restart after win
         if (gameWon && Keyboard.current.rKey.wasPressedThisFrame)
         {
             Debug.Log("🔄 Restarting game...");
@@ -89,10 +88,7 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
-    public void SetColor(Color color)
-    {
-        iconImage.color = color;
-    }
+    public void SetColor(Color color) => iconImage.color = color;
 
     public void SetBoards(RectTransform[] boardRects)
     {
@@ -104,10 +100,7 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
-    public void SetJoinManager(PlayerJoinManager manager)
-    {
-        joinManager = manager;
-    }
+    public void SetJoinManager(PlayerJoinManager manager) => joinManager = manager;
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
@@ -121,13 +114,9 @@ public class PlayerIconController : MonoBehaviour
         {
             if (boards == null || boards.Length == 0) return;
 
-            // Only allow moving to boards player can claim (check via joinManager)
-            if (direction.x > 0.5f)
-                currentIndex = (currentIndex + 1) % boards.Length;
-            else if (direction.x < -0.5f)
-                currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
+            if (direction.x > 0.5f) currentIndex = (currentIndex + 1) % boards.Length;
+            else if (direction.x < -0.5f) currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
 
-            // Check if player can claim this board, skip if can't
             int attempts = 0;
             while (!joinManager.CanClaimBoard(currentIndex, playerIndex) && attempts < boards.Length)
             {
@@ -165,7 +154,6 @@ public class PlayerIconController : MonoBehaviour
 
         if (!hasClaimed)
         {
-            // Check if board can be claimed
             if (joinManager.CanClaimBoard(currentIndex, playerIndex))
             {
                 bool success = joinManager.ClaimBoard(currentIndex, playerIndex);
@@ -173,12 +161,12 @@ public class PlayerIconController : MonoBehaviour
                 {
                     hasClaimed = true;
                     inputLocked = true;
-                    Debug.Log($"{gameObject.name} initially claimed board {currentIndex}. Press again to confirm.");
+                    Debug.Log($"{gameObject.name} initially claimed board {currentIndex}.");
                 }
             }
             else
             {
-                Debug.Log($"{gameObject.name} cannot claim board {currentIndex} - already claimed by another player.");
+                UIManager.Instance.SetText($"{gameObject.name} cannot claim board {currentIndex} - already claimed.");
             }
         }
         else if (hasClaimed && !isBoardLocked)
@@ -187,7 +175,6 @@ public class PlayerIconController : MonoBehaviour
             inputLocked = true;
             Debug.Log($"{gameObject.name} fully claimed board {currentIndex}.");
 
-            // Link health bar
             var board = boards[currentIndex];
             var hb = board.Find("HealthBar");
             if (hb != null) healthBar = hb.GetComponent<Image>();
@@ -207,7 +194,6 @@ public class PlayerIconController : MonoBehaviour
         {
             inEditMode = false;
             SetSelectorHighlight(false);
-            Debug.Log("Exited edit mode");
             return;
         }
 
@@ -216,7 +202,6 @@ public class PlayerIconController : MonoBehaviour
             joinManager.ResetBoard(currentIndex);
             hasClaimed = false;
             inputLocked = false;
-            Debug.Log($"{gameObject.name} undid board claim.");
         }
     }
 
@@ -246,7 +231,6 @@ public class PlayerIconController : MonoBehaviour
         float tileSize = 100f;
         float spacing = 10f;
         float totalSize = gridSize * tileSize + (gridSize - 1) * spacing;
-
         Vector2 startPos = new Vector2(-totalSize / 2 + tileSize / 2, totalSize / 2 - tileSize / 2);
 
         for (int y = 0; y < gridSize; y++)
@@ -286,7 +270,6 @@ public class PlayerIconController : MonoBehaviour
                 {
                     bool isSelected = (x == cursorX && y == cursorY);
                     selector.gameObject.SetActive(isSelected);
-
                     var highlight = selector.Find("Highlight");
                     if (highlight != null)
                     {
@@ -300,13 +283,10 @@ public class PlayerIconController : MonoBehaviour
     private void SetSelectorHighlight(bool on)
     {
         if (boards == null || !puzzleSpawned) return;
-
         var selector = tileGrid[cursorX, cursorY].transform.Find("Selector");
         if (selector == null) return;
-
         var highlight = selector.Find("Highlight");
         if (highlight == null) return;
-
         highlight.gameObject.SetActive(on);
     }
 
@@ -357,7 +337,6 @@ public class PlayerIconController : MonoBehaviour
     private IEnumerator ClearMatchesAndRespawnRoutine()
     {
         inputLocked = true;
-
         bool foundMatch = true;
 
         while (foundMatch)
@@ -381,15 +360,9 @@ public class PlayerIconController : MonoBehaviour
             if (foundFour) gain += 4 * unit;
             if (foundFive) gain += 5 * unit;
 
-            // Add fuse boost if combos found
-            if (foundFour)
-            {
-                joinManager?.AddFuseAmount(playerIndex, 0.4f);
-            }
-            if (foundFive)
-            {
-                joinManager?.AddFuseAmount(playerIndex, 0.5f);
-            }
+            int boardIndex = currentIndex;
+            if (foundFour) joinManager?.AddFuseAmount(boardIndex, 0.4f);
+            if (foundFive) joinManager?.AddFuseAmount(boardIndex, 0.5f);
 
             if (healthBar != null && !gameWon)
             {
@@ -400,8 +373,7 @@ public class PlayerIconController : MonoBehaviour
                     healthBar.fillAmount = 1f;
                     gameWon = true;
                     Time.timeScale = 0f;
-                    Debug.Log($"🏆 Game Finished! Player: {gameObject.name}, Color: {iconImage.color}, Index: {playerIndex}");
-                    Debug.Log("Press R to restart");
+                    UIManager.Instance.SetText("PLAYER " + playerIndex + " WON");
                 }
             }
 
@@ -413,7 +385,7 @@ public class PlayerIconController : MonoBehaviour
 
     private List<(int x, int y)> GetMatchedPositions(out bool foundFour, out bool foundFive)
     {
-        List<(int, int)> matches = new List<(int, int)>();
+        List<(int, int)> matches = new();
         foundFour = false;
         foundFive = false;
 
@@ -496,10 +468,8 @@ public class PlayerIconController : MonoBehaviour
 
     private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
 
-    // Helper to get player score - adjust with your real score logic
     public int GetScore()
     {
-        // Placeholder: return 0 or actual score tracking
         return 0;
     }
 }

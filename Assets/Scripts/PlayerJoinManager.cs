@@ -77,7 +77,7 @@ public class PlayerJoinManager : MonoBehaviour
             if (waitingForRestart && Keyboard.current.rKey.wasPressedThisFrame)
             {
                 Debug.Log("Restarting game...");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                ResetGame();
             }
             return;
         }
@@ -95,6 +95,11 @@ public class PlayerJoinManager : MonoBehaviour
         }
     }
 
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     private void JoinPlayer(Gamepad gamepad)
     {
         PlayerInput playerInput = PlayerInput.Instantiate(
@@ -105,7 +110,6 @@ public class PlayerJoinManager : MonoBehaviour
         );
 
         playerInput.transform.SetParent(canvasTransform, false);
-
         playerInput.name = "Player " + (players.Count + 1);
         players.Add(playerInput);
         joinedDevices.Add(gamepad);
@@ -118,6 +122,7 @@ public class PlayerJoinManager : MonoBehaviour
         icon.SetJoinManager(this);
 
         Debug.Log($"{playerInput.name} joined using {gamepad.displayName}");
+        UIManager.Instance.SetText(playerInput.name + " joined");
     }
 
     public bool ClaimBoard(int boardIndex, int playerIndex)
@@ -208,10 +213,11 @@ public class PlayerJoinManager : MonoBehaviour
         while (timer > 0f)
         {
             Debug.Log($"Game starting in {timer:F0}...");
+            UIManager.Instance.SetTimer(timer.ToString());
             yield return new WaitForSeconds(1f);
             timer -= 1f;
         }
-
+        UIManager.Instance.HideTimer();
         Debug.Log("Countdown finished! Spawning puzzles...");
 
         foreach (var playerInput in players)
@@ -262,23 +268,20 @@ public class PlayerJoinManager : MonoBehaviour
         }
     }
 
-    public void AddFuseAmount(int playerIndex, float amount)
+    public void AddFuseAmount(int boardIndex, float amount)
     {
         if (gameOver) return;
-        if (playerIndex < 0 || playerIndex >= fuseAmounts.Length) return;
+        if (boardIndex < 0 || boardIndex >= fuseAmounts.Length) return;
 
-        if (fuseAmounts[playerIndex] < 1f)
+        fuseAmounts[boardIndex] += amount;
+        fuseAmounts[boardIndex] = Mathf.Clamp01(fuseAmounts[boardIndex]);
+
+        if (fuseImages[boardIndex] != null)
         {
-            fuseAmounts[playerIndex] += amount;
-            fuseAmounts[playerIndex] = Mathf.Clamp01(fuseAmounts[playerIndex]);
-
-            if (fuseImages[playerIndex] != null)
-            {
-                fuseImages[playerIndex].fillAmount = fuseAmounts[playerIndex];
-            }
-
-            Debug.Log($"Player {playerIndex} fuse increased by {amount * 100f}%. New fuse: {fuseAmounts[playerIndex] * 100f}%");
+            fuseImages[boardIndex].fillAmount = fuseAmounts[boardIndex];
         }
+
+        Debug.Log($"Board {boardIndex} fuse increased by {amount * 100f}%. New fuse: {fuseAmounts[boardIndex] * 100f}%");
     }
 
     private void PrintFuseAndScores()
