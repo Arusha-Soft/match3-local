@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class PlayerIconController : MonoBehaviour
 {
@@ -11,12 +12,18 @@ public class PlayerIconController : MonoBehaviour
     public RectTransform iconRectTransform;
     public GameObject[] tilePrefabs;
 
+    public int playerIndex;
+    private PlayerJoinManager joinManager;
+
     private RectTransform[] boards;
     private int currentIndex = 0;
     private bool hasClaimed = false;
     private bool puzzleSpawned = false;
     private bool inPuzzleMode = false;
     private bool inEditMode = false;
+    private bool puzzleSpawnAllowed = false;
+    private bool isBoardLocked = false;
+    private bool inputLocked = false;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -25,10 +32,7 @@ public class PlayerIconController : MonoBehaviour
     private Vector3 targetPosition;
     private bool isMoving = false;
     private float moveSpeed = 500f;
-
-    [Space]
-    [Header("D-Pad Controller")]
-    private float moveCooldown = 0.075f; // faster move cooldown for D-pad responsiveness
+    private float moveCooldown = 0.075f;
     private float lastMoveTime = 0f;
 
     private Transform tileParent;
@@ -36,7 +40,10 @@ public class PlayerIconController : MonoBehaviour
     private int cursorX = 0;
     private int cursorY = 0;
 
-    private bool inputLocked = false;
+    private Image healthBar;
+    private bool gameWon = false;
+
+    public bool HasClaimed => hasClaimed;
 
     private void Awake()
     {
@@ -66,12 +73,19 @@ public class PlayerIconController : MonoBehaviour
         if (isMoving)
         {
             iconRectTransform.position = Vector3.MoveTowards(iconRectTransform.position, targetPosition, moveSpeed * Time.deltaTime);
-
             if (Vector3.Distance(iconRectTransform.position, targetPosition) < 0.1f)
             {
                 iconRectTransform.position = targetPosition;
                 isMoving = false;
             }
+        }
+
+        // Restart after win
+        if (gameWon && Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            Debug.Log("🔄 Restarting game...");
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -90,23 +104,42 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
+    public void SetJoinManager(PlayerJoinManager manager)
+    {
+        joinManager = manager;
+    }
+
     private void OnMove(InputAction.CallbackContext ctx)
     {
         if (inputLocked) return;
-
         if (Time.time - lastMoveTime < moveCooldown) return;
-        lastMoveTime = Time.time;
 
+        lastMoveTime = Time.time;
         Vector2 direction = ctx.ReadValue<Vector2>();
 
         if (!hasClaimed || !puzzleSpawned)
         {
             if (boards == null || boards.Length == 0) return;
 
-            if (direction.x > 0.5f)
-                currentIndex = (currentIndex + 1) % boards.Length;
-            else if (direction.x < -0.5f)
-                currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
+            int attempts = 0;
+            int previousIndex = currentIndex;
+
+            do
+            {
+                if (direction.x > 0.5f)
+                    currentIndex = (currentIndex + 1) % boards.Length;
+                else if (direction.x < -0.5f)
+                    currentIndex = (currentIndex - 1 + boards.Length) % boards.Length;
+
+                attempts++;
+            }
+            while (!joinManager.CanClaimBoard(currentIndex, playerIndex) && attempts < boards.Length);
+
+            if (!joinManager.CanClaimBoard(currentIndex, playerIndex))
+            {
+                currentIndex = previousIndex;
+                return;
+            }
 
             targetPosition = boards[currentIndex].position;
             isMoving = true;
@@ -115,29 +148,19 @@ public class PlayerIconController : MonoBehaviour
         {
             if (!inEditMode)
             {
-                // Move selector cursor inside puzzle grid
-                if (direction.x > 0.5f)
-                    cursorX = (cursorX + 1) % 5;
-                else if (direction.x < -0.5f)
-                    cursorX = (cursorX - 1 + 5) % 5;
-                else if (direction.y > 0.5f)
-                    cursorY = (cursorY - 1 + 5) % 5;
-                else if (direction.y < -0.5f)
-                    cursorY = (cursorY + 1) % 5;
+                if (direction.x > 0.5f) cursorX = (cursorX + 1) % 5;
+                else if (direction.x < -0.5f) cursorX = (cursorX - 1 + 5) % 5;
+                else if (direction.y > 0.5f) cursorY = (cursorY - 1 + 5) % 5;
+                else if (direction.y < -0.5f) cursorY = (cursorY + 1) % 5;
 
                 UpdateSelector();
             }
             else
             {
-                // In edit mode: roll row/column of current cursor position
-                if (direction.x > 0.5f)
-                    RollRow(cursorY, true);
-                else if (direction.x < -0.5f)
-                    RollRow(cursorY, false);
-                else if (direction.y > 0.5f)
-                    RollColumn(cursorX, false);
-                else if (direction.y < -0.5f)
-                    RollColumn(cursorX, true);
+                if (direction.x > 0.5f) RollRow(cursorY, true);
+                else if (direction.x < -0.5f) RollRow(cursorY, false);
+                else if (direction.y > 0.5f) RollColumn(cursorX, false);
+                else if (direction.y < -0.5f) RollColumn(cursorX, true);
             }
         }
     }
@@ -148,28 +171,31 @@ public class PlayerIconController : MonoBehaviour
 
         if (!hasClaimed)
         {
-            Image boardImage = boards[currentIndex].GetComponent<Image>();
-            boardImage.color = iconImage.color;
-            hasClaimed = true;
-        }
-        else if (!puzzleSpawned)
-        {
-            Transform boardTransform = boards[currentIndex];
-            tileParent = boardTransform.Find("TileParent");
-            if (tileParent == null)
+            bool success = joinManager != null && joinManager.ClaimBoard(currentIndex, playerIndex);
+            if (!success)
             {
-                Debug.LogError("TileParent not found");
+                Debug.Log($"Board {currentIndex} already claimed by another player. Cannot claim.");
                 return;
             }
 
-            SpawnPuzzleGrid();
-            puzzleSpawned = true;
-            inPuzzleMode = true;
-            iconImage.enabled = false;
+            hasClaimed = true;
+            inputLocked = true;
+            Debug.Log($"{gameObject.name} selected board {currentIndex}. Press again to confirm.");
+        }
+        else if (hasClaimed && !isBoardLocked)
+        {
+            isBoardLocked = true;
+            inputLocked = true;
+            Debug.Log($"{gameObject.name} fully claimed board {currentIndex}.");
+
+            var board = boards[currentIndex];
+            var hb = board.Find("HealthBar");
+            if (hb != null) healthBar = hb.GetComponent<Image>();
+
+            joinManager?.OnPlayerClaimed(currentIndex, playerIndex);
         }
         else if (inPuzzleMode && !inEditMode)
         {
-            // Enter edit mode for current tile (start rolling)
             inEditMode = true;
             SetSelectorHighlight(true);
         }
@@ -179,19 +205,39 @@ public class PlayerIconController : MonoBehaviour
     {
         if (inPuzzleMode && inEditMode)
         {
-            // Exit edit mode
             inEditMode = false;
             SetSelectorHighlight(false);
             Debug.Log("Exited edit mode");
             return;
         }
 
-        if (!hasClaimed || puzzleSpawned)
-            return;
+        if (hasClaimed && !isBoardLocked)
+        {
+            joinManager?.ResetBoard(currentIndex);
+            hasClaimed = false;
+            inputLocked = false;
+            Debug.Log($"{gameObject.name} undid board claim.");
+        }
+    }
 
-        Image boardImage = boards[currentIndex].GetComponent<Image>();
-        boardImage.color = Color.white;
-        hasClaimed = false;
+    public void SpawnPuzzleAfterCountdown()
+    {
+        if (puzzleSpawned) return;
+
+        Transform boardTransform = boards[currentIndex];
+        tileParent = boardTransform.Find("TileParent");
+        if (tileParent == null)
+        {
+            Debug.LogError("TileParent not found");
+            return;
+        }
+
+        SpawnPuzzleGrid();
+        puzzleSpawned = true;
+        inPuzzleMode = true;
+        inputLocked = false;
+        puzzleSpawnAllowed = true;
+        iconImage.enabled = false;
     }
 
     private void SpawnPuzzleGrid()
@@ -213,8 +259,6 @@ public class PlayerIconController : MonoBehaviour
                 RectTransform tileRT = tile.GetComponent<RectTransform>();
                 tileRT.anchoredPosition = startPos + new Vector2(x * (tileSize + spacing), -y * (tileSize + spacing));
                 tileRT.sizeDelta = new Vector2(tileSize, tileSize);
-
-                // Animate pop-in scale from zero to one
                 tileRT.localScale = Vector3.zero;
                 tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
 
@@ -246,7 +290,6 @@ public class PlayerIconController : MonoBehaviour
                     var highlight = selector.Find("Highlight");
                     if (highlight != null)
                     {
-                        // Highlight only ON if selected AND in edit mode
                         highlight.gameObject.SetActive(isSelected && inEditMode);
                     }
                 }
@@ -333,11 +376,24 @@ public class PlayerIconController : MonoBehaviour
             ClearTiles(matchedPositions);
             RespawnTilesAtPositions(matchedPositions);
 
-            if (foundFour) Debug.Log("Four in a row");
-            if (foundFive) Debug.Log("Five in a row");
-            if (foundFour && foundFive) Debug.Log("Combo");
+            float unit = 0.036f;
+            float gain = 0f;
+            if (foundFour) gain += 4 * unit;
+            if (foundFive) gain += 5 * unit;
 
-            Debug.Log("+10 point score added");
+            if (healthBar != null && !gameWon)
+            {
+                healthBar.fillAmount += gain;
+
+                if (healthBar.fillAmount >= 0.99f)
+                {
+                    healthBar.fillAmount = 1f;
+                    gameWon = true;
+                    Time.timeScale = 0f;
+                    Debug.Log($"🏆 Game Finished! Player: {gameObject.name}, Color: {iconImage.color}, Index: {playerIndex}");
+                    Debug.Log("Press R to restart");
+                }
+            }
 
             yield return new WaitForSeconds(0.2f);
         }
@@ -351,7 +407,6 @@ public class PlayerIconController : MonoBehaviour
         foundFour = false;
         foundFive = false;
 
-        // Horizontal
         for (int y = 0; y < 5; y++)
         {
             int count = 1;
@@ -360,16 +415,12 @@ public class PlayerIconController : MonoBehaviour
                 int prev = tileGrid[x - 1, y].GetComponent<Tile>().tileID;
                 int curr = tileGrid[x, y].GetComponent<Tile>().tileID;
 
-                if (prev == curr)
-                {
-                    count++;
-                }
+                if (prev == curr) count++;
                 else
                 {
                     if (count >= 4)
                     {
-                        for (int k = x - count; k < x; k++)
-                            matches.Add((k, y));
+                        for (int k = x - count; k < x; k++) matches.Add((k, y));
                         if (count == 4) foundFour = true;
                         if (count >= 5) foundFive = true;
                     }
@@ -378,14 +429,12 @@ public class PlayerIconController : MonoBehaviour
             }
             if (count >= 4)
             {
-                for (int k = 5 - count; k < 5; k++)
-                    matches.Add((k, y));
+                for (int k = 5 - count; k < 5; k++) matches.Add((k, y));
                 if (count == 4) foundFour = true;
                 if (count >= 5) foundFive = true;
             }
         }
 
-        // Vertical
         for (int x = 0; x < 5; x++)
         {
             int count = 1;
@@ -394,16 +443,12 @@ public class PlayerIconController : MonoBehaviour
                 int prev = tileGrid[x, y - 1].GetComponent<Tile>().tileID;
                 int curr = tileGrid[x, y].GetComponent<Tile>().tileID;
 
-                if (prev == curr)
-                {
-                    count++;
-                }
+                if (prev == curr) count++;
                 else
                 {
                     if (count >= 4)
                     {
-                        for (int k = y - count; k < y; k++)
-                            matches.Add((x, k));
+                        for (int k = y - count; k < y; k++) matches.Add((x, k));
                         if (count == 4) foundFour = true;
                         if (count >= 5) foundFive = true;
                     }
@@ -412,8 +457,7 @@ public class PlayerIconController : MonoBehaviour
             }
             if (count >= 4)
             {
-                for (int k = 5 - count; k < 5; k++)
-                    matches.Add((x, k));
+                for (int k = 5 - count; k < 5; k++) matches.Add((x, k));
                 if (count == 4) foundFour = true;
                 if (count >= 5) foundFive = true;
             }
@@ -430,22 +474,15 @@ public class PlayerIconController : MonoBehaviour
             Tile tileComp = tileObj.GetComponent<Tile>();
             RectTransform tileRT = tileObj.GetComponent<RectTransform>();
 
-            tileRT.DOScale(Vector3.zero, 0.2f)
-                  .SetEase(Ease.InBack)
-                  .OnComplete(() =>
-                  {
-                      int randomIndex = Random.Range(0, tilePrefabs.Length);
-                      tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
-
-                      // Animate pop-in scale
-                      tileRT.localScale = Vector3.zero;
-                      tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-                  });
+            tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                int randomIndex = Random.Range(0, tilePrefabs.Length);
+                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+                tileRT.localScale = Vector3.zero;
+                tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            });
         }
     }
 
-    private void RespawnTilesAtPositions(List<(int x, int y)> positions)
-    {
-        // No additional logic needed here; ClearTiles already handles replacement and animation
-    }
+    private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
 }
