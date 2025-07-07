@@ -133,11 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8823105203561805431, guid: 4420f455fd451b5418431114fa9dd16e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 8823105203561805431, guid: 4420f455fd451b5418431114fa9dd16e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 70
       objectReference: {fileID: 0}
     - target: {fileID: 8823105203561805431, guid: 4420f455fd451b5418431114fa9dd16e, type: 3}
       propertyPath: m_LocalPosition.x

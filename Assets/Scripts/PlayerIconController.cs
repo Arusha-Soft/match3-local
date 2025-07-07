@@ -42,7 +42,7 @@ public class PlayerIconController : MonoBehaviour
 
     private Image healthBar;
     private bool gameWon = false;
-
+    private bool hasFiveMatchOnBoard = false;
     public bool HasClaimed => hasClaimed;
 
     private void Awake()
@@ -256,6 +256,15 @@ public class PlayerIconController : MonoBehaviour
         cursorX = 0;
         cursorY = 0;
         UpdateSelector();
+
+        hasFiveMatchOnBoard = CheckForAnyFiveMatchesOnBoard();
+
+        if (hasFiveMatchOnBoard)
+        {
+            // Immediately clear those matches if you want to start clean
+            StartCoroutine(ClearMatchesAndRespawnRoutine());
+        }
+
     }
 
     private void UpdateSelector()
@@ -337,9 +346,9 @@ public class PlayerIconController : MonoBehaviour
     private IEnumerator ClearMatchesAndRespawnRoutine()
     {
         inputLocked = true;
-        bool foundMatch = true;
+        bool keepChecking = true;
 
-        while (foundMatch)
+        while (keepChecking)
         {
             yield return null;
 
@@ -348,11 +357,11 @@ public class PlayerIconController : MonoBehaviour
 
             if (matchedPositions.Count == 0)
             {
-                foundMatch = false;
+                keepChecking = false;
                 break;
             }
 
-            ClearTiles(matchedPositions);
+            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions));
             RespawnTilesAtPositions(matchedPositions);
 
             float unit = 0.036f;
@@ -377,11 +386,12 @@ public class PlayerIconController : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.2f); // Wait before checking again
         }
 
         inputLocked = false;
     }
+
 
     private List<(int x, int y)> GetMatchedPositions(out bool foundFour, out bool foundFive)
     {
@@ -389,6 +399,9 @@ public class PlayerIconController : MonoBehaviour
         foundFour = false;
         foundFive = false;
 
+        List<(int, int)> fourMatchesTemp = new();
+
+        // First, find all 5+ matches horizontally and vertically
         for (int y = 0; y < 5; y++)
         {
             int count = 1;
@@ -400,23 +413,32 @@ public class PlayerIconController : MonoBehaviour
                 if (prev == curr) count++;
                 else
                 {
-                    if (count >= 4)
+                    if (count >= 5)
                     {
                         for (int k = x - count; k < x; k++) matches.Add((k, y));
-                        if (count == 4) foundFour = true;
-                        if (count >= 5) foundFive = true;
+                        foundFive = true;
+                    }
+                    else if (count == 4)
+                    {
+                        // Temporarily store 4 matches, but do not add yet
+                        for (int k = x - count; k < x; k++) fourMatchesTemp.Add((k, y));
                     }
                     count = 1;
                 }
             }
-            if (count >= 4)
+            // Check last run
+            if (count >= 5)
             {
                 for (int k = 5 - count; k < 5; k++) matches.Add((k, y));
-                if (count == 4) foundFour = true;
-                if (count >= 5) foundFive = true;
+                foundFive = true;
+            }
+            else if (count == 4)
+            {
+                for (int k = 5 - count; k < 5; k++) fourMatchesTemp.Add((k, y));
             }
         }
 
+        // Same for vertical matches
         for (int x = 0; x < 5; x++)
         {
             int count = 1;
@@ -428,28 +450,58 @@ public class PlayerIconController : MonoBehaviour
                 if (prev == curr) count++;
                 else
                 {
-                    if (count >= 4)
+                    if (count >= 5)
                     {
                         for (int k = y - count; k < y; k++) matches.Add((x, k));
-                        if (count == 4) foundFour = true;
-                        if (count >= 5) foundFive = true;
+                        foundFive = true;
+                    }
+                    else if (count == 4)
+                    {
+                        for (int k = y - count; k < y; k++) fourMatchesTemp.Add((x, k));
                     }
                     count = 1;
                 }
             }
-            if (count >= 4)
+            // Check last run
+            if (count >= 5)
             {
                 for (int k = 5 - count; k < 5; k++) matches.Add((x, k));
-                if (count == 4) foundFour = true;
-                if (count >= 5) foundFive = true;
+                foundFive = true;
+            }
+            else if (count == 4)
+            {
+                for (int k = 5 - count; k < 5; k++) fourMatchesTemp.Add((x, k));
             }
         }
 
-        return matches;
+        // Now, only add 4-matches if there is at least one 5-match
+        if (foundFive)
+        {
+            matches.AddRange(fourMatchesTemp);
+            foundFour = fourMatchesTemp.Count > 0;
+        }
+        else
+        {
+            // No 5 matches found, so ignore all 4 matches
+            foundFour = false;
+            fourMatchesTemp.Clear();
+        }
+
+        // Remove duplicates because 4-matches might overlap with 5-matches
+        var distinctMatches = new HashSet<(int, int)>(matches);
+        return new List<(int, int)>(distinctMatches);
     }
+
 
     private void ClearTiles(List<(int x, int y)> positions)
     {
+        StartCoroutine(ClearTilesOneByOneRoutine(positions));
+    }
+
+    private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions)
+    {
+        float delayBetween = 0.05f;
+
         foreach (var pos in positions)
         {
             GameObject tileObj = tileGrid[pos.x, pos.y];
@@ -463,13 +515,20 @@ public class PlayerIconController : MonoBehaviour
                 tileRT.localScale = Vector3.zero;
                 tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
             });
+
+            yield return new WaitForSeconds(delayBetween);
         }
     }
-
     private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
 
     public int GetScore()
     {
         return 0;
+    }
+    private bool CheckForAnyFiveMatchesOnBoard()
+    {
+        bool dummyFour, foundFive;
+        GetMatchedPositions(out dummyFour, out foundFive);
+        return foundFive;
     }
 }

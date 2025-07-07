@@ -209,3 +209,4 @@ MonoBehaviour:
   - {fileID: 151813487170663540, guid: 710ca7a35c58b8044a2c8e611a087b82, type: 3}
   - {fileID: 3305036767404787046, guid: 23ccbec419a934941af91b6bb8ef0da8, type: 3}
   - {fileID: 8087436114528769205, guid: 5bde6aaa8df1f054da084ace724035df, type: 3}
+  playerIndex: 0
