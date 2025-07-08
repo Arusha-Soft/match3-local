@@ -29,7 +29,7 @@ public class PlayerJoinManager : MonoBehaviour
     private List<GameObject> boards;
 
     private Coroutine countdownCoroutine;
-    private float countdownDuration = 5f;
+    private float countdownDuration = 1f;
 
     private int?[] initiallyClaimedByPlayer;
     private int?[] fullyClaimedByPlayer;
