@@ -302,231 +302,6 @@ public class PlayerIconController : MonoBehaviour
         highlight.gameObject.SetActive(on);
     }
 
-    //private void RollRow(int rowIndex, bool toRight)
-    //{
-    //    Sprite[] rowSprites = new Sprite[5];
-    //    int[] rowTileIDs = new int[5];
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        var tileComp = tileGrid[x, rowIndex].GetComponent<Tile>();
-    //        rowSprites[x] = tileComp.tileImage.sprite;
-    //        rowTileIDs[x] = tileComp.tileID;
-    //    }
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
-    //        var tileComp = tileGrid[x, rowIndex].GetComponent<Tile>();
-    //        tileComp.SetTile(rowTileIDs[from], rowSprites[from]);
-    //    }
-
-    //    StartCoroutine(ClearMatchesAndRespawnRoutine());
-    //}
-    //private void RollRow(int rowIndex, bool toRight)
-    //{
-    //    StartCoroutine(RollRowRoutine(rowIndex, toRight));
-    //}
-
-    //private IEnumerator RollRowRoutine(int rowIndex, bool toRight)
-    //{
-    //    GridLayoutGroup grid = tileGrid[0, rowIndex].transform.parent.GetComponent<GridLayoutGroup>();
-    //    RectTransform parentRect = grid.GetComponent<RectTransform>();
-
-    //    // 1. Disable layout group completely before animation
-    //    grid.enabled = false;
-
-    //    // Also disable any LayoutElement components on tiles (optional but safer)
-    //    foreach (var tile in tileGrid)
-    //    {
-    //        var layoutElement = tile.GetComponent<LayoutElement>();
-    //        if (layoutElement != null) layoutElement.enabled = false;
-    //    }
-
-    //    // 2. Cache start positions (as you do now)
-    //    RectTransform[] tileRects = new RectTransform[5];
-    //    GameObject[] originalTiles = new GameObject[5];
-    //    Vector2[] startPositions = new Vector2[5];
-    //    Vector2[] targetPositions = new Vector2[5];
-
-    //    //float tileSize = grid.cellSize.x;
-
-    //    float cellWidth = grid.cellSize.x;
-    //    float spacingX = grid.spacing.x;
-    //    RectOffset padding = grid.padding;
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        originalTiles[x] = tileGrid[x, rowIndex];
-    //        tileRects[x] = originalTiles[x].GetComponent<RectTransform>();
-
-    //        float anchoredY = tileRects[x].anchoredPosition.y; // Preserve Y
-    //        float anchoredX = padding.left + x * (cellWidth + spacingX);
-    //        startPositions[x] = new Vector2(anchoredX, anchoredY);
-    //    }
-
-    //    // 3. Set target positions based on direction
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        int to = toRight ? (x + 1) % 5 : (x + 4) % 5;
-    //        targetPositions[x] = startPositions[to];
-    //    }
-
-    //    // 4. Animate tiles to target positions
-    //    float duration = 0.2f;
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        tileRects[x].DOAnchorPos(targetPositions[x], duration).SetEase(Ease.InOutQuad);
-    //    }
-
-    //    // 5. Wait for animation to finish
-    //    yield return new WaitForSeconds(duration);
-
-    //    // 6. Update tileGrid references to match new positions
-    //    GameObject[] newTiles = new GameObject[5];
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
-    //        newTiles[x] = tileGrid[from, rowIndex];
-    //    }
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        tileGrid[x, rowIndex] = newTiles[x];
-    //        // Fix final anchoredPosition explicitly
-    //        RectTransform rt = tileGrid[x, rowIndex].GetComponent<RectTransform>();
-    //        rt.anchoredPosition = startPositions[x];
-    //    }
-
-    //    StartCoroutine(ClearMatchesAndRespawnRoutine());
-    //}
-    //private void RollRow(int rowIndex, bool toRight)
-    //{
-    //    StartCoroutine(RollRowAnimated(rowIndex, toRight));
-    //}
-
-
-
-    //private void RollRow(int rowIndex, bool toRight)
-    //{
-    //    StartCoroutine(RollRowRoutine(rowIndex, toRight));
-    //}
-
-    //private IEnumerator RollRowRoutine(int rowIndex, bool toRight)
-    //{
-    //    GridLayoutGroup grid = tileGrid[0, rowIndex].transform.parent.GetComponent<GridLayoutGroup>();
-    //    RectOffset padding = grid.padding;
-    //    float cellWidth = grid.cellSize.x;
-    //    float spacing = grid.spacing.x;
-
-    //    // 1. Cache sprite + tileID + rect
-    //    Sprite[] rowSprites = new Sprite[5];
-    //    int[] rowTileIDs = new int[5];
-    //    RectTransform[] tileRects = new RectTransform[5];
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        var tile = tileGrid[x, rowIndex];
-    //        var tileComp = tile.GetComponent<Tile>();
-    //        rowSprites[x] = tileComp.tileImage.sprite;
-    //        rowTileIDs[x] = tileComp.tileID;
-    //        tileRects[x] = tile.GetComponent<RectTransform>();
-    //    }
-
-    //    // 2. Animate tiles
-    //    float duration = 0.2f;
-    //    float dir = toRight ? 1f : -1f;
-    //    float offset = (cellWidth + spacing) * dir;
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        tileRects[x].DOAnchorPosX(tileRects[x].anchoredPosition.x + offset, duration)
-    //            .SetEase(Ease.InOutQuad);
-    //    }
-
-    //    // 3. Wait for tween to complete
-    //    yield return new WaitForSeconds(duration);
-
-    //    // 4. Apply logic shift
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
-    //        tileGrid[x, rowIndex].GetComponent<Tile>().SetTile(rowTileIDs[from], rowSprites[from]);
-    //    }
-
-    //    // ✅ 5. Snap each tile back to exact GridLayoutGroup position
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        RectTransform rt = tileGrid[x, rowIndex].GetComponent<RectTransform>();
-    //        float anchoredX = padding.left + x * (cellWidth + spacing);
-    //        rt.anchoredPosition = new Vector2(anchoredX, rt.anchoredPosition.y);
-    //    }
-    //    grid.enabled = true;
-    //    LayoutRebuilder.ForceRebuildLayoutImmediate(grid.GetComponent<RectTransform>());
-    //    // 6. Match logic
-    //    StartCoroutine(ClearMatchesAndRespawnRoutine());
-    //}
-    //fully best Working Code
-    //private void RollRow(int rowIndex, bool toRight)
-    //{
-    //    if (isShifting) return;
-    //    StartCoroutine(RollRowRoutine(rowIndex, toRight));
-    //}
-
-    //private IEnumerator RollRowRoutine(int rowIndex, bool toRight)
-    //{
-    //    isShifting = true;
-
-    //    GridLayoutGroup grid = tileGrid[0, rowIndex].transform.parent.GetComponent<GridLayoutGroup>();
-    //    RectOffset padding = grid.padding;
-    //    float cellWidth = grid.cellSize.x;
-    //    float spacing = grid.spacing.x;
-
-    //    Sprite[] rowSprites = new Sprite[5];
-    //    int[] rowTileIDs = new int[5];
-    //    RectTransform[] tileRects = new RectTransform[5];
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        var tile = tileGrid[x, rowIndex];
-    //        var tileComp = tile.GetComponent<Tile>();
-    //        rowSprites[x] = tileComp.tileImage.sprite;
-    //        rowTileIDs[x] = tileComp.tileID;
-    //        tileRects[x] = tile.GetComponent<RectTransform>();
-    //    }
-
-    //    float duration = 0.2f;
-    //    float dir = toRight ? 1f : -1f;
-    //    float offset = (cellWidth + spacing) * dir;
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        tileRects[x].DOKill(); // Stop any previous animation
-    //        tileRects[x].DOAnchorPosX(tileRects[x].anchoredPosition.x + offset, duration)
-    //            .SetEase(Ease.InOutQuad);
-    //    }
-
-    //    yield return new WaitForSeconds(duration);
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        int from = toRight ? (x + 4) % 5 : (x + 1) % 5;
-    //        tileGrid[x, rowIndex].GetComponent<Tile>().SetTile(rowTileIDs[from], rowSprites[from]);
-    //    }
-
-    //    for (int x = 0; x < 5; x++)
-    //    {
-    //        RectTransform rt = tileGrid[x, rowIndex].GetComponent<RectTransform>();
-    //        float anchoredX = padding.left + x * (cellWidth + spacing);
-    //        rt.anchoredPosition = new Vector2(anchoredX, rt.anchoredPosition.y);
-    //    }
-
-    //    grid.enabled = true;
-    //    LayoutRebuilder.ForceRebuildLayoutImmediate(grid.GetComponent<RectTransform>());
-
-    //    StartCoroutine(ClearMatchesAndRespawnRoutine());
-
-    //    isShifting = false;
-    //}
 
 
     private void RollRow(int rowIndex, bool toRight)
@@ -555,101 +330,101 @@ public class PlayerIconController : MonoBehaviour
             rowSprites[x] = tileComp.tileImage.sprite;
             rowTileIDs[x] = tileComp.tileID;
             tileRects[x] = tile.GetComponent<RectTransform>();
-            tileRects[x].DOKill(); // Kill any running tween
+            tileRects[x].DOKill();
         }
 
         float duration = 0.2f;
+        float offset = cellWidth + spacing;
+        float anchoredY = tileRects[0].anchoredPosition.y;
 
         if (toRight)
         {
-            // Move tiles right, temp tile appears from outside-left moving in
+            // حرکت به سمت راست: 
+            // تایل خارج شونده سمت راست، تایل وارد شونده از خارج سمت چپ
 
-            float outsideLeftX = padding.left - (cellWidth + spacing);
-            float anchoredY = tileRects[0].anchoredPosition.y;
+            Vector2 targetPos = tileRects[0].anchoredPosition; // موقعیت تایل اول (جایی که تایل وارد میشه)
+            Vector2 outsideLeft = targetPos - new Vector2(offset * 1.5f, 0f); // فاصله مناسب خارج از کادر سمت چپ
 
-            // Create temp tile off-screen left with last tile data
+            // ساخت تایل موقت ورودی خارج از کادر
             GameObject tempTile = Instantiate(tilePrefabs[0], tileGrid[0, rowIndex].transform.parent);
             RectTransform tempRT = tempTile.GetComponent<RectTransform>();
+            tempRT.anchoredPosition = outsideLeft;
             tempRT.SetAsLastSibling();
-            tempRT.anchoredPosition = new Vector2(outsideLeftX, anchoredY);
 
             Tile tempTileComp = tempTile.GetComponent<Tile>();
-            tempTileComp.SetTile(rowTileIDs[4], rowSprites[4]); // last tile's data
+            tempTileComp.SetTile(rowTileIDs[4], rowSprites[4]);
 
-            // Animate existing tiles right (+offset)
-            float offset = cellWidth + spacing;
+            // انیمیشن ورود تایل موقت به موقعیت هدف
+            tempRT.DOAnchorPos(targetPos, duration).SetEase(Ease.InOutQuad);
+
+            // انیمیشن حرکت تایل‌های اصلی به سمت راست
             for (int x = 0; x < 5; x++)
             {
-                tileRects[x].DOAnchorPosX(tileRects[x].anchoredPosition.x + offset, duration)
-                    .SetEase(Ease.InOutQuad);
+                Vector2 newPos = tileRects[x].anchoredPosition + new Vector2(offset, 0f);
+                tileRects[x].DOAnchorPos(newPos, duration).SetEase(Ease.InOutQuad);
             }
-
-            // Animate temp tile from outside-left to first tile position
-            Vector2 firstPos = new Vector2(padding.left, anchoredY);
-            tempRT.DOAnchorPosX(firstPos.x, duration).SetEase(Ease.InOutQuad);
 
             yield return new WaitForSeconds(duration);
 
-            // Logical shift right
+            // جابجایی منطقی داده‌ها در آرایه (چرخش به راست)
             for (int x = 0; x < 5; x++)
             {
                 int from = (x + 4) % 5;
                 tileGrid[x, rowIndex].GetComponent<Tile>().SetTile(rowTileIDs[from], rowSprites[from]);
             }
 
-            // Snap tiles exactly into grid positions
+            // تنظیم دقیق موقعیت‌های تایل‌ها روی گرید
             for (int x = 0; x < 5; x++)
             {
                 RectTransform rt = tileGrid[x, rowIndex].GetComponent<RectTransform>();
-                float anchoredX = padding.left + x * (cellWidth + spacing);
-                rt.anchoredPosition = new Vector2(anchoredX, rt.anchoredPosition.y);
+                float anchoredX = padding.left + x * offset;
+                rt.anchoredPosition = new Vector2(anchoredX, anchoredY);
             }
 
             Destroy(tempTile);
         }
         else
         {
-            // Move tiles left, temp tile appears from outside-right moving in
+            // حرکت به سمت چپ: 
+            // تایل خارج شونده سمت چپ، تایل وارد شونده از خارج سمت راست
 
-            float outsideRightX = padding.left + 5 * (cellWidth + spacing);
-            float anchoredY = tileRects[0].anchoredPosition.y;
+            Vector2 targetPos = tileRects[4].anchoredPosition; // موقعیت تایل آخر (جایی که تایل وارد میشه)
+            Vector2 outsideRight = targetPos + new Vector2(offset * 1.5f, 0f); // فاصله مناسب خارج از کادر سمت راست
 
-            // Create temp tile off-screen right with first tile data
+            // ساخت تایل موقت ورودی خارج از کادر
             GameObject tempTile = Instantiate(tilePrefabs[0], tileGrid[0, rowIndex].transform.parent);
             RectTransform tempRT = tempTile.GetComponent<RectTransform>();
+            tempRT.anchoredPosition = outsideRight;
             tempRT.SetAsLastSibling();
-            tempRT.anchoredPosition = new Vector2(outsideRightX, anchoredY);
 
             Tile tempTileComp = tempTile.GetComponent<Tile>();
-            tempTileComp.SetTile(rowTileIDs[0], rowSprites[0]); // first tile's data
+            tempTileComp.SetTile(rowTileIDs[0], rowSprites[0]);
 
-            // Animate existing tiles left (-offset)
-            float offset = -(cellWidth + spacing);
+            // انیمیشن ورود تایل موقت به موقعیت هدف
+            tempRT.DOAnchorPos(targetPos, duration).SetEase(Ease.InOutQuad);
+
+            // انیمیشن حرکت تایل‌های اصلی به سمت چپ
             for (int x = 0; x < 5; x++)
             {
-                tileRects[x].DOAnchorPosX(tileRects[x].anchoredPosition.x + offset, duration)
-                    .SetEase(Ease.InOutQuad);
+                Vector2 newPos = tileRects[x].anchoredPosition - new Vector2(offset, 0f);
+                tileRects[x].DOAnchorPos(newPos, duration).SetEase(Ease.InOutQuad);
             }
-
-            // Animate temp tile from outside-right to last tile position
-            Vector2 lastPos = new Vector2(padding.left + 4 * (cellWidth + spacing), anchoredY);
-            tempRT.DOAnchorPosX(lastPos.x, duration).SetEase(Ease.InOutQuad);
 
             yield return new WaitForSeconds(duration);
 
-            // Logical shift left
+            // جابجایی منطقی داده‌ها در آرایه (چرخش به چپ)
             for (int x = 0; x < 5; x++)
             {
                 int from = (x + 1) % 5;
                 tileGrid[x, rowIndex].GetComponent<Tile>().SetTile(rowTileIDs[from], rowSprites[from]);
             }
 
-            // Snap tiles exactly into grid positions
+            // تنظیم دقیق موقعیت‌های تایل‌ها روی گرید
             for (int x = 0; x < 5; x++)
             {
                 RectTransform rt = tileGrid[x, rowIndex].GetComponent<RectTransform>();
-                float anchoredX = padding.left + x * (cellWidth + spacing);
-                rt.anchoredPosition = new Vector2(anchoredX, rt.anchoredPosition.y);
+                float anchoredX = padding.left + x * offset;
+                rt.anchoredPosition = new Vector2(anchoredX, anchoredY);
             }
 
             Destroy(tempTile);
@@ -665,66 +440,6 @@ public class PlayerIconController : MonoBehaviour
 
 
 
-
-    //private void RollColumn(int colIndex, bool toDown)
-    //{
-    //    StartCoroutine(RollColumnRoutine(colIndex, toDown));
-    //}
-
-    //private IEnumerator RollColumnRoutine(int colIndex, bool toDown)
-    //{
-    //    GridLayoutGroup grid = tileGrid[colIndex, 0].transform.parent.GetComponent<GridLayoutGroup>();
-    //    RectOffset padding = grid.padding;
-    //    float cellHeight = grid.cellSize.y;
-    //    float spacingY = grid.spacing.y;
-
-    //    // 1. Cache sprite + tileID + rect
-    //    Sprite[] colSprites = new Sprite[5];
-    //    int[] colTileIDs = new int[5];
-    //    RectTransform[] tileRects = new RectTransform[5];
-
-    //    for (int y = 0; y < 5; y++)
-    //    {
-    //        var tile = tileGrid[colIndex, y];
-    //        var tileComp = tile.GetComponent<Tile>();
-    //        colSprites[y] = tileComp.tileImage.sprite;
-    //        colTileIDs[y] = tileComp.tileID;
-    //        tileRects[y] = tile.GetComponent<RectTransform>();
-    //    }
-
-    //    // ✅ 2. Animate tiles in correct Y direction
-    //    float duration = 0.2f;
-    //    float dir = toDown ? 1f : -1f; // ✅ Fix: pressing down should move tiles visually down (y decreases)
-    //    float offset = (cellHeight + spacingY) * dir;
-
-    //    for (int y = 0; y < 5; y++)
-    //    {
-    //        tileRects[y].DOAnchorPosY(tileRects[y].anchoredPosition.y - offset, duration)
-    //            .SetEase(Ease.InOutQuad);
-    //    }
-
-    //    // 3. Wait for tween
-    //    yield return new WaitForSeconds(duration);
-
-    //    // 4. Apply logic shift
-    //    for (int y = 0; y < 5; y++)
-    //    {
-    //        int from = toDown ? (y + 4) % 5 : (y + 1) % 5;
-    //        tileGrid[colIndex, y].GetComponent<Tile>().SetTile(colTileIDs[from], colSprites[from]);
-    //    }
-
-    //    // 5. Snap tiles back to their exact GridLayoutGroup position
-    //    for (int y = 0; y < 5; y++)
-    //    {
-    //        RectTransform rt = tileGrid[colIndex, y].GetComponent<RectTransform>();
-    //        float anchoredY = -(padding.top + y * (cellHeight + spacingY));
-    //        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, anchoredY);
-    //    }
-    //    grid.enabled = true;
-    //    LayoutRebuilder.ForceRebuildLayoutImmediate(grid.GetComponent<RectTransform>());
-    //    // 6. Match logic
-    //    StartCoroutine(ClearMatchesAndRespawnRoutine());
-    //}
 
     private void RollColumn(int colIndex, bool toDown)
     {
@@ -761,98 +476,90 @@ public class PlayerIconController : MonoBehaviour
 
         if (toDown)
         {
-            // Move tiles down (new tile appears from top)
-            float outsideTopY = -(padding.top - offset);
+            // حرکت به پایین:
+            // تایل خارج شونده پایین، تایل وارد شونده از بالا (با فاصله مناسب)
+
+            Vector2 targetPos = tileRects[0].anchoredPosition; // جای تایل اول (از بالا وارد میشه)
+            Vector2 outsideTop = targetPos + new Vector2(0f, offset * 1.5f); // فاصله خارج از کادر بالایی
 
             GameObject tempTile = Instantiate(tilePrefabs[0], tileGrid[colIndex, 0].transform.parent);
             RectTransform tempRT = tempTile.GetComponent<RectTransform>();
-            tempRT.anchoredPosition = new Vector2(anchoredX, outsideTopY);
+            tempRT.anchoredPosition = outsideTop;
+            tempRT.SetAsLastSibling();
 
             Tile tempTileComp = tempTile.GetComponent<Tile>();
             tempTileComp.SetTile(colTileIDs[4], colSprites[4]);
 
-            Canvas tempCanvas = tempTile.AddComponent<Canvas>();
-            tempCanvas.overrideSorting = true;
-            tempCanvas.sortingOrder = -1;
+            // انیمیشن ورود تایل موقت از بالا به جایگاه اول
+            tempRT.DOAnchorPos(targetPos, duration).SetEase(Ease.InOutQuad);
 
-            CanvasGroup tempGroup = tempTile.AddComponent<CanvasGroup>();
-            tempGroup.alpha = 0;
-
-            tempRT.SetAsLastSibling();
-
+            // انیمیشن حرکت تایل‌های اصلی به پایین
             for (int y = 0; y < 5; y++)
             {
-                tileRects[y].DOAnchorPosY(tileRects[y].anchoredPosition.y - offset, duration)
-                    .SetEase(Ease.InOutQuad);
+                Vector2 newPos = tileRects[y].anchoredPosition - new Vector2(0f, offset);
+                tileRects[y].DOAnchorPos(newPos, duration).SetEase(Ease.InOutQuad);
             }
-
-            float targetY = -(padding.top);
-            tempRT.DOAnchorPosY(targetY, duration).SetEase(Ease.InOutQuad);
-            DOVirtual.DelayedCall(0.05f, () => tempGroup.DOFade(1f, 0.15f));
 
             yield return new WaitForSeconds(duration);
 
-            // Logical shift down
+            // جابجایی منطقی داده‌ها (چرخش به پایین)
             for (int y = 0; y < 5; y++)
             {
                 int from = (y + 4) % 5;
                 tileGrid[colIndex, y].GetComponent<Tile>().SetTile(colTileIDs[from], colSprites[from]);
             }
 
+            // تنظیم دقیق موقعیت‌های تایل‌ها روی گرید
             for (int y = 0; y < 5; y++)
             {
                 RectTransform rt = tileGrid[colIndex, y].GetComponent<RectTransform>();
-                float anchoredY = -(padding.top + y * offset);
-                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, anchoredY);
+                float anchoredY = padding.top + y * -offset; // توجه به منفی بودن محور Y در anchoredPosition
+                rt.anchoredPosition = new Vector2(anchoredX, anchoredY);
             }
 
             Destroy(tempTile);
         }
         else
         {
-            // Move tiles up (new tile appears from bottom)
-            float outsideBottomY = -(padding.top + 5 * offset);
+            // حرکت به بالا:
+            // تایل خارج شونده بالا، تایل وارد شونده از پایین (با فاصله مناسب)
+
+            Vector2 targetPos = tileRects[4].anchoredPosition; // جای تایل آخر (از پایین وارد میشه)
+            Vector2 outsideBottom = targetPos - new Vector2(0f, offset * 1.5f); // فاصله خارج از کادر پایینی
 
             GameObject tempTile = Instantiate(tilePrefabs[0], tileGrid[colIndex, 0].transform.parent);
             RectTransform tempRT = tempTile.GetComponent<RectTransform>();
-            tempRT.anchoredPosition = new Vector2(anchoredX, outsideBottomY);
+            tempRT.anchoredPosition = outsideBottom;
+            tempRT.SetAsLastSibling();
 
             Tile tempTileComp = tempTile.GetComponent<Tile>();
             tempTileComp.SetTile(colTileIDs[0], colSprites[0]);
 
-            Canvas tempCanvas = tempTile.AddComponent<Canvas>();
-            tempCanvas.overrideSorting = true;
-            tempCanvas.sortingOrder = -1;
+            // انیمیشن ورود تایل موقت از پایین به جایگاه آخر
+            tempRT.DOAnchorPos(targetPos, duration).SetEase(Ease.InOutQuad);
 
-            CanvasGroup tempGroup = tempTile.AddComponent<CanvasGroup>();
-            tempGroup.alpha = 0;
-
-            tempRT.SetAsLastSibling();
-
+            // انیمیشن حرکت تایل‌های اصلی به بالا
             for (int y = 0; y < 5; y++)
             {
-                tileRects[y].DOAnchorPosY(tileRects[y].anchoredPosition.y + offset, duration)
-                    .SetEase(Ease.InOutQuad);
+                Vector2 newPos = tileRects[y].anchoredPosition + new Vector2(0f, offset);
+                tileRects[y].DOAnchorPos(newPos, duration).SetEase(Ease.InOutQuad);
             }
-
-            float targetY = -(padding.top + 4 * offset);
-            tempRT.DOAnchorPosY(targetY, duration).SetEase(Ease.InOutQuad);
-            DOVirtual.DelayedCall(0.05f, () => tempGroup.DOFade(1f, 0.15f));
 
             yield return new WaitForSeconds(duration);
 
-            // Logical shift up
+            // جابجایی منطقی داده‌ها (چرخش به بالا)
             for (int y = 0; y < 5; y++)
             {
                 int from = (y + 1) % 5;
                 tileGrid[colIndex, y].GetComponent<Tile>().SetTile(colTileIDs[from], colSprites[from]);
             }
 
+            // تنظیم دقیق موقعیت‌های تایل‌ها روی گرید
             for (int y = 0; y < 5; y++)
             {
                 RectTransform rt = tileGrid[colIndex, y].GetComponent<RectTransform>();
-                float anchoredY = -(padding.top + y * offset);
-                rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, anchoredY);
+                float anchoredY = padding.top + y * -offset;
+                rt.anchoredPosition = new Vector2(anchoredX, anchoredY);
             }
 
             Destroy(tempTile);
@@ -865,9 +572,6 @@ public class PlayerIconController : MonoBehaviour
 
         isShifting = false;
     }
-
-
-
 
 
 
