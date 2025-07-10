@@ -209,6 +209,38 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
+    //public void SpawnPuzzleAfterCountdown()
+    //{
+    //    if (puzzleSpawned) return;
+
+    //    Transform boardTransform = boards[currentIndex];
+
+    //    tileParent = boardTransform.Find("TileParent");
+    //    if (tileParent == null)
+    //    {
+    //        Debug.LogError("TileParent not found");
+    //        return;
+    //    }
+
+    //    // ✅ Add this block right here:
+    //    var selectorTransform = boardTransform.Find("Selector");
+    //    if (selectorTransform != null)
+    //    {
+    //        globalSelector = selectorTransform.GetComponent<RectTransform>();
+    //        globalSelector.gameObject.SetActive(false); // initially hidden
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("Selector not found inside board!");
+    //    }
+
+    //    SpawnPuzzleGrid();
+    //    puzzleSpawned = true;
+    //    inPuzzleMode = true;
+    //    inputLocked = false;
+    //    puzzleSpawnAllowed = true;
+    //    iconImage.enabled = false;
+    //}
     public void SpawnPuzzleAfterCountdown()
     {
         if (puzzleSpawned) return;
@@ -222,24 +254,32 @@ public class PlayerIconController : MonoBehaviour
             return;
         }
 
-        // ✅ Add this block right here:
+        // ✅ Selector setup
         var selectorTransform = boardTransform.Find("Selector");
         if (selectorTransform != null)
         {
             globalSelector = selectorTransform.GetComponent<RectTransform>();
-            globalSelector.gameObject.SetActive(false); // initially hidden
+            globalSelector.gameObject.SetActive(false); // hide initially
         }
         else
         {
             Debug.LogWarning("Selector not found inside board!");
         }
 
-        SpawnPuzzleGrid();
+        SpawnPuzzleGrid();               // Spawns the tiles
         puzzleSpawned = true;
         inPuzzleMode = true;
         inputLocked = false;
         puzzleSpawnAllowed = true;
         iconImage.enabled = false;
+
+        // ✅ Force selector update next frame to fix its first-frame positioning
+        StartCoroutine(ForceInitialSelectorUpdate());
+    }
+    private IEnumerator ForceInitialSelectorUpdate()
+    {
+        yield return null;       // Wait one frame for layout to update
+        UpdateSelector();        // Force selector to update to correct tile position
     }
 
 
