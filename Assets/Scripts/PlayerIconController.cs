@@ -594,18 +594,58 @@ public class PlayerIconController : MonoBehaviour
                 break;
             }
 
+            // ✅ If both 4 and 5 exist, use fade animation
+            bool useFade = foundFour && foundFive;
+
             // Clear tiles with animation
-            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions));
+            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
 
-            // Respawn tiles (assign new sprites, scale, etc)
+            // Respawn new tiles
             RespawnTilesAtPositions(matchedPositions);
-
-            // ... rest of your scoring & health code ...
 
             yield return new WaitForSeconds(0.2f);
         }
 
         inputLocked = false;
+    }
+    private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions, bool useFade)
+    {
+        float delayBetween = 0.05f;
+
+        foreach (var pos in positions)
+        {
+            GameObject tileObj = tileGrid[pos.x, pos.y];
+            Tile tileComp = tileObj.GetComponent<Tile>();
+            RectTransform tileRT = tileObj.GetComponent<RectTransform>();
+
+            if (useFade)
+            {
+                // Fade animation
+                CanvasGroup cg = tileObj.GetComponent<CanvasGroup>();
+                if (cg == null) cg = tileObj.AddComponent<CanvasGroup>();
+
+                cg.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
+                {
+                    int randomIndex = Random.Range(0, tilePrefabs.Length);
+                    tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+                    cg.alpha = 0f;
+                    cg.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
+                });
+            }
+            else
+            {
+                // Scale animation (original behavior)
+                tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
+                {
+                    int randomIndex = Random.Range(0, tilePrefabs.Length);
+                    tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+                    tileRT.localScale = Vector3.zero;
+                    tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+                });
+            }
+
+            yield return new WaitForSeconds(delayBetween);
+        }
     }
 
 
