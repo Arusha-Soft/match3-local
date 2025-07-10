@@ -619,38 +619,38 @@ public class PlayerIconController : MonoBehaviour
 
 
 
-    private IEnumerator ClearMatchesAndRespawnRoutine()
-    {
-        inputLocked = true;
-        bool foundMatch = true;
+    //private IEnumerator ClearMatchesAndRespawnRoutine()
+    //{
+    //    inputLocked = true;
+    //    bool foundMatch = true;
 
-        while (foundMatch)
-        {
-            yield return null;
+    //    while (foundMatch)
+    //    {
+    //        yield return null;
 
-            bool foundFour, foundFive;
-            var matchedPositions = GetMatchedPositions(out foundFour, out foundFive);
+    //        bool foundFour, foundFive;
+    //        var matchedPositions = GetMatchedPositions(out foundFour, out foundFive);
 
-            if (matchedPositions.Count == 0)
-            {
-                foundMatch = false;
-                break;
-            }
+    //        if (matchedPositions.Count == 0)
+    //        {
+    //            foundMatch = false;
+    //            break;
+    //        }
 
-            // ✅ If both 4 and 5 exist, use fade animation
-            bool useFade = foundFour && foundFive;
+    //        // ✅ If both 4 and 5 exist, use fade animation
+    //        bool useFade = foundFour && foundFive;
 
-            // Clear tiles with animation
-            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
+    //        // Clear tiles with animation
+    //        yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
 
-            // Respawn new tiles
-            RespawnTilesAtPositions(matchedPositions);
+    //        // Respawn new tiles
+    //        RespawnTilesAtPositions(matchedPositions);
 
-            yield return new WaitForSeconds(0.2f);
-        }
+    //        yield return new WaitForSeconds(0.2f);
+    //    }
 
-        inputLocked = false;
-    }
+    //    inputLocked = false;
+    //}
     private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions, bool useFade)
     {
         float delayBetween = 0.05f;
@@ -689,6 +689,54 @@ public class PlayerIconController : MonoBehaviour
 
             yield return new WaitForSeconds(delayBetween);
         }
+    }
+    private IEnumerator ClearMatchesAndRespawnRoutine()
+    {
+        inputLocked = true;
+        bool foundMatch = true;
+
+        while (foundMatch)
+        {
+            yield return null;
+
+            bool foundFour, foundFive;
+            var matchedPositions = GetMatchedPositions(out foundFour, out foundFive);
+
+            if (matchedPositions.Count == 0)
+            {
+                foundMatch = false;
+                break;
+            }
+
+            // ✅ Calculate and apply health
+            if (healthBar != null)
+            {
+                if (foundFive)
+                {
+                    healthBar.fillAmount += 5 * 0.036f;
+                }
+                else if (foundFour)
+                {
+                    healthBar.fillAmount += 4 * 0.036f;
+                }
+
+                // ✅ Optional: Clamp fill amount between 0 and 1
+                healthBar.fillAmount = Mathf.Clamp01(healthBar.fillAmount);
+            }
+
+            // ✅ If both 4 and 5 exist, use fade animation
+            bool useFade = foundFour && foundFive;
+
+            // Clear tiles with animation
+            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
+
+            // Respawn new tiles
+            RespawnTilesAtPositions(matchedPositions);
+
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        inputLocked = false;
     }
 
 

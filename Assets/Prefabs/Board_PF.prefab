@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7630795780068593833}
   - component: {fileID: 7408326609714524092}
+  - component: {fileID: 3980636124055664191}
   m_Layer: 5
   m_Name: TileParent
   m_TagString: Untagged
@@ -135,6 +136,20 @@ MonoBehaviour:
   m_Spacing: {x: 8, y: 8}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &3980636124055664191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604515557082172266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 5, y: 10, z: 5, w: 5}
+  m_Softness: {x: 5, y: 5}
 --- !u!1 &5213205681984957080
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,7 +161,6 @@ GameObject:
   - component: {fileID: 680526252067932042}
   - component: {fileID: 5348225444713206593}
   - component: {fileID: 3934830516419274959}
-  - component: {fileID: 618819396110575611}
   m_Layer: 5
   m_Name: Board_PF
   m_TagString: Untagged
@@ -215,20 +229,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &618819396110575611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5213205681984957080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding: {x: 20, y: 100, z: 20, w: 15}
-  m_Softness: {x: 10, y: 10}
 --- !u!1 &5744132308530831970
 GameObject:
   m_ObjectHideFlags: 0
