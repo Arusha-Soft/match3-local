@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+
+    public static Action OninitializeComplete;
 
     [Header("Board Setup")]
     public GameObject boardPrefab;
@@ -17,9 +20,13 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    private void Start()
+    //private void Start()
+    //{
+    //    CreateBoards(numberofBoards);
+    //}
+    private void InitializeBoard(int num)
     {
-        CreateBoards(numberofBoards);
+        CreateBoards(num);
     }
 
     private void CreateBoards(int count)
@@ -29,11 +36,15 @@ public class GameManager : MonoBehaviour
             var board = Instantiate(boardPrefab, boardParent);
             boards.Add(board);
         }
+        OninitializeComplete?.Invoke();
     }
 
     public List<GameObject> GetBoards()
     {
         return boards;
     }
-    
+    private void OnEnable()
+    {
+        PlayerCountSelector.OnCreateBoard += InitializeBoard;
+    }
 }

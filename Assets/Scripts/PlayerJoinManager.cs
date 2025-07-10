@@ -40,8 +40,15 @@ public class PlayerJoinManager : MonoBehaviour
     private bool gameOver = false;
     private bool waitingForRestart = false;
     private bool gameStarted = false; // 🚫 NEW: Flag to lock out new players
-
-    private void Start()
+    private void OnEnable()
+    {
+        GameManager.OninitializeComplete += InitilizeBoard;
+    }
+    private void OnDisable()
+    {
+        GameManager.OninitializeComplete -= InitilizeBoard;
+    }
+    private void InitilizeBoard()
     {
         boards = GameManager.instance.GetBoards();
 
@@ -70,6 +77,35 @@ public class PlayerJoinManager : MonoBehaviour
             }
         }
     }
+    //private void Start()
+    //{
+    //    boards = GameManager.instance.GetBoards();
+
+    //    int count = boards.Count;
+    //    initiallyClaimedByPlayer = new int?[count];
+    //    fullyClaimedByPlayer = new int?[count];
+
+    //    fuseAmounts = new float[count];
+    //    fuseImages = new Image[count];
+    //    fuseDecreasePercentPerTick = 1f / fuseDurationSeconds;
+
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        fuseAmounts[i] = 1f;
+
+    //        var fuseImageTransform = boards[i].transform.Find("Fuse");
+    //        if (fuseImageTransform != null)
+    //        {
+    //            fuseImages[i] = fuseImageTransform.GetComponent<Image>();
+    //            fuseImages[i].fillAmount = 1f;
+    //            fuseImages[i].gameObject.SetActive(false);
+    //        }
+    //        else
+    //        {
+    //            Debug.LogWarning($"Board {i} missing Fuse Image child");
+    //        }
+    //    }
+    //}
 
     private void Update()
     {
