@@ -46,6 +46,7 @@ public class PlayerIconController : MonoBehaviour
     private bool hasFiveMatchOnBoard = false;
     public bool HasClaimed => hasClaimed;
     private bool isShifting = false;
+    private RectTransform globalSelector;
 
 
     private void Awake()
@@ -213,11 +214,24 @@ public class PlayerIconController : MonoBehaviour
         if (puzzleSpawned) return;
 
         Transform boardTransform = boards[currentIndex];
+
         tileParent = boardTransform.Find("TileParent");
         if (tileParent == null)
         {
             Debug.LogError("TileParent not found");
             return;
+        }
+
+        // ✅ Add this block right here:
+        var selectorTransform = boardTransform.Find("Selector");
+        if (selectorTransform != null)
+        {
+            globalSelector = selectorTransform.GetComponent<RectTransform>();
+            globalSelector.gameObject.SetActive(false); // initially hidden
+        }
+        else
+        {
+            Debug.LogWarning("Selector not found inside board!");
         }
 
         SpawnPuzzleGrid();
@@ -227,6 +241,7 @@ public class PlayerIconController : MonoBehaviour
         puzzleSpawnAllowed = true;
         iconImage.enabled = false;
     }
+
 
     private void SpawnPuzzleGrid()
     {
@@ -270,38 +285,66 @@ public class PlayerIconController : MonoBehaviour
 
     }
 
+    //private void UpdateSelector()
+    //{
+    //    for (int y = 0; y < 5; y++)
+    //    {
+    //        for (int x = 0; x < 5; x++)
+    //        {
+    //            var tile = tileGrid[x, y];
+    //            Transform selector = tile.transform.Find("Selector");
+    //            if (selector)
+    //            {
+    //                bool isSelected = (x == cursorX && y == cursorY);
+    //                selector.gameObject.SetActive(isSelected);
+    //                var highlight = selector.Find("Highlight");
+    //                if (highlight != null)
+    //                {
+    //                    highlight.gameObject.SetActive(isSelected && inEditMode);
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
     private void UpdateSelector()
     {
-        for (int y = 0; y < 5; y++)
-        {
-            for (int x = 0; x < 5; x++)
-            {
-                var tile = tileGrid[x, y];
-                Transform selector = tile.transform.Find("Selector");
-                if (selector)
-                {
-                    bool isSelected = (x == cursorX && y == cursorY);
-                    selector.gameObject.SetActive(isSelected);
-                    var highlight = selector.Find("Highlight");
-                    if (highlight != null)
-                    {
-                        highlight.gameObject.SetActive(isSelected && inEditMode);
-                    }
-                }
-            }
-        }
+        if (globalSelector == null || tileParent == null) return;
+
+        // Get RectTransform of the target tile in tileParent space
+        RectTransform targetTileRT = tileGrid[cursorX, cursorY].GetComponent<RectTransform>();
+
+        // Convert tile local position from TileParent space to world space
+        Vector3 worldPos = targetTileRT.transform.position;
+
+        // Convert world position to Board local position (selector parent)
+        Vector3 localPosInBoard = globalSelector.parent.InverseTransformPoint(worldPos);
+
+        // Set selector anchoredPosition relative to Board
+        globalSelector.localPosition = localPosInBoard;
+
+        if (!globalSelector.gameObject.activeSelf)
+            globalSelector.gameObject.SetActive(true);
     }
+
+
+    //private void SetSelectorHighlight(bool on)
+    //{
+    //    if (boards == null || !puzzleSpawned) return;
+    //    var selector = tileGrid[cursorX, cursorY].transform.Find("Selector");
+    //    if (selector == null) return;
+    //    var highlight = selector.Find("Highlight");
+    //    if (highlight == null) return;
+    //    highlight.gameObject.SetActive(on);
+    //}
 
     private void SetSelectorHighlight(bool on)
     {
-        if (boards == null || !puzzleSpawned) return;
-        var selector = tileGrid[cursorX, cursorY].transform.Find("Selector");
-        if (selector == null) return;
-        var highlight = selector.Find("Highlight");
-        if (highlight == null) return;
-        highlight.gameObject.SetActive(on);
-    }
+        if (globalSelector == null) return;
 
+        var highlight = globalSelector.Find("Highlight");
+        if (highlight != null)
+            highlight.gameObject.SetActive(on);
+    }
 
 
     private void RollRow(int rowIndex, bool toRight)
