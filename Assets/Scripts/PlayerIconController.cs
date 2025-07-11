@@ -657,13 +657,13 @@ public class PlayerIconController : MonoBehaviour
             }
             else
             {
-                yield return tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).WaitForCompletion();
+                yield return tileRT.DOScale(Vector3.zero, 1f).SetEase(Ease.InBack).WaitForCompletion();
 
                 int randomIndex = Random.Range(0, tilePrefabs.Length);
                 tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
 
                 tileRT.localScale = Vector3.zero;
-                yield return tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).WaitForCompletion();
+                yield return tileRT.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack).WaitForCompletion();
             }
 
             yield return new WaitForSeconds(delayBetween);
@@ -755,7 +755,7 @@ public class PlayerIconController : MonoBehaviour
 
                 foreach (int rowIndex in rowsToClear)
                 {
-                    yield return StartCoroutine(mycleanRow(rowIndex));
+                    yield return StartCoroutine(ClearRow(rowIndex));
                     yield return new WaitForSeconds(0.3f);
                     ShiftRowsDownFrom(rowIndex);
                     yield return new WaitForSeconds(0.3f);
@@ -831,16 +831,15 @@ public class PlayerIconController : MonoBehaviour
         for (int y = 0; y < 5; y++)
         {
             var tile = tileGrid[colIndex, y].GetComponent<Tile>();
-            var rt = tile.GetComponent<RectTransform>();
+            RectTransform rt = tile.GetComponent<RectTransform>();
 
-            tile.SetTile(-1, null); // حذف محتوای تایل
-            rt.localScale = Vector3.zero; // اسکیل به صفر برای شروع
+            // حذف با انیمیشن
+            yield return rt.DOScale(Vector3.zero, 0.02f).SetEase(Ease.InBack).WaitForCompletion();
 
-            yield return rt.DOScale(Vector3.one, 0.02f)
-                .SetEase(Ease.InOutBounce)
-                .WaitForCompletion();
+            tile.SetTile(-1, null); // بعد از حذف انیمیشنی محتوا خالی شود
 
-            yield return new WaitForSeconds(0.02f); // تأخیر بین هر تایل
+            yield return rt.DOScale(Vector3.one, 0.02f).SetEase(Ease.OutBack).WaitForCompletion();
+            yield return new WaitForSeconds(0.005f);
         }
     }
 
@@ -886,18 +885,22 @@ public class PlayerIconController : MonoBehaviour
     }
 
 
-    private IEnumerator ClearRow(int rowIndex)
+private IEnumerator ClearRow(int rowIndex)
+{
+    for (int x = 0; x < 5; x++)
     {
-        for (int x = 0; x < 5; x++)
-        {
-            var tile = tileGrid[x, rowIndex].GetComponent<Tile>();
-            tile.SetTile(-1, null);
-            RectTransform rt = tile.GetComponent<RectTransform>();
-            rt.localScale = Vector3.zero;
-            rt.DOScale(Vector3.one, 0.1f).SetEase(Ease.InOutBounce);
-            yield return new WaitForSeconds(0.1f);
-        }
+        var tile = tileGrid[x, rowIndex].GetComponent<Tile>();
+        RectTransform rt = tile.GetComponent<RectTransform>();
+
+        // حذف با انیمیشن
+        yield return rt.DOScale(new Vector3 (0,2f,0), 0.02f).SetEase(Ease.InBack).WaitForCompletion();
+
+        tile.SetTile(-1, null); // بعد از حذف انیمیشنی محتوا خالی شود
+
+        yield return rt.DOScale(Vector3.one, 0.02f).SetEase(Ease.OutBack).WaitForCompletion();
+        yield return new WaitForSeconds(0.005f);
     }
+}
 
     private void ShiftRowsDownFrom(int startRow)
     {
