@@ -748,7 +748,6 @@ public class PlayerIconController : MonoBehaviour
                 break;
             }
 
-            // ✅ Calculate and apply health
             if (healthBar != null)
             {
                 if (foundFive)
@@ -760,25 +759,133 @@ public class PlayerIconController : MonoBehaviour
                     healthBar.fillAmount += 4 * 0.036f;
                 }
 
-                // ✅ Optional: Clamp fill amount between 0 and 1
                 healthBar.fillAmount = Mathf.Clamp01(healthBar.fillAmount);
             }
 
-            // ✅ If both 4 and 5 exist, use fade animation
-            bool useFade = foundFour && foundFive;
+            bool didClearRowOrColumn = false;
 
-            // Clear tiles with animation
-            yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
+            if (foundFive)
+            {
+                // پیدا کردن سطرهایی که 5 تایی کامل دارند
+                HashSet<int> rowsToClear = new();
+                for (int y = 0; y < 5; y++)
+                {
+                    int count = 0;
+                    foreach (var pos in matchedPositions)
+                    {
+                        if (pos.y == y) count++;
+                    }
+                    if (count >= 5)
+                        rowsToClear.Add(y);
+                }
 
-            // Respawn new tiles
-            RespawnTilesAtPositions(matchedPositions);
+                foreach (int rowIndex in rowsToClear)
+                {
+                    ClearRow(rowIndex);
+                    yield return new WaitForSeconds(0.3f);
+                    ShiftRowsDownFrom(rowIndex);
+                    yield return new WaitForSeconds(0.3f);
+                }
 
-            yield return new WaitForSeconds(0.2f);
+                // پیدا کردن ستون‌هایی که 5 تایی کامل دارند
+                HashSet<int> colsToClear = new();
+                for (int x = 0; x < 5; x++)
+                {
+                    int count = 0;
+                    foreach (var pos in matchedPositions)
+                    {
+                        if (pos.x == x) count++;
+                    }
+                    if (count >= 5)
+                        colsToClear.Add(x);
+                }
+
+                foreach (int colIndex in colsToClear)
+                {
+                    ClearColumn(colIndex);
+                    yield return new WaitForSeconds(0.3f);
+                    ShiftColumnsRightFrom(colIndex);
+                    yield return new WaitForSeconds(0.3f);
+                }
+
+                didClearRowOrColumn = rowsToClear.Count > 0 || colsToClear.Count > 0;
+            }
+
+            if (!didClearRowOrColumn)
+            {
+                bool useFade = foundFour && foundFive;
+                yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
+                RespawnTilesAtPositions(matchedPositions);
+                yield return new WaitForSeconds(0.2f);
+            }
         }
 
         inputLocked = false;
     }
+    private void ShiftColumnsRightFrom(int startCol)
+    {
+        for (int x = startCol; x < 4; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                var rightTile = tileGrid[x + 1, y].GetComponent<Tile>();
+                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+                currentTile.SetTile(rightTile.tileID, rightTile.tileImage.sprite);
+            }
+        }
 
+        // اسپاون تایل رندوم برای ستون آخر (سمت راست)
+        for (int y = 0; y < 5; y++)
+        {
+            int randomIndex = Random.Range(0, tilePrefabs.Length);
+            var rightmostTile = tileGrid[4, y].GetComponent<Tile>();
+            var newSprite = tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite;
+            rightmostTile.SetTile(randomIndex, newSprite);
+        }
+    }
+    private void ClearColumn(int colIndex)
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            var tile = tileGrid[colIndex, y].GetComponent<Tile>();
+            tile.SetTile(-1, null);
+            tile.GetComponent<RectTransform>().localScale = Vector3.zero;
+            tile.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+        }
+    }
+
+    private void ClearRow(int rowIndex)
+    {
+        for (int x = 0; x < 5; x++)
+        {
+            var tile = tileGrid[x, rowIndex].GetComponent<Tile>();
+            tile.SetTile(-1, null); // یا هر چیز که معنی حذف باشه
+            tile.GetComponent<RectTransform>().localScale = Vector3.zero; // انیمیشن حذف بصورت کوچک شدن
+            tile.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+        }
+    }
+
+    private void ShiftRowsDownFrom(int startRow)
+    {
+        for (int y = startRow; y > 0; y--)
+        {
+            for (int x = 0; x < 5; x++)
+            {
+                var upperTile = tileGrid[x, y - 1].GetComponent<Tile>();
+                var currentTile = tileGrid[x, y].GetComponent<Tile>();
+                currentTile.SetTile(upperTile.tileID, upperTile.tileImage.sprite);
+            }
+        }
+
+        // بالاترین سطر ریسپاون رندوم جدید
+        for (int x = 0; x < 5; x++)
+        {
+            int randomIndex = Random.Range(0, tilePrefabs.Length);
+            var topTile = tileGrid[x, 0].GetComponent<Tile>();
+            var newSprite = tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite;
+            topTile.SetTile(randomIndex, newSprite);
+        }
+    }
 
     private List<(int x, int y)> GetMatchedPositions(out bool foundFour, out bool foundFive)
     {
