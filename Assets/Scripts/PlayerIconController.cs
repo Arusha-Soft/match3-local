@@ -209,38 +209,6 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
-    //public void SpawnPuzzleAfterCountdown()
-    //{
-    //    if (puzzleSpawned) return;
-
-    //    Transform boardTransform = boards[currentIndex];
-
-    //    tileParent = boardTransform.Find("TileParent");
-    //    if (tileParent == null)
-    //    {
-    //        Debug.LogError("TileParent not found");
-    //        return;
-    //    }
-
-    //    // ✅ Add this block right here:
-    //    var selectorTransform = boardTransform.Find("Selector");
-    //    if (selectorTransform != null)
-    //    {
-    //        globalSelector = selectorTransform.GetComponent<RectTransform>();
-    //        globalSelector.gameObject.SetActive(false); // initially hidden
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("Selector not found inside board!");
-    //    }
-
-    //    SpawnPuzzleGrid();
-    //    puzzleSpawned = true;
-    //    inPuzzleMode = true;
-    //    inputLocked = false;
-    //    puzzleSpawnAllowed = true;
-    //    iconImage.enabled = false;
-    //}
     public void SpawnPuzzleAfterCountdown()
     {
         if (puzzleSpawned) return;
@@ -325,27 +293,7 @@ public class PlayerIconController : MonoBehaviour
 
     }
 
-    //private void UpdateSelector()
-    //{
-    //    for (int y = 0; y < 5; y++)
-    //    {
-    //        for (int x = 0; x < 5; x++)
-    //        {
-    //            var tile = tileGrid[x, y];
-    //            Transform selector = tile.transform.Find("Selector");
-    //            if (selector)
-    //            {
-    //                bool isSelected = (x == cursorX && y == cursorY);
-    //                selector.gameObject.SetActive(isSelected);
-    //                var highlight = selector.Find("Highlight");
-    //                if (highlight != null)
-    //                {
-    //                    highlight.gameObject.SetActive(isSelected && inEditMode);
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
+
     private void UpdateSelector()
     {
         if (globalSelector == null || tileParent == null) return;
@@ -365,18 +313,6 @@ public class PlayerIconController : MonoBehaviour
         if (!globalSelector.gameObject.activeSelf)
             globalSelector.gameObject.SetActive(true);
     }
-
-
-    //private void SetSelectorHighlight(bool on)
-    //{
-    //    if (boards == null || !puzzleSpawned) return;
-    //    var selector = tileGrid[cursorX, cursorY].transform.Find("Selector");
-    //    if (selector == null) return;
-    //    var highlight = selector.Find("Highlight");
-    //    if (highlight == null) return;
-    //    highlight.gameObject.SetActive(on);
-    //}
-
     private void SetSelectorHighlight(bool on)
     {
         if (globalSelector == null) return;
@@ -656,41 +592,46 @@ public class PlayerIconController : MonoBehaviour
         isShifting = false;
     }
 
-
-
-
-    //private IEnumerator ClearMatchesAndRespawnRoutine()
+    //private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions, bool useFade)
     //{
-    //    inputLocked = true;
-    //    bool foundMatch = true;
+    //    float delayBetween = 0.05f;
 
-    //    while (foundMatch)
+    //    foreach (var pos in positions)
     //    {
-    //        yield return null;
+    //        GameObject tileObj = tileGrid[pos.x, pos.y];
+    //        Tile tileComp = tileObj.GetComponent<Tile>();
+    //        RectTransform tileRT = tileObj.GetComponent<RectTransform>();
 
-    //        bool foundFour, foundFive;
-    //        var matchedPositions = GetMatchedPositions(out foundFour, out foundFive);
-
-    //        if (matchedPositions.Count == 0)
+    //        if (useFade)
     //        {
-    //            foundMatch = false;
-    //            break;
+    //            // Fade animation
+    //            CanvasGroup cg = tileObj.GetComponent<CanvasGroup>();
+    //            if (cg == null) cg = tileObj.AddComponent<CanvasGroup>();
+
+    //            cg.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
+    //            {
+    //                int randomIndex = Random.Range(0, tilePrefabs.Length);
+    //                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+    //                cg.alpha = 0f;
+    //                cg.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
+    //            });
+    //        }
+    //        else
+    //        {
+    //            // Scale animation - با تأخیر بین هر تایل
+    //            yield return tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).WaitForCompletion();
+
+    //            int randomIndex = Random.Range(0, tilePrefabs.Length);
+    //            tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+    //            tileRT.localScale = Vector3.zero;
+
+    //            yield return tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).WaitForCompletion();
     //        }
 
-    //        // ✅ If both 4 and 5 exist, use fade animation
-    //        bool useFade = foundFour && foundFive;
-
-    //        // Clear tiles with animation
-    //        yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
-
-    //        // Respawn new tiles
-    //        RespawnTilesAtPositions(matchedPositions);
-
-    //        yield return new WaitForSeconds(0.2f);
+    //        yield return new WaitForSeconds(delayBetween);
     //    }
-
-    //    inputLocked = false;
     //}
+
     private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions, bool useFade)
     {
         float delayBetween = 0.05f;
@@ -703,33 +644,66 @@ public class PlayerIconController : MonoBehaviour
 
             if (useFade)
             {
-                // Fade animation
                 CanvasGroup cg = tileObj.GetComponent<CanvasGroup>();
                 if (cg == null) cg = tileObj.AddComponent<CanvasGroup>();
 
-                cg.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-                {
-                    int randomIndex = Random.Range(0, tilePrefabs.Length);
-                    tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
-                    cg.alpha = 0f;
-                    cg.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
-                });
+                yield return cg.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).WaitForCompletion();
+
+                int randomIndex = Random.Range(0, tilePrefabs.Length);
+                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+
+                cg.alpha = 0f;
+                yield return cg.DOFade(1f, 0.3f).SetEase(Ease.OutQuad).WaitForCompletion();
             }
             else
             {
-                // Scale animation (original behavior)
-                tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
-                {
-                    int randomIndex = Random.Range(0, tilePrefabs.Length);
-                    tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
-                    tileRT.localScale = Vector3.zero;
-                    tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-                });
+                yield return tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).WaitForCompletion();
+
+                int randomIndex = Random.Range(0, tilePrefabs.Length);
+                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+
+                tileRT.localScale = Vector3.zero;
+                yield return tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack).WaitForCompletion();
             }
 
             yield return new WaitForSeconds(delayBetween);
         }
     }
+
+    private IEnumerator AnimateFiveCombo(List<(int x, int y)> positions)
+    {
+        float delayBetween = 0.1f;
+        float punchDuration = 0.3f;
+
+        foreach (var pos in positions)
+        {
+            GameObject tileObj = tileGrid[pos.x, pos.y];
+            RectTransform tileRT = tileObj.GetComponent<RectTransform>();
+
+            yield return tileRT.DOPunchScale(new Vector3(0.3f, 0.3f, 0), punchDuration, 10, 1).WaitForCompletion();
+
+            yield return new WaitForSeconds(delayBetween);
+        }
+    }
+
+    private void RespawnTilesAtPositions(List<(int x, int y)> positions)
+    {
+        foreach (var pos in positions)
+        {
+            GameObject tileObj = tileGrid[pos.x, pos.y];
+            Tile tileComp = tileObj.GetComponent<Tile>();
+            RectTransform tileRT = tileObj.GetComponent<RectTransform>();
+
+            int randomIndex = Random.Range(0, tilePrefabs.Length);
+            Sprite newSprite = tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite;
+
+            tileComp.SetTile(randomIndex, newSprite);
+            tileRT.localScale = Vector3.one;
+
+            tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+        }
+    }
+
     private IEnumerator ClearMatchesAndRespawnRoutine()
     {
         inputLocked = true;
@@ -748,61 +722,57 @@ public class PlayerIconController : MonoBehaviour
                 break;
             }
 
+            // افزایش نوار سلامتی
             if (healthBar != null)
             {
-                if (foundFive)
-                {
-                    healthBar.fillAmount += 5 * 0.036f;
-                }
-                else if (foundFour)
-                {
-                    healthBar.fillAmount += 4 * 0.036f;
-                }
+                float healthToAdd = 0f;
 
+                if (foundFive)
+                    healthToAdd = 5 * 0.036f;
+                else if (foundFour)
+                    healthToAdd = 4 * 0.036f;
+
+                healthBar.fillAmount += healthToAdd;
                 healthBar.fillAmount = Mathf.Clamp01(healthBar.fillAmount);
+
+                if (joinManager != null)
+                    joinManager.AddFuseAmount(currentIndex, healthToAdd);
             }
 
             bool didClearRowOrColumn = false;
 
+            // حذف ردیف‌ها و ستون‌های کامل (کمبو ۵)
             if (foundFive)
             {
-                // پیدا کردن سطرهایی که 5 تایی کامل دارند
                 HashSet<int> rowsToClear = new();
                 for (int y = 0; y < 5; y++)
                 {
                     int count = 0;
                     foreach (var pos in matchedPositions)
-                    {
                         if (pos.y == y) count++;
-                    }
-                    if (count >= 5)
-                        rowsToClear.Add(y);
+                    if (count >= 5) rowsToClear.Add(y);
                 }
 
                 foreach (int rowIndex in rowsToClear)
                 {
-                    ClearRow(rowIndex);
+                    yield return StartCoroutine(mycleanRow(rowIndex));
                     yield return new WaitForSeconds(0.3f);
                     ShiftRowsDownFrom(rowIndex);
                     yield return new WaitForSeconds(0.3f);
                 }
 
-                // پیدا کردن ستون‌هایی که 5 تایی کامل دارند
                 HashSet<int> colsToClear = new();
                 for (int x = 0; x < 5; x++)
                 {
                     int count = 0;
                     foreach (var pos in matchedPositions)
-                    {
                         if (pos.x == x) count++;
-                    }
-                    if (count >= 5)
-                        colsToClear.Add(x);
+                    if (count >= 5) colsToClear.Add(x);
                 }
 
                 foreach (int colIndex in colsToClear)
                 {
-                    ClearColumn(colIndex);
+                    yield return StartCoroutine(ClearColumn(colIndex));
                     yield return new WaitForSeconds(0.3f);
                     ShiftColumnsRightFrom(colIndex);
                     yield return new WaitForSeconds(0.3f);
@@ -813,15 +783,86 @@ public class PlayerIconController : MonoBehaviour
 
             if (!didClearRowOrColumn)
             {
-                bool useFade = foundFour && foundFive;
-                yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, useFade));
-                RespawnTilesAtPositions(matchedPositions);
-                yield return new WaitForSeconds(0.2f);
+                // اگر هم کمبو ۵ بود هم کمبو ۴ → fade حذف شود
+                // اگر فقط کمبو ۵ بود → scale حذف شود
+
+                bool useFade = foundFive && foundFour;
+                bool useScale = foundFive && !foundFour;
+
+                if (useFade)
+                {
+                    yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, true)); // fade
+                    RespawnTilesAtPositions(matchedPositions);
+                    yield return new WaitForSeconds(0.2f);
+                }
+                else if (useScale)
+                {
+                    yield return StartCoroutine(AnimateFiveCombo(matchedPositions)); // punch scale
+                    yield return StartCoroutine(ClearTilesOneByOneRoutine(matchedPositions, false)); // scale حذف
+                    RespawnTilesAtPositions(matchedPositions);
+                    yield return new WaitForSeconds(0.2f);
+                }
             }
         }
 
         inputLocked = false;
     }
+
+
+    private IEnumerator mycleanRow(int rowIndex)
+    {
+        for (int x = 0; x < 5; x++)
+        {
+            var tile = tileGrid[x, rowIndex].GetComponent<Tile>();
+            var rt = tile.GetComponent<RectTransform>();
+
+            tile.SetTile(-1, null); // حذف محتوای تایل
+            rt.localScale = Vector3.zero; // اسکیل به صفر برای شروع
+
+            yield return rt.DOScale(Vector3.one, 0.02f)
+                .SetEase(Ease.InOutBounce)
+                .WaitForCompletion();
+
+            yield return new WaitForSeconds(0.02f); // تأخیر بین هر تایل
+        }
+    }
+    private IEnumerator ClearColumn(int colIndex)
+    {
+        for (int y = 0; y < 5; y++)
+        {
+            var tile = tileGrid[colIndex, y].GetComponent<Tile>();
+            var rt = tile.GetComponent<RectTransform>();
+
+            tile.SetTile(-1, null); // حذف محتوای تایل
+            rt.localScale = Vector3.zero; // اسکیل به صفر برای شروع
+
+            yield return rt.DOScale(Vector3.one, 0.02f)
+                .SetEase(Ease.InOutBounce)
+                .WaitForCompletion();
+
+            yield return new WaitForSeconds(0.02f); // تأخیر بین هر تایل
+        }
+    }
+
+    //private IEnumerator AnimateFiveCombo(List<(int x, int y)> positions)
+    //{
+    //    float delayBetween = 1f;
+    //    float punchDuration = 0.3f;
+
+    //    foreach (var pos in positions)
+    //    {
+    //        GameObject tileObj = tileGrid[pos.x, pos.y];
+    //        RectTransform tileRT = tileObj.GetComponent<RectTransform>();
+
+    //        // انیمیشن Punch Scale و صبر تا کامل شدنش
+    //        yield return tileRT.DOPunchScale(new Vector3(0.3f, 0.3f, 0), punchDuration, 10, 1).WaitForCompletion();
+
+    //        // صبر کمی قبل از رفتن به تایل بعدی
+    //        yield return new WaitForSeconds(delayBetween);
+    //    }
+    //}
+
+
     private void ShiftColumnsRightFrom(int startCol)
     {
         for (int x = startCol; x < 4; x++)
@@ -843,25 +884,18 @@ public class PlayerIconController : MonoBehaviour
             rightmostTile.SetTile(randomIndex, newSprite);
         }
     }
-    private void ClearColumn(int colIndex)
-    {
-        for (int y = 0; y < 5; y++)
-        {
-            var tile = tileGrid[colIndex, y].GetComponent<Tile>();
-            tile.SetTile(-1, null);
-            tile.GetComponent<RectTransform>().localScale = Vector3.zero;
-            tile.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-        }
-    }
 
-    private void ClearRow(int rowIndex)
+
+    private IEnumerator ClearRow(int rowIndex)
     {
         for (int x = 0; x < 5; x++)
         {
             var tile = tileGrid[x, rowIndex].GetComponent<Tile>();
-            tile.SetTile(-1, null); // یا هر چیز که معنی حذف باشه
-            tile.GetComponent<RectTransform>().localScale = Vector3.zero; // انیمیشن حذف بصورت کوچک شدن
-            tile.GetComponent<RectTransform>().DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            tile.SetTile(-1, null);
+            RectTransform rt = tile.GetComponent<RectTransform>();
+            rt.localScale = Vector3.zero;
+            rt.DOScale(Vector3.one, 0.1f).SetEase(Ease.InOutBounce);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -987,53 +1021,52 @@ public class PlayerIconController : MonoBehaviour
     }
 
 
-private void ClearTiles(List<(int x, int y)> positions)
-{
-    StartCoroutine(ClearTilesOneByOneRoutine(positions));
-}
-
-private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions)
-{
-    float delayBetween = 0.05f;
-
-    foreach (var pos in positions)
+    private void ClearTiles(List<(int x, int y)> positions)
     {
-        GameObject tileObj = tileGrid[pos.x, pos.y];
-        Tile tileComp = tileObj.GetComponent<Tile>();
-        RectTransform tileRT = tileObj.GetComponent<RectTransform>();
-
-        tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
-        {
-            int randomIndex = Random.Range(0, tilePrefabs.Length);
-            tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
-            tileRT.localScale = Vector3.zero;
-            tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
-        });
-
-        yield return new WaitForSeconds(delayBetween);
+        StartCoroutine(ClearTilesOneByOneRoutine(positions));
     }
-}
-    //private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
-    private void RespawnTilesAtPositions(List<(int x, int y)> positions)
+
+    private IEnumerator ClearTilesOneByOneRoutine(List<(int x, int y)> positions)
     {
+        float delayBetween = 0.05f;
+
         foreach (var pos in positions)
         {
             GameObject tileObj = tileGrid[pos.x, pos.y];
             Tile tileComp = tileObj.GetComponent<Tile>();
             RectTransform tileRT = tileObj.GetComponent<RectTransform>();
 
-            // Assign new random sprite & tileID
-            int randomIndex = Random.Range(0, tilePrefabs.Length);
-            Sprite newSprite = tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite;
+            tileRT.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                int randomIndex = Random.Range(0, tilePrefabs.Length);
+                tileComp.SetTile(randomIndex, tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite);
+                tileRT.localScale = Vector3.zero;
+                tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            });
 
-            tileComp.SetTile(randomIndex, newSprite);
-            tileRT.localScale = Vector3.one; // Make sure scale reset
-
-            // Optional: If you want a respawn animation here, add it
-            tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+            yield return new WaitForSeconds(delayBetween);
         }
     }
+    //private void RespawnTilesAtPositions(List<(int x, int y)> positions) { }
+    //private void RespawnTilesAtPositions(List<(int x, int y)> positions)
+    //{
+    //    foreach (var pos in positions)
+    //    {
+    //        GameObject tileObj = tileGrid[pos.x, pos.y];
+    //        Tile tileComp = tileObj.GetComponent<Tile>();
+    //        RectTransform tileRT = tileObj.GetComponent<RectTransform>();
 
+    //        // Assign new random sprite & tileID
+    //        int randomIndex = Random.Range(0, tilePrefabs.Length);
+    //        Sprite newSprite = tilePrefabs[randomIndex].GetComponent<Tile>().tileImage.sprite;
+
+    //        tileComp.SetTile(randomIndex, newSprite);
+    //        tileRT.localScale = Vector3.one; // Make sure scale reset
+
+    //        // Optional: If you want a respawn animation here, add it
+    //        tileRT.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
+    //    }
+    //}
 
     public int GetScore()
     {
