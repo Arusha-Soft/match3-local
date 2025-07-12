@@ -843,25 +843,6 @@ public class PlayerIconController : MonoBehaviour
         }
     }
 
-    //private IEnumerator AnimateFiveCombo(List<(int x, int y)> positions)
-    //{
-    //    float delayBetween = 1f;
-    //    float punchDuration = 0.3f;
-
-    //    foreach (var pos in positions)
-    //    {
-    //        GameObject tileObj = tileGrid[pos.x, pos.y];
-    //        RectTransform tileRT = tileObj.GetComponent<RectTransform>();
-
-    //        // انیمیشن Punch Scale و صبر تا کامل شدنش
-    //        yield return tileRT.DOPunchScale(new Vector3(0.3f, 0.3f, 0), punchDuration, 10, 1).WaitForCompletion();
-
-    //        // صبر کمی قبل از رفتن به تایل بعدی
-    //        yield return new WaitForSeconds(delayBetween);
-    //    }
-    //}
-
-
     private void ShiftColumnsRightFrom(int startCol)
     {
         for (int x = startCol; x < 4; x++)

@@ -24,24 +24,30 @@ public class PlayerCountSelector : MonoBehaviour
         UpdateText();
     }
 
+
     private void Update()
     {
-        if (Gamepad.current == null || !panelActive) return;
+        if (!panelActive) return;
 
-        // Up
-        if (Gamepad.current.dpad.up.wasPressedThisFrame || Gamepad.current.leftStick.up.wasPressedThisFrame)
+        // Gamepad or Keyboard Up
+        if ((Gamepad.current != null && Gamepad.current.dpad.up.wasPressedThisFrame) ||
+            (Gamepad.current != null && Gamepad.current.leftStick.up.wasPressedThisFrame) ||
+            Keyboard.current.upArrowKey.wasPressedThisFrame)
         {
             IncreaseCount();
         }
 
-        // Down
-        if (Gamepad.current.dpad.down.wasPressedThisFrame || Gamepad.current.leftStick.down.wasPressedThisFrame)
+        // Gamepad or Keyboard Down
+        if ((Gamepad.current != null && Gamepad.current.dpad.down.wasPressedThisFrame) ||
+            (Gamepad.current != null && Gamepad.current.leftStick.down.wasPressedThisFrame) ||
+            Keyboard.current.downArrowKey.wasPressedThisFrame)
         {
             DecreaseCount();
         }
 
-        // South Button (A) to confirm selection
-        if (Gamepad.current.buttonSouth.wasPressedThisFrame)
+        // Gamepad South Button or Enter key to confirm
+        if ((Gamepad.current != null && Gamepad.current.buttonSouth.wasPressedThisFrame) ||
+            Keyboard.current.enterKey.wasPressedThisFrame)
         {
             ConfirmSelection();
         }
