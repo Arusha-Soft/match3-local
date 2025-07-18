@@ -1,11 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PlayerBoard : MonoBehaviour
+public class ModeButton : MonoBehaviour
 {
-    public int playerIndex;
-    public Image iconImage;
-    public Button btn;
     private void Awake()
     {
         PlayerCursor.ClickPlayerCursorEvent += OnClick;
@@ -14,19 +10,11 @@ public class PlayerBoard : MonoBehaviour
     {
         PlayerCursor.ClickPlayerCursorEvent -= OnClick;
     }
-    void Start()
-    {
-    }
+
     void OnClick(GameObject gameObj, int PlayerNumber)
     {
         if (gameObj != gameObject)
             return;
-        iconImage.sprite = JoinManager.Instance.playerSprites[PlayerNumber];
+        JoinManager.Instance.ToggleButton();
     }
-    void Update()
-    {
-       
-    }
-
-   
 }
