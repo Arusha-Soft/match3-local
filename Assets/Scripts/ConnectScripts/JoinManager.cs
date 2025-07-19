@@ -40,6 +40,7 @@ public class JoinManager : MonoBehaviour
             cursor.transform.SetParent(CursorParent, false);
             CursorList.Add(cursor);
             cursor.GetComponent<PlayerCursor>().playerNumber = i;
+            cursor.GetComponent<PlayerCursor>().GamepadPlayer = Gamepad.all[i];
         }
 
         SetModeButoon(isFreeToAll);

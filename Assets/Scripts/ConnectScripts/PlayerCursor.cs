@@ -5,8 +5,9 @@ using UnityEngine.UI;
 public class PlayerCursor : MonoBehaviour
 {
     public int playerNumber;
+    public Gamepad GamepadPlayer;
     public RectTransform cursor;
-    public float moveSpeed = 100f;
+    public float moveSpeed = 50f;
     private Vector2 moveInput;
 
     public Image iconImage;
@@ -20,10 +21,10 @@ public class PlayerCursor : MonoBehaviour
 
     private void Update()
     {
-        if (Gamepad.current == null)
+        if (GamepadPlayer == null)
             return;
 
-        moveInput = Gamepad.current.leftStick.ReadValue();
+        moveInput = GamepadPlayer.leftStick.ReadValue();
 
         cursor.anchoredPosition += moveInput * moveSpeed * Time.deltaTime;
 
@@ -32,7 +33,7 @@ public class PlayerCursor : MonoBehaviour
         //clampedPos.y = Mathf.Clamp(clampedPos.y, 0, Screen.height);
         //cursor.anchoredPosition = clampedPos;
 
-        if (Gamepad.current.buttonSouth.wasPressedThisFrame ||
+        if (GamepadPlayer.buttonSouth.wasPressedThisFrame ||
            Keyboard.current.enterKey.wasPressedThisFrame)
         {
             TryClick();
