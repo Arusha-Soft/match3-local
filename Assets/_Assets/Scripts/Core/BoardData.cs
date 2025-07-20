@@ -13,6 +13,8 @@ namespace Project.Core
 
         public IReadOnlyList<Block> VisibleBlocks => m_VisibleBlocks;
 
+        private int m_BlockCount;
+
         private SelectionBox m_SelectionBox;
         private BoardIdentity m_BoardIdentity;
 
@@ -41,6 +43,8 @@ namespace Project.Core
                     m_VisibleBlocks.Add(block);
                 }
             }
+
+            m_BlockCount = m_Blocks.Count;
         }
 
         public Block GetBlockById(int id)
@@ -83,6 +87,33 @@ namespace Project.Core
             return resultBlock != null;
         }
 
+        public IReadOnlyList<Block> GetColumnBlocksAtId(int blockId)
+        {
+            List<Block> result = new List<Block>(m_OriginalBoardSize.y);
+            int rowNumber = GetRowNumberById(blockId);
+
+            for (int i = rowNumber; i < m_BlockCount; i += m_OriginalBoardSize.x)
+            {
+                result.Add(GetBlockById(i));
+            }
+
+            return result;
+        }
+
+        public IReadOnlyList<Block> GetRowBlocksAtId(int blockId)
+        {
+            List<Block> result = new List<Block>(m_OriginalBoardSize.x);
+            int rowNumber = GetRowNumberById(blockId);
+            int startBlockId = rowNumber * m_OriginalBoardSize.y;
+
+            for (int i = startBlockId; i < (startBlockId + m_OriginalBoardSize.y); i++)
+            {
+                result.Add(GetBlockById(i));
+            }
+
+            return result;
+        }
+
         public int GetRowNumberById(int id)
         {
             return id / m_OriginalBoardSize.x;
@@ -93,28 +124,9 @@ namespace Project.Core
             return id % m_OriginalBoardSize.x;
         }
 
-        public int id;
-        [ContextMenu("A")]
-        private void asd()
+        public IReadOnlyList<Cookie> GetColumnCookiesAtId(int blockId)
         {
-            var f = GetRowCookiesAtId(id);
-
-            for (int i = 0; i < f.Count; i++)
-            {
-                Debug.Log(f[i]);
-            }
-
-            f = GetColumnCookiesAtId(id);
-            Debug.Log("??????????????????????????????????????????????????????????");
-            for (int i = 0; i < f.Count; i++)
-            {
-                Debug.Log(f[i]);
-            }
-        }
-
-        public IReadOnlyList<Cookie> GetColumnCookiesAtId(int id)
-        {
-            TryGetBlockAt(0, GetColumnNumberById(id), out Block firstBlockInColumn);
+            TryGetBlockAt(0, GetColumnNumberById(blockId), out Block firstBlockInColumn);
 
             ContactFilter2D filter2D = new ContactFilter2D()
             {
@@ -126,9 +138,9 @@ namespace Project.Core
             return CheckBuffer(m_VerticalHitBuffer);
         }
 
-        public IReadOnlyList<Cookie> GetRowCookiesAtId(int id)
+        public IReadOnlyList<Cookie> GetRowCookiesAtId(int blockId)
         {
-            TryGetBlockAt(GetRowNumberById(id), 0, out Block firstBlockInRaw);
+            TryGetBlockAt(GetRowNumberById(blockId), 0, out Block firstBlockInRaw);
 
             ContactFilter2D filter2D = new ContactFilter2D()
             {
