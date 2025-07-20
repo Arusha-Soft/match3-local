@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerBoard : MonoBehaviour
 {
-    public int playerIndex;
+    public int boardIndex;
     public Image iconImage;
     public Button btn;
     private void Awake()
@@ -17,11 +17,27 @@ public class PlayerBoard : MonoBehaviour
     void Start()
     {
     }
-    void OnClick(GameObject gameObj, int PlayerNumber)
+    void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect)
     {
         if (gameObj != gameObject)
             return;
-        iconImage.sprite = JoinManager.Instance.playerSprites[PlayerNumber];
+
+        if (isSelect)
+        {
+            if (JoinManager.Instance.CheckBoardDontUse(boardIndex))
+                return;
+            iconImage.sprite = JoinManager.Instance.playerSprites[PlayerNumber];
+            JoinManager.Instance.BindPlayerOnBoard(PlayerNumber, boardIndex);
+        }
+        else
+        {
+            if (!JoinManager.Instance.CheckPlayerAndBoard(PlayerNumber, boardIndex))
+                return;
+
+            iconImage.sprite = JoinManager.Instance.DefaultSprite;
+            JoinManager.Instance.UnBindPlayerOnBoard(PlayerNumber, boardIndex);
+        }
+        
     }
     void Update()
     {

@@ -11,7 +11,7 @@ public class ModeButton : MonoBehaviour
         PlayerCursor.ClickPlayerCursorEvent -= OnClick;
     }
 
-    void OnClick(GameObject gameObj, int PlayerNumber)
+    void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect = true)
     {
         if (gameObj != gameObject)
             return;
