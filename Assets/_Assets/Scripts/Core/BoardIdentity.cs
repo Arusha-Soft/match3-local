@@ -7,12 +7,14 @@ namespace Project.Core
     {
         [SerializeField] private BoardInputHandler m_BoardInput;
         [SerializeField] private BoardData m_BoardData;
+        [SerializeField] private CookieGenerator m_CookieGenerator;
         [SerializeField] private SelectionBoxMover m_SelectionBoxMover;
 
         private void Start()
         {
             m_BoardInput.Init();
             m_BoardData.Init();
+            m_CookieGenerator.Init(m_BoardData);
             m_SelectionBoxMover.Init(m_BoardInput, m_BoardData);
         }
     }

@@ -9,6 +9,9 @@ namespace Project.Core
         [SerializeField] private Vector2Int m_VisibleBoardSize;
         [SerializeField] private List<Block> m_Blocks;
 
+        public IReadOnlyList<Block> VisibleBlocks => m_VisibleBlocks;
+
+        private List<Block> m_VisibleBlocks = new List<Block>();
         private Dictionary<int, Block> m_BlockDictionary;
 
         public void Init()
@@ -17,7 +20,13 @@ namespace Project.Core
 
             for (int i = 0; i < m_Blocks.Count; i++)
             {
-                m_BlockDictionary.Add(m_Blocks[i].Id, m_Blocks[i]);
+                Block block = m_Blocks[i];
+                m_BlockDictionary.Add(block.Id, block);
+
+                if (block.IsVisible)
+                {
+                    m_VisibleBlocks.Add(block);
+                }
             }
         }
 
@@ -47,7 +56,7 @@ namespace Project.Core
             return result;
         }
 
-        public bool TryGetLeftIdOf(int id , out int blockId)
+        public bool TryGetLeftIdOf(int id, out int blockId)
         {
             blockId = id - 1;
             bool result = blockId >= 0;
