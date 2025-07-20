@@ -27,11 +27,6 @@ namespace Project.InputHandling
             m_IsInitialized = true;
         }
 
-        private void OnEnable()
-        {
-            Init();
-        }
-
         private void Update()
         {
             if (!m_IsInitialized)
