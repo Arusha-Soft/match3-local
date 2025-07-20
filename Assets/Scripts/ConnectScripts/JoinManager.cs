@@ -153,7 +153,6 @@ public class JoinManager : MonoBehaviour
             }
         }
 
-        CheckGameStart();
     }
     private void CheckJoinGame(int index)
     {
@@ -179,6 +178,7 @@ public class JoinManager : MonoBehaviour
     public void BindPlayerOnBoard(int playerNumber, int PlayerBoard)
     {
         PlayerOnBoardList.Add(new PlayerOnBoard(playerNumber, PlayerBoard));
+        CheckGameStart();
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)
     {
