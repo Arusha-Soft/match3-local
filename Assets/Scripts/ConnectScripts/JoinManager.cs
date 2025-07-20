@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class JoinManager : MonoBehaviour
 {
@@ -32,6 +31,9 @@ public class JoinManager : MonoBehaviour
     public Sprite[] NumberSprites;
     private int LimitFreeToAll = 3;
     private int LimitTeam = 8;
+
+    public delegate void PlayerOnBoardHandler(List<PlayerOnBoard> playerOnBoardList);
+    public static PlayerOnBoardHandler PlayerOnBoardEvent;
 
     private void Awake()
     {
@@ -150,6 +152,8 @@ public class JoinManager : MonoBehaviour
                 }
             }
         }
+
+        CheckGameStart();
     }
     private void CheckJoinGame(int index)
     {
@@ -193,6 +197,26 @@ public class JoinManager : MonoBehaviour
     public bool CheckPlayerAndBoard(int playerNumber, int boardIndex)
     {
         return PlayerOnBoardList.Where((pon) => (pon.PlayerNumber == playerNumber && pon.PlayerBoard == boardIndex)).Any();
+    }
+
+    private void CheckGameStart()
+    {
+        if (isFreeToAll)
+        {
+            if(PlayerOnBoardList.Count== BoardFreeToAllList.Count)
+            {
+                Debug.Log("Game ready to start");
+                PlayerOnBoardEvent?.Invoke(PlayerOnBoardList);
+            }
+        }
+        else
+        {
+            if (PlayerOnBoardList.Count == BoardTeamList.Count)
+            {
+                Debug.Log("Game ready to start");
+                PlayerOnBoardEvent?.Invoke(PlayerOnBoardList);
+            }
+        }
     }
 
 }

@@ -115,16 +115,16 @@ public class PlayerCursor : MonoBehaviour
 
     private void ModeButtonClick(GameObject btn)
     {
-        ClickPlayerCursorEvent(btn, playerNumber);
+        ClickPlayerCursorEvent?.Invoke(btn, playerNumber);
     }
     private void SelectBoard(GameObject btn)
     {
         if (JoinManager.Instance.CheckPlayerOnBoard(playerNumber))
             return;
-        ClickPlayerCursorEvent(btn, playerNumber);
+        ClickPlayerCursorEvent?.Invoke(btn, playerNumber);
     }
     private void UnselectBoard(GameObject btn)
     {
-        ClickPlayerCursorEvent(btn, playerNumber, false);
+        ClickPlayerCursorEvent?.Invoke(btn, playerNumber, false);
     }
 }
