@@ -1,0 +1,40 @@
+using System;
+using System.Collections;
+using UnityEngine;
+
+namespace Project.Core
+{
+    public class MovableTile : BaseTile
+    {
+        [SerializeField] private float m_MoveDuration = 0.2f;
+
+        private Coroutine m_Moving;
+
+        public void Move(Transform target)
+        {
+            if(m_Moving != null)
+            {
+                StopCoroutine(m_Moving);
+            }
+
+            StartCoroutine(Moving(target));
+        }
+
+        protected virtual void OnFinishMoving(MovableTile movableTile) { }
+
+        private IEnumerator Moving(Transform target)
+        {
+            float value = 0;
+
+            while (transform.position != target.position)
+            {
+                value += Time.deltaTime / m_MoveDuration;
+                transform.position = Vector3.Lerp(transform.position, target.position, value);
+                yield return null;
+            }
+
+            m_Moving = null;
+            OnFinishMoving(this);
+        }
+    }
+}
