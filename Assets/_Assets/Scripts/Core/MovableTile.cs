@@ -8,6 +8,8 @@ namespace Project.Core
     {
         [SerializeField] private float m_MoveDuration = 0.2f;
 
+        public event Action<MovableTile> FinishMoving;
+
         private Coroutine m_Moving;
 
         public void Move(Transform target)
@@ -25,16 +27,17 @@ namespace Project.Core
         private IEnumerator Moving(Transform target)
         {
             float value = 0;
-
+            Vector3 startPosition = transform.position;
             while (transform.position != target.position)
             {
                 value += Time.deltaTime / m_MoveDuration;
-                transform.position = Vector3.Lerp(transform.position, target.position, value);
+                transform.position = Vector3.Lerp(startPosition, target.position, value);
                 yield return null;
             }
 
             m_Moving = null;
             OnFinishMoving(this);
+            FinishMoving?.Invoke(this);
         }
     }
 }

@@ -90,9 +90,10 @@ namespace Project.Core
         public IReadOnlyList<Block> GetColumnBlocksAtId(int blockId)
         {
             List<Block> result = new List<Block>(m_OriginalBoardSize.y);
-            int rowNumber = GetRowNumberById(blockId);
 
-            for (int i = rowNumber; i < m_BlockCount; i += m_OriginalBoardSize.x)
+            int columnIndex = blockId % m_OriginalBoardSize.x;
+
+            for (int i = columnIndex; i < m_BlockCount; i += m_OriginalBoardSize.x)
             {
                 result.Add(GetBlockById(i));
             }

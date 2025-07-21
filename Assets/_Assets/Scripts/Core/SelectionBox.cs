@@ -33,7 +33,7 @@ namespace Project.Core
         {
             while (true)
             {
-                if (!m_IsInMoving)
+                if (!m_IsInMoving && !m_Input.SelectIsPressed)
                 {
                     if (m_Input.IsUp)
                     {
