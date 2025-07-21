@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Pool;
 using Random = UnityEngine.Random;
@@ -12,14 +11,19 @@ namespace Project.Core
 {
     public class CookiesController : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private CookieProperties[] m_CookieProperties;
         [SerializeField] private Cookie m_CookiePrefab;
         [SerializeField] private Transform m_CookieParent;
+
+        public event Action OnFinishMovingCookies;
 
         private BoardData m_BoardData;
         private BoardInputHandler m_Input;
         private SelectionBox m_SelectionBox;
         private BoardIdentity m_BoardIdentity;
+        private CookiesMatcher m_CookiesMatcher;
+
         private List<Block> m_TempBlocks = new List<Block>();
         private List<Cookie> m_TempCookies = new List<Cookie>();
 
@@ -30,19 +34,24 @@ namespace Project.Core
 
         private ObjectPool<Cookie> m_CookiePool;
 
-        public void Init(BoardData boardData, BoardInputHandler input, SelectionBox selectionBox, BoardIdentity boardIdentity)
+        public void Init(BoardData boardData, BoardInputHandler input, SelectionBox selectionBox,
+            BoardIdentity boardIdentity, CookiesMatcher cookiesMatcher)
         {
             m_BoardData = boardData;
             m_Input = input;
             m_SelectionBox = selectionBox;
             m_BoardIdentity = boardIdentity;
+            m_CookiesMatcher = cookiesMatcher;
 
             m_CookiePool = new ObjectPool<Cookie>(OnCreate, OnGet, OnRelease);
+
+            m_CookiesMatcher.OnDisappearCookies += OnDisappearCookies;
 
             StartCoroutine(MoveHandling());
             FillBoard();
         }
 
+        #region Movement
         private IEnumerator MoveHandling()
         {
             while (true)
@@ -95,7 +104,6 @@ namespace Project.Core
             {
                 Cookie firstCookie = m_TempCookies[0];
                 Block firstBlock = m_TempBlocks[m_TempBlocks.Count - 1];
-                Debug.Log(firstBlock);
                 Cookie tempCookie = m_CookiePool.Get();
                 tempCookie.Init(firstCookie.Properties, tempCookie.Owner);
                 tempCookie.transform.position = firstBlock.transform.position;
@@ -168,7 +176,6 @@ namespace Project.Core
             m_CookiePool.Release(tempCoocike);
         }
 
-
         private void OnCookieFinishMoving(MovableTile cookie)
         {
             cookie.FinishMoving -= OnCookieFinishMoving;
@@ -181,7 +188,20 @@ namespace Project.Core
                 m_TempBlocks.Clear();
                 m_TempCookies.Clear();
                 m_IsMoving = false;
+                DoFinishCookieMovement();
             }
+        }
+
+        #endregion
+
+        private void DoFinishCookieMovement()
+        {
+            OnFinishMovingCookies?.Invoke();
+        }
+
+        private void OnDisappearCookies(CookiesMatcher.MatchCookiesData data)
+        {
+            Debug.Log(data.IsHorizontal);
         }
 
         private void FillBoard()

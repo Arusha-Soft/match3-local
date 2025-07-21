@@ -12,10 +12,10 @@ namespace Project.Core
         [SerializeField] private List<Block> m_Blocks;
 
         public IReadOnlyList<Block> VisibleBlocks => m_VisibleBlocks;
+        public Vector2Int OriginalBoardSize => m_OriginalBoardSize;
 
         private int m_BlockCount;
 
-        private SelectionBox m_SelectionBox;
         private BoardIdentity m_BoardIdentity;
 
         private List<Block> m_VisibleBlocks = new List<Block>();
@@ -30,7 +30,6 @@ namespace Project.Core
             m_VerticalHitBuffer = new List<RaycastHit2D>(m_HitBuffer);
             m_HorizontalHitBuffer = new List<RaycastHit2D>(m_HitBuffer);
 
-            m_SelectionBox = selectionBox;
             m_BoardIdentity = boardIdentity;
 
             for (int i = 0; i < m_Blocks.Count; i++)
@@ -108,6 +107,30 @@ namespace Project.Core
             int startBlockId = rowNumber * m_OriginalBoardSize.y;
 
             for (int i = startBlockId; i < (startBlockId + m_OriginalBoardSize.y); i++)
+            {
+                result.Add(GetBlockById(i));
+            }
+
+            return result;
+        }
+
+        public IReadOnlyList<Block> GetBlokcsAtRow(int rowIndex)
+        {
+            List<Block> result = new List<Block>(m_OriginalBoardSize.x);
+
+            for (int i = (rowIndex * m_OriginalBoardSize.x); i < (m_OriginalBoardSize.x * (rowIndex + 1)); i++)
+            {
+                result.Add(GetBlockById(i));
+            }
+
+            return result;
+        }
+
+        public IReadOnlyList<Block> GetBlocksAtColumn(int columnIndex)
+        {
+            List<Block> result = new List<Block>(m_OriginalBoardSize.x);
+
+            for (int i = columnIndex; i < m_BlockCount; i+= m_OriginalBoardSize.x)
             {
                 result.Add(GetBlockById(i));
             }

@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 2364771208959180729}
   - component: {fileID: 7279641210109595326}
   - component: {fileID: 5555980092942374936}
+  - component: {fileID: 5335112399562351405}
   m_Layer: 0
   m_Name: BoardTheme
   m_TagString: Untagged
@@ -301,6 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_OriginalBoardSize: {x: 7, y: 7}
   m_VisibleBoardSize: {x: 5, y: 5}
+  m_HitBuffer: 10
   m_Blocks:
   - {fileID: 4249374540736403230}
   - {fileID: 3925909290913042016}
@@ -372,6 +374,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 68607e39be3e36044b3bc5c6257e04e8, type: 2}
   m_CookiePrefab: {fileID: 4925614251629074187, guid: 4f8c620453357b143b484143446e02f1, type: 3}
   m_CookieParent: {fileID: 1824564362777709280}
+--- !u!114 &5335112399562351405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2482011467840462587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138b4384e49d4374e8eeaaa56b127cf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MatchActions:
+  - {fileID: 11400000, guid: 61092e1581e97a644810210edf756952, type: 2}
+  - {fileID: 11400000, guid: f63bca8e755b1b94ba90a5822cba89d6, type: 2}
+  - {fileID: 11400000, guid: 4c888e85ce9dbb043a75d28bfd72252f, type: 2}
+  - {fileID: 11400000, guid: ab94898488e7e284ea2a3afe88426c67, type: 2}
+  - {fileID: 11400000, guid: a4d1f5f58b441424a9e2baa04325429e, type: 2}
 --- !u!1 &3414033496991437863
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,6 +607,7 @@ MonoBehaviour:
   m_BoardInput: {fileID: 2364771208959180729}
   m_BoardData: {fileID: 7279641210109595326}
   m_CookieGenerator: {fileID: 5555980092942374936}
+  m_CookiesMatcher: {fileID: 5335112399562351405}
   m_SelectionBox: {fileID: 2031378112663229674}
 --- !u!1 &8193566255311046859
 GameObject:
