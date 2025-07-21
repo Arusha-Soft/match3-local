@@ -1,28 +1,31 @@
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-public class PlayerCursor : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    public int playerNumber;
-    public Gamepad GamepadPlayer;
-    public Mouse mouse;
-    public RectTransform cursor;
-    public float moveSpeed = 50f;
-    public float moveMouseSpeed = 10;
-    private Vector2 moveInput;
-
+    public int PlayerID;
     public Image ArrowImage;
     public Image NumberImage;
+
+    public Gamepad GamepadPlayer;
+    public Mouse mouse;
+    private float moveSpeed = 500f;
+    private float moveMouseSpeed = 10;
+   
     public void SetArrow(Sprite sprite) => ArrowImage.sprite = sprite;
     public void SetNumber(Sprite sprite) => NumberImage.sprite = sprite;
-    public delegate void ClickPlayerCursor(GameObject gameobj,int PlayerNumber,bool isSelect=true);
+    public delegate void ClickPlayerCursor(GameObject gameobj, int PlayerNumber, bool isSelect = true);
     public static ClickPlayerCursor ClickPlayerCursorEvent;
+
+    private RectTransform cursor;
+    private Vector2 moveInput;
+
     void Start()
     {
-        SetArrow(JoinManager.Instance.CursorSprites[playerNumber]);
-        SetNumber(JoinManager.Instance.NumberSprites[playerNumber]);
+        cursor=GetComponent<RectTransform>();
+        SetArrow(PlayerManager.Instance.CursorSprites[PlayerID]);
+        SetNumber(PlayerManager.Instance.NumberSprites[PlayerID]);
     }
 
     private void Update()
@@ -38,6 +41,8 @@ public class PlayerCursor : MonoBehaviour
                 {
                     if (theBtn.name == "ModeButton")
                         ModeButtonClick(theBtn.gameObject);
+                    else if (theBtn.name == "SelectTeam")
+                        ModeButtonClick(theBtn.gameObject);
                     else
                         SelectBoard(theBtn.gameObject);
                 }
@@ -52,33 +57,6 @@ public class PlayerCursor : MonoBehaviour
             }
             moveCursor(moveSpeed);
         }
-
-        //if (mouse != null)
-        //{
-        //    moveInput = mouse.position.ReadValue();
-        //    if (mouse.leftButton.wasPressedThisFrame)
-        //    {
-        //        var theBtn = DetectButton();
-        //        if (theBtn != null)
-        //        {
-        //            if (theBtn.name == "ModeButton")
-        //                ModeButtonClick(theBtn.gameObject);
-        //            else
-        //                SelectBoard(theBtn.gameObject);
-        //        }
-        //    }
-        //    if (mouse.rightButton.wasPressedThisFrame)
-        //    {
-        //        var theBtn = DetectButton();
-        //        if (theBtn != null)
-        //        {
-        //            UnselectBoard(theBtn.gameObject);
-        //        }
-        //    }
-
-        //    moveCursor(moveMouseSpeed);
-        //    //cursor.anchoredPosition += moveInput * moveSpeed * Time.deltaTime;
-        //}
     }
     private void moveCursor(float speed)
     {
@@ -115,16 +93,16 @@ public class PlayerCursor : MonoBehaviour
 
     private void ModeButtonClick(GameObject btn)
     {
-        ClickPlayerCursorEvent?.Invoke(btn, playerNumber);
+        ClickPlayerCursorEvent?.Invoke(btn, PlayerID);
     }
     private void SelectBoard(GameObject btn)
     {
-        if (JoinManager.Instance.CheckPlayerOnBoard(playerNumber))
+        if (PlayerManager.Instance.CheckPlayerOnBoard(PlayerID))
             return;
-        ClickPlayerCursorEvent?.Invoke(btn, playerNumber);
+        ClickPlayerCursorEvent?.Invoke(btn, PlayerID);
     }
     private void UnselectBoard(GameObject btn)
     {
-        ClickPlayerCursorEvent?.Invoke(btn, playerNumber, false);
+        ClickPlayerCursorEvent?.Invoke(btn, PlayerID, false);
     }
 }

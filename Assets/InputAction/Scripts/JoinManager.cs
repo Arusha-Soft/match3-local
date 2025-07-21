@@ -23,7 +23,7 @@ public class JoinManager : MonoBehaviour
     public Text ButtonText;
     private bool isFreeToAll = true;
 
-    public static JoinManager Instance;
+   // public static JoinManager Instance;
     public Color[] playerColors;
     public Sprite DefaultSprite;
     public Sprite[] playerSprites;
@@ -37,7 +37,7 @@ public class JoinManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+      //  Instance = this;
     }
     void Start()
     {
@@ -67,7 +67,7 @@ public class JoinManager : MonoBehaviour
         var board = SimplePool.Spawn(PlayerBoardPrefab, Vector3.zero, PlayerBoardPrefab.transform.rotation);
         board.transform.SetParent(PlayerBoardParent,false);
         board.name = id.ToString();
-        board.GetComponent<PlayerBoard>().boardIndex = id;
+        board.GetComponent<Board>().BoardID = id;
         BoardList.Add(board);
     }
     //private void RemoveBoards()
@@ -147,8 +147,8 @@ public class JoinManager : MonoBehaviour
                     cursor.transform.SetParent(CursorParent, false);
                     CursorList.Add(cursor);
                     NumberPlayerList.Add(2);
-                    cursor.GetComponent<PlayerCursor>().playerNumber = 2;
-                    cursor.GetComponent<PlayerCursor>().mouse = mouse;
+                    cursor.GetComponent<Player>().PlayerID = 2;
+                    cursor.GetComponent<Player>().mouse = mouse;
                 }
             }
         }
@@ -171,32 +171,32 @@ public class JoinManager : MonoBehaviour
         cursor.transform.SetParent(CursorParent, false);
         CursorList.Add(cursor);
         NumberPlayerList.Add(index);
-        cursor.GetComponent<PlayerCursor>().playerNumber = index;
-        cursor.GetComponent<PlayerCursor>().GamepadPlayer = Gamepad.all[index];
+        cursor.GetComponent<Player>().PlayerID = index;
+        cursor.GetComponent<Player>().GamepadPlayer = Gamepad.all[index];
     }
 
-    public void BindPlayerOnBoard(int playerNumber, int PlayerBoard)
+    public void BindPlayerOnBoard(int playerNo, int BoardNo, int ColorNo)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(playerNumber, PlayerBoard));
+        PlayerOnBoardList.Add(new PlayerOnBoard(playerNo, BoardNo, ColorNo));
         CheckGameStart();
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)
     {
-        var item=PlayerOnBoardList.Where((pon) => pon.PlayerNumber == playerNumber).FirstOrDefault();
+        var item=PlayerOnBoardList.Where((pon) => pon.PlayerNo == playerNumber).FirstOrDefault();
         if (item != null)
             PlayerOnBoardList.Remove(item);
     }
     public bool CheckPlayerOnBoard(int playerNumber)
     {
-       return PlayerOnBoardList.Where((pon)=>pon.PlayerNumber == playerNumber).Any(); 
+       return PlayerOnBoardList.Where((pon)=>pon.PlayerNo == playerNumber).Any(); 
     }
     public bool CheckBoardDontUse(int boardIndex)
     {
-        return PlayerOnBoardList.Where((pon) => pon.PlayerBoard == boardIndex).Any();
+        return PlayerOnBoardList.Where((pon) => pon.BoardNo == boardIndex).Any();
     }
     public bool CheckPlayerAndBoard(int playerNumber, int boardIndex)
     {
-        return PlayerOnBoardList.Where((pon) => (pon.PlayerNumber == playerNumber && pon.PlayerBoard == boardIndex)).Any();
+        return PlayerOnBoardList.Where((pon) => (pon.PlayerNo == playerNumber && pon.BoardNo == boardIndex)).Any();
     }
 
     private void CheckGameStart()
@@ -219,16 +219,26 @@ public class JoinManager : MonoBehaviour
         }
     }
 
+    public void AssignPlayerToTeam(int controllerID, string teamName)
+    {
+        //var player = connectedPlayers.FirstOrDefault(p => p.ControllerID == controllerID);
+        //var team = TeamManager.Instance.GetTeamByName(teamName);
+        //if (player != null && team != null)
+        //    player.JoinTeam(team);
+    }
+
 }
 [Serializable]
 public class PlayerOnBoard
 { 
-    public int PlayerNumber;
-    public int PlayerBoard;
-    public PlayerOnBoard(int playerNumber, int playerBoard)
+    public int PlayerNo;
+    public int BoardNo;
+    public int ColorNo;
+    public PlayerOnBoard(int playerNo, int BoardNo,int ColorNo)
     {
-        this.PlayerNumber = playerNumber;
-        this.PlayerBoard = playerBoard;
+        this.PlayerNo = playerNo;
+        this.BoardNo = BoardNo;
+        this.ColorNo = ColorNo;
     }
 
 }

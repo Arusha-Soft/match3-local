@@ -4,17 +4,17 @@ public class ModeButton : MonoBehaviour
 {
     private void Awake()
     {
-        PlayerCursor.ClickPlayerCursorEvent += OnClick;
+        Player.ClickPlayerCursorEvent += OnClick;
     }
     private void OnDestroy()
     {
-        PlayerCursor.ClickPlayerCursorEvent -= OnClick;
+        Player.ClickPlayerCursorEvent -= OnClick;
     }
 
     void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect = true)
     {
         if (gameObj != gameObject)
             return;
-        JoinManager.Instance.ToggleButton();
+        BoardManager.Instance.ToggleButton();
     }
 }

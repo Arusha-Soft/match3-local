@@ -841,8 +841,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1781601371}
+  - component: {fileID: 1781601375}
+  - component: {fileID: 1781601374}
   - component: {fileID: 1781601370}
   - component: {fileID: 1781601373}
+  - component: {fileID: 1781601376}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -857,7 +860,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781601369}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b99dcf6ed9315a5478941a46cbf12257, type: 3}
   m_Name: 
@@ -870,6 +873,9 @@ MonoBehaviour:
   PlayerBoardParentFreeToAll: {fileID: 924910350}
   PlayerBoardPrefabTeam: {fileID: 4185668332115052804, guid: ae5912e09eb1d89428a6943e1d053f5b, type: 3}
   PlayerBoardParentTeam: {fileID: 1670004929}
+  PlayerOnBoardList: []
+  BoardFreeToAllList: []
+  NumberPlayerList: 
   ButtonText: {fileID: 1338940394}
   playerColors:
   - {r: 1, g: 0, b: 0, a: 1}
@@ -953,6 +959,95 @@ MonoBehaviour:
   m_DefaultActionMap: GamePlay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1781601374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781601369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da648de193f709a4db8a0c083bf8e977, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoardList: []
+  FreeToAllPanel: {fileID: 1655096695}
+  TeamPanel: {fileID: 139572059}
+  BoardPrefab: {fileID: 4185668332115052804, guid: ae5912e09eb1d89428a6943e1d053f5b, type: 3}
+  PlayerBoardParentFreeToAll: {fileID: 924910350}
+  PlayerBoardParentTeam: {fileID: 1670004929}
+  ButtonText: {fileID: 1338940394}
+  isFreeToAll: 1
+  DefaultSprite: {fileID: 21300000, guid: dbbf25dbfe12fad48a223f9b7a055e9f, type: 3}
+  playerSprites:
+  - {fileID: 21300000, guid: b412e62b8e50435478d449e2a2401091, type: 3}
+  - {fileID: 21300000, guid: 98641e8bf5313a84fa97d68cf4ef2c54, type: 3}
+  - {fileID: 21300000, guid: 7891a7b95e93954448961f52e44784fa, type: 3}
+  - {fileID: 21300000, guid: 7413c11e9da74bd4f8fbdb39567ec174, type: 3}
+  - {fileID: 21300000, guid: e6549336d6455ac4d8dbee85f1e18897, type: 3}
+  - {fileID: 21300000, guid: 3283be9658eb3a641bf76f2bdf245e18, type: 3}
+  - {fileID: 21300000, guid: 1a0d948f1799b964db1219ca6ddddcda, type: 3}
+  - {fileID: 21300000, guid: 85a022d2497cd8f478cef4dc2373b92e, type: 3}
+  playerColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0.03137255, g: 0, b: 0.9882353, a: 1}
+  - {r: 0, g: 0.9882353, b: 0.08235294, a: 1}
+  - {r: 0.9882353, g: 0.45882353, b: 0, a: 1}
+  - {r: 0.9882353, g: 0, b: 0.6862745, a: 1}
+  - {r: 0.654902, g: 0, b: 0.9882353, a: 1}
+  - {r: 0, g: 0.9803922, b: 0.98823535, a: 1}
+  - {r: 0.98823535, g: 0.854902, b: 0, a: 1}
+  LimitFreeToAll: 3
+  LimitTeam: 2
+  TeamCount: 4
+--- !u!114 &1781601375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781601369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc59757e6604ae346bdf1d9e25b60334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerList: []
+  PlayerOnBoardList: []
+  PlayerPrefab: {fileID: 3322314991023351248, guid: c27cd803d3508e249aaf13b04256c2a6, type: 3}
+  PlayerParent: {fileID: 1133491724}
+  CursorSprites:
+  - {fileID: 21300000, guid: d6fab9a8c9790d341b14b9183503058c, type: 3}
+  - {fileID: 21300000, guid: d7de798f51817404fa41e7ee54d2333e, type: 3}
+  - {fileID: 21300000, guid: 1b72019c1bc14e6468fa6f6769527dce, type: 3}
+  - {fileID: 21300000, guid: d3709b180f56ad941a3d221afa607f70, type: 3}
+  - {fileID: 21300000, guid: 271a9abc3d97aad47ae78f63353c1baf, type: 3}
+  - {fileID: 21300000, guid: 65a7ba794abeeaa41bd2987619421cb7, type: 3}
+  - {fileID: 21300000, guid: 50e1871ad1b961e4784f1295ae0c9fd5, type: 3}
+  - {fileID: 21300000, guid: da53bf49ac6e11c49ae2deea61f5a326, type: 3}
+  NumberSprites:
+  - {fileID: 21300000, guid: 16ccb211580f3674f809a5658591edfc, type: 3}
+  - {fileID: 21300000, guid: 3cbbf1f451dfadd4298549cd0510c2b8, type: 3}
+  - {fileID: 21300000, guid: 2b25c8fc5d80e7d44ae6b8af3be250c6, type: 3}
+  - {fileID: 21300000, guid: 4a7002e57834c6043846d4cfa097aaeb, type: 3}
+  - {fileID: 21300000, guid: 33c11fa60816edf468f21c7bdbfc4db6, type: 3}
+  - {fileID: 21300000, guid: e6c71eb5fedcf494f9f2c0b9b608a9f7, type: 3}
+  - {fileID: 21300000, guid: 3fde4c5ebc88e46439148c92f84ce208, type: 3}
+  - {fileID: 21300000, guid: 12999a94fddd49a498d9c2d119ec0058, type: 3}
+  boardManager: {fileID: 1781601374}
+--- !u!114 &1781601376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781601369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51f0503685fdb74a9200e8a0c4863d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1809349261
 GameObject:
   m_ObjectHideFlags: 0
