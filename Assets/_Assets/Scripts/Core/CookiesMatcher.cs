@@ -114,10 +114,12 @@ namespace Project.Core
                     MatchCookiesData matchCookiesData = new MatchCookiesData()
                     {
                         IsHorizontal = isHorizontal,
-                        MatchedCookies = cookies,
+                        MatchCookieProperties = m_MatchActions[j].TargetCookie,
+                        AllCookies = cookies,
                         Score = matchScore,
                         MatchCount = m_MatchActions[j].MatchCount
                     };
+                    matchCookiesData.InitializeMatchedCookies();
 
                     m_MatchedCookies.Add(matchCookiesData);
                 }
@@ -126,10 +128,12 @@ namespace Project.Core
                     MatchCookiesData matchCookiesData = new MatchCookiesData()
                     {
                         IsHorizontal = isHorizontal,
-                        MatchedCookies = cookies,
+                        MatchCookieProperties = m_MatchActions[j].TargetCookie,
+                        AllCookies = cookies,
                         Score = comboScore,
                         MatchCount = m_ComboMatchCount
                     };
+                    matchCookiesData.InitializeMatchedCookies();
 
                     m_MatchedCookies.Add(matchCookiesData);
                 }
@@ -140,9 +144,27 @@ namespace Project.Core
         public struct MatchCookiesData
         {
             public bool IsHorizontal;
-            public List<Cookie> MatchedCookies;
+            public CookieProperties MatchCookieProperties;
+            public List<Cookie> AllCookies; // list of cookies which have some match
             public int Score;
             public int MatchCount;
+
+            public IReadOnlyList<Cookie> MatchedCookies { private set; get; }// list of the cookies which are matched
+
+            public void InitializeMatchedCookies()
+            {
+                List<Cookie> cookies = new List<Cookie>(AllCookies.Count);
+
+                for (int i = 0; i < AllCookies.Count; i++)
+                {
+                    if (AllCookies[i].Properties == MatchCookieProperties)
+                    {
+                        cookies.Add(AllCookies[i]);
+                    }
+                }
+
+                MatchedCookies = cookies;
+            }
         }
     }
 }

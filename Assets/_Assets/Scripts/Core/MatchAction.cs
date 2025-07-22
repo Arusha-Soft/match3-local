@@ -9,6 +9,7 @@ namespace Project.Core
         [SerializeField] private int m_MatchCount;
         [SerializeField] private int m_MatchScore;
 
+        public CookieProperties TargetCookie => m_TargetCookie;
         public int MatchCount => m_MatchCount;
 
         /// <summary>
