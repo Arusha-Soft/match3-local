@@ -386,12 +386,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 138b4384e49d4374e8eeaaa56b127cf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MatchCount: 5
+  m_ComboMatchCount: 4
   m_MatchActions:
   - {fileID: 11400000, guid: 61092e1581e97a644810210edf756952, type: 2}
   - {fileID: 11400000, guid: f63bca8e755b1b94ba90a5822cba89d6, type: 2}
   - {fileID: 11400000, guid: 4c888e85ce9dbb043a75d28bfd72252f, type: 2}
   - {fileID: 11400000, guid: ab94898488e7e284ea2a3afe88426c67, type: 2}
   - {fileID: 11400000, guid: a4d1f5f58b441424a9e2baa04325429e, type: 2}
+  m_MatchedCookies: []
 --- !u!1 &3414033496991437863
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,6 +612,7 @@ MonoBehaviour:
   m_CookieGenerator: {fileID: 5555980092942374936}
   m_CookiesMatcher: {fileID: 5335112399562351405}
   m_SelectionBox: {fileID: 2031378112663229674}
+  m_sprite: {fileID: 6723839559062931808}
 --- !u!1 &8193566255311046859
 GameObject:
   m_ObjectHideFlags: 0

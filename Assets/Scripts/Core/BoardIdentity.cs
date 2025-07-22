@@ -10,6 +10,7 @@ namespace Project.Core
         [SerializeField] private CookiesController m_CookieGenerator;
         [SerializeField] private CookiesMatcher m_CookiesMatcher;
         [SerializeField] private SelectionBox m_SelectionBox;
+        [SerializeField] private SpriteRenderer m_sprite;
 
         private void Start()
         {
@@ -18,6 +19,10 @@ namespace Project.Core
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
             m_SelectionBox.Init(m_BoardInput, m_BoardData);
+        }
+        public void SetSprite(Sprite sprite)
+        {
+            m_sprite.sprite = sprite;
         }
     }
 }

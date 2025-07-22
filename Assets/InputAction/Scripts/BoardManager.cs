@@ -22,11 +22,12 @@ public class BoardManager : MonoBehaviour
     public int LimitFreeToAll = 3;
     public int LimitTeam = 8;
     public int TeamCount = 4;
+    public TeamManager teamManager;
     private void Awake()
     {
         Instance = this;
         for (int i = 0; i < TeamCount; i++)
-            TeamManager.Instance.CreateTeam(i, playerColors[i]);
+            teamManager.CreateTeam(i, playerColors[i]);
     }
     void Start()
     {
