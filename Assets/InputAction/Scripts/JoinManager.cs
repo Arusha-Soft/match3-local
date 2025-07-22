@@ -175,9 +175,9 @@ public class JoinManager : MonoBehaviour
         cursor.GetComponent<Player>().GamepadPlayer = Gamepad.all[index];
     }
 
-    public void BindPlayerOnBoard(int playerNo, int BoardNo, int ColorNo,Sprite sprite)
+    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(playerNo, BoardNo, ColorNo, sprite));
+        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo));
         CheckGameStart();
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)
@@ -228,19 +228,18 @@ public class JoinManager : MonoBehaviour
     }
 
 }
-[Serializable]
-public class PlayerOnBoard
-{ 
-    public int PlayerNo;
-    public int BoardNo;
-    public int ColorNo;
-    public Sprite BoardSprite;
-    public PlayerOnBoard(int playerNo, int BoardNo,int ColorNo, Sprite boardSprite)
-    {
-        this.PlayerNo = playerNo;
-        this.BoardNo = BoardNo;
-        this.ColorNo = ColorNo;
-        this.BoardSprite = boardSprite;
-    }
+//[Serializable]
+//public class PlayerOnBoard
+//{
+//    public int PlayerNo;
+//    public int BoardNo;
+//    public int ColorNo;
+//    //spublic Sprite BoardSprite;
+//    public PlayerOnBoard(int PlayerNo, int BoardNo,int ColorNo)
+//    {
+//        this.PlayerNo = PlayerNo;
+//        this.BoardNo = BoardNo;
+//        this.ColorNo = ColorNo;
+//    }
 
-}
+//}

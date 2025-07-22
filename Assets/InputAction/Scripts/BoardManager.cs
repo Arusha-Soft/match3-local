@@ -18,6 +18,7 @@ public class BoardManager : MonoBehaviour
 
     public Sprite DefaultSprite;
     public Sprite[] playerSprites;
+    public Sprite[] BoardSprites;
     public Color[] playerColors;
     public int LimitFreeToAll = 3;
     public int LimitTeam = 8;

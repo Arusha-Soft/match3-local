@@ -1,5 +1,7 @@
 using Project.InputHandling;
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Project.Core
 {
@@ -10,9 +12,24 @@ namespace Project.Core
         [SerializeField] private CookiesController m_CookieGenerator;
         [SerializeField] private CookiesMatcher m_CookiesMatcher;
         [SerializeField] private SelectionBox m_SelectionBox;
-        [SerializeField] private SpriteRenderer m_sprite;
-
+        [SerializeField] private SpriteRenderer m_BoardSprite;
+        [SerializeField] private SpriteRenderer m_SelectSprite;
+        public Sprite[] BoardSprites;
+        public Sprite[] SelectSprites;
         private void Start()
+        {
+           
+        }
+        public void SetSprite(int spriteIndex)
+        {
+            m_BoardSprite.sprite = BoardSprites[spriteIndex];
+            m_SelectSprite.sprite = SelectSprites[spriteIndex];
+        }
+        public void SetInputHandler(int PlayerNo)
+        {
+            m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
+        }
+        public void Initialize()
         {
             m_BoardInput.Init();
             m_BoardData.Init(m_SelectionBox, this);
@@ -20,9 +37,6 @@ namespace Project.Core
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
             m_SelectionBox.Init(m_BoardInput, m_BoardData);
         }
-        public void SetSprite(Sprite sprite)
-        {
-            m_sprite.sprite = sprite;
-        }
+        
     }
 }

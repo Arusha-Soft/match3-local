@@ -85,9 +85,9 @@ public class PlayerManager : MonoBehaviour
         PlayerList.Add(p.GetComponent<Player>());
     }
 
-    public void BindPlayerOnBoard(int playerNo, int BoardNo, int ColorNo)
+    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(playerNo, BoardNo, ColorNo, boardManager.playerSprites[BoardNo]));
+        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo));
         boardManager.CheckGameStart(PlayerOnBoardList);
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)

@@ -1097,6 +1097,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3283be9658eb3a641bf76f2bdf245e18, type: 3}
   - {fileID: 21300000, guid: 1a0d948f1799b964db1219ca6ddddcda, type: 3}
   - {fileID: 21300000, guid: 85a022d2497cd8f478cef4dc2373b92e, type: 3}
+  BoardSprites:
+  - {fileID: 21300000, guid: 6cdf622f9007f364d83f39dafc655e65, type: 3}
+  - {fileID: 21300000, guid: b8b0fb0c349727f4d9be3d7089d3eb43, type: 3}
+  - {fileID: 21300000, guid: 89a6007f3b302f2488f33d87dfc24502, type: 3}
+  - {fileID: 21300000, guid: 9818a1d84deb0bd41b3e335b7ec5174e, type: 3}
+  - {fileID: 21300000, guid: 65254d7bda8ddc449bed243b65c2e727, type: 3}
+  - {fileID: 21300000, guid: eeeb638b87df0264c97dbf146bb54d7b, type: 3}
+  - {fileID: 21300000, guid: 41ae50bc4586b004b9fb27afe51a1ba7, type: 3}
   playerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0.03137255, g: 0, b: 0.9882353, a: 1}
@@ -1173,6 +1181,8 @@ MonoBehaviour:
   MenuePanel: {fileID: 1809349261}
   CoreGameParent: {fileID: 1319816421}
   BoardPrefab: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+  spacing: 1.5
+  SelectSprites: {fileID: 21300000, guid: b8b0fb0c349727f4d9be3d7089d3eb43, type: 3}
 --- !u!1 &1809349261
 GameObject:
   m_ObjectHideFlags: 0
