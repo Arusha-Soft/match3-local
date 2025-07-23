@@ -18,7 +18,7 @@ namespace Project.Core
         public Sprite[] SelectSprites;
         private void Start()
         {
-           
+            Initialize();
         }
         public void SetSprite(int spriteIndex)
         {
