@@ -49,6 +49,7 @@ namespace Project.Core
 
             m_CookiesMatcher.OnDisappearCookiesStepFinished += OnDisappearCookiesStepFinished;
             m_CookiesMatcher.OnDisappearCookiesFinished += OnDisappearCookiesFinished;
+            m_CookiesMatcher.OnMatchingProcessFinished += OnMatchingProcessFinished;
 
             StartCoroutine(MoveHandling());
             FillBoard();
@@ -124,7 +125,7 @@ namespace Project.Core
                 {
                     Cookie cookie = m_TempMovingCookies[i];
                     cookie.FinishMoving += OnCookieFinishMoving;
-                    cookie.Move(m_TempBlocks[i + 1].transform);
+                    cookie.TryMove(m_TempBlocks[i + 1].transform);
                     m_OnMovingCookieCount++;
                 }
             }
@@ -137,7 +138,7 @@ namespace Project.Core
                 {
                     Cookie cookie = m_TempMovingCookies[i];
                     cookie.FinishMoving += OnCookieFinishMoving;
-                    cookie.Move(m_TempBlocks[i].transform);
+                    cookie.TryMove(m_TempBlocks[i].transform);
                     m_OnMovingCookieCount++;
                 }
             }
@@ -208,8 +209,6 @@ namespace Project.Core
             {
                 m_CookiePool.Release(data.MatchedCookies[i]);
             }
-
-            Debug.Log("OnDisappearCookiesStepFinished");
         }
 
         private void OnDisappearCookiesFinished(List<CookiesMatcher.MatchCookiesData> list)
@@ -217,7 +216,15 @@ namespace Project.Core
             CleanBoard();
         }
 
-        [ContextMenu("Chejck")]
+        private void OnMatchingProcessFinished()
+        {
+            Debug.Log("OnMatchingProcessFinished");
+
+            Cookie[,] cookies;
+            Block[,] blocks;
+            //TakeBoardSnapshot(out cookies, out blocks);
+        }
+
         private void CleanBoard()
         {
             m_TempCleanCookies.Clear();
@@ -226,13 +233,13 @@ namespace Project.Core
             Block[,] blocks;
             TakeBoardSnapshot(out cookies, out blocks);
 
-            for (int y = 0; y < cookies.GetLength(1); y++)
-            {
-                for (int x = 0; x < cookies.GetLength(0); x++)
-                {
-                    Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
-                }
-            }
+            //for (int y = 0; y < cookies.GetLength(1); y++)
+            //{
+            //    for (int x = 0; x < cookies.GetLength(0); x++)
+            //    {
+            //        Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
+            //    }
+            //}
 
             int xCount = cookies.GetLength(0);
             int yCount = cookies.GetLength(1);
@@ -271,50 +278,64 @@ namespace Project.Core
                     Cookie cookie = cookies[x, y];
                     if (cookie != null)
                     {
-                        m_TempCleanCookies.Add(cookie);
                         cookie.FinishMoving += OnFinishMovingCookieCleanBoard;
-                        cookie.Move(blocks[x, y].transform);
+
+                        if (cookie.TryMove(blocks[x, y].transform))
+                        {
+                            m_TempCleanCookies.Add(cookie);
+                        }
+                        else
+                        {
+                            cookie.FinishMoving -= OnFinishMovingCookieCleanBoard;
+                        }
                     }
                 }
             }
 
-            void TakeBoardSnapshot(out Cookie[,] cookies, out Block[,] blocks)
+            if(m_TempCleanCookies.Count <= 0)
             {
-                cookies = new Cookie[m_BoardData.VisibleBoardSize.x, m_BoardData.VisibleBoardSize.y];
-                blocks = new Block[m_BoardData.VisibleBoardSize.x, m_BoardData.VisibleBoardSize.y];
-                IReadOnlyList<Block> rowBlocks;
-                IReadOnlyList<Cookie> rowCookies;
-                int xOffset = Mathf.Abs(m_BoardData.OriginalBoardSize.x - m_BoardData.VisibleBoardSize.x) / 2;
-                int yOffset = Mathf.Abs(m_BoardData.OriginalBoardSize.y - m_BoardData.VisibleBoardSize.y) / 2;
-
-                for (int y = yOffset; y < m_BoardData.OriginalBoardSize.y - yOffset; y++)
-                {
-                    rowBlocks = m_BoardData.GetBlokcsAtRow(y, true);
-                    if (rowBlocks.Count <= 0)
-                    {
-                        continue;
-                    }
-
-                    rowCookies = m_BoardData.GetRowCookiesAtId(rowBlocks[0].Id);
-
-                    for (int x = xOffset; x < m_BoardData.OriginalBoardSize.x - xOffset; x++)
-                    {
-                        cookies[x - xOffset, y - yOffset] = x - xOffset < rowCookies.Count ? rowCookies[x - xOffset] : null;
-                        blocks[x - xOffset, y - yOffset] = rowBlocks[x - xOffset];
-                    }
-                }
+                Debug.Log("No move");
+                OnFinishCleanBoard?.Invoke();
             }
 
-            Debug.Log("////////////////////////////////////////////////////////////////");
+            //Debug.Log("////////////////////////////////////////////////////////////////");
 
-            for (int y = 0; y < cookies.GetLength(1); y++)
+            //for (int y = 0; y < cookies.GetLength(1); y++)
+            //{
+            //    for (int x = 0; x < cookies.GetLength(0); x++)
+            //    {
+            //        Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
+            //    }
+            //}
+        }
+
+        private void TakeBoardSnapshot(out Cookie[,] cookies, out Block[,] blocks)
+        {
+            cookies = new Cookie[m_BoardData.VisibleBoardSize.x, m_BoardData.VisibleBoardSize.y];
+            blocks = new Block[m_BoardData.VisibleBoardSize.x, m_BoardData.VisibleBoardSize.y];
+            IReadOnlyList<Block> rowBlocks;
+            IReadOnlyList<Cookie> rowCookies;
+            int xOffset = Mathf.Abs(m_BoardData.OriginalBoardSize.x - m_BoardData.VisibleBoardSize.x) / 2;
+            int yOffset = Mathf.Abs(m_BoardData.OriginalBoardSize.y - m_BoardData.VisibleBoardSize.y) / 2;
+
+            for (int y = yOffset; y < m_BoardData.OriginalBoardSize.y - yOffset; y++)
             {
-                for (int x = 0; x < cookies.GetLength(0); x++)
+                rowBlocks = m_BoardData.GetBlokcsAtRow(y, true);
+                if (rowBlocks.Count <= 0)
                 {
-                    Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
+                    continue;
+                }
+
+                rowCookies = m_BoardData.GetRowCookiesAtId(rowBlocks[0].Id);
+
+                for (int x = xOffset; x < m_BoardData.OriginalBoardSize.x - xOffset; x++)
+                {
+                    cookies[x - xOffset, y - yOffset] = x - xOffset < rowCookies.Count ? rowCookies[x - xOffset] : null;
+                    blocks[x - xOffset, y - yOffset] = rowBlocks[x - xOffset];
                 }
             }
         }
+
 
         private void OnFinishMovingCookieCleanBoard(MovableTile cookie)
         {
@@ -322,7 +343,7 @@ namespace Project.Core
 
             m_TempCleanCookies.Remove(cookie);
 
-            if(m_TempCleanCookies.Count <= 0)
+            if (m_TempCleanCookies.Count <= 0)
             {
                 OnFinishCleanBoard?.Invoke();
             }

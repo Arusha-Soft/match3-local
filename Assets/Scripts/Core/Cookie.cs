@@ -15,6 +15,8 @@ namespace Project.Core
 
         public BoardIdentity Owner { private set; get; }
         public CookieProperties Properties { private set; get; }
+        public event Action<Cookie> OnFinishHideAnimation;
+        public event Action<Cookie> OnFinishComboHideAnimation;
 
         private Collider2D m_Collider;
 
@@ -28,13 +30,13 @@ namespace Project.Core
             m_Collider = GetComponent<Collider2D>();
         }
 
-        public virtual void PlayHideAnimation(Action<Cookie> onFinish = null)
+        public virtual void PlayHideAnimation()
         {
             m_BlinkAnimation.tween.onComplete = () =>
             {
                 m_ScaleDownAnimation.tween.onComplete = () =>
                 {
-                    onFinish?.Invoke(this);
+                    OnFinishHideAnimation?.Invoke(this);
                 };
 
                 m_ScaleDownAnimation.tween.Restart();
@@ -43,14 +45,14 @@ namespace Project.Core
             m_BlinkAnimation.tween.Restart();
         }
 
-        public virtual void PlayComboHideAnimation(Action<Cookie> onFinish = null)
+        public virtual void PlayComboHideAnimation()
         {
             m_ScaleDownAnimation.tween.Pause();
             m_BlinkAnimation.tween.Pause();
 
             m_FadeOutAnimation.tween.onComplete = () =>
             {
-                onFinish?.Invoke(this);
+                OnFinishComboHideAnimation?.Invoke(this);
             };
             m_FadeOutAnimation.tween.Restart();
         }

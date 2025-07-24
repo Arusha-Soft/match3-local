@@ -17,6 +17,7 @@ namespace Project.Core
         public event Action<MatchCookiesData> OnDisappearCookiesStarted;
         public event Action<MatchCookiesData> OnDisappearCookiesStepFinished;
         public event Action<List<MatchCookiesData>> OnDisappearCookiesFinished;
+        public event Action OnMatchingProcessFinished;
 
         private List<MatchCookiesData> m_DisapparMatchedCookies = new List<MatchCookiesData>();
         private CookiesController m_CookiesController;
@@ -36,8 +37,10 @@ namespace Project.Core
         {
             FindAllMatchCookies(false);
         }
+
         private void OnFinishCleanBoard()
         {
+            Debug.Log("OnFinishCleanBoard");
             FindAllMatchCookies(true);
         }
 
@@ -45,6 +48,7 @@ namespace Project.Core
         {
             m_MatchedCookies.Clear();
             m_DisapparMatchedCookies.Clear();
+            m_CanDoCombo = false;
 
             FindMatchCookiesInHorizontal(combo);
             FindMatchCookiesInVertical(combo);
@@ -64,7 +68,6 @@ namespace Project.Core
         private void TryMatch()
         {
             m_MatchDataDictionary.Clear();
-            m_CanDoCombo = false;
 
             for (int i = m_MatchedCookies.Count - 1; i >= 0; i--)
             {
@@ -76,13 +79,13 @@ namespace Project.Core
                     m_MatchDataDictionary.Add(data, 0);
                     for (int j = 0; j < data.MatchedCookies.Count; j++)
                     {
-                        data.MatchedCookies[j].PlayHideAnimation(OnFinishHideAnimationCookie);
+                        data.MatchedCookies[j].OnFinishHideAnimation += OnFinishHideAnimationCookie;
+                        data.MatchedCookies[j].PlayHideAnimation();
                     }
-
-                    m_CanDoCombo = true;
                 }
             }
         }
+
         private void TryCombo()
         {
             if (m_CanDoCombo)
@@ -100,15 +103,50 @@ namespace Project.Core
 
                         for (int j = 0; j < data.MatchedCookies.Count; j++)
                         {
-                            data.MatchedCookies[j].PlayComboHideAnimation(OnFinishHideAnimationCookie);
+                            data.MatchedCookies[j].OnFinishComboHideAnimation += OnFinishComboHideAnimationCookie;
+                            data.MatchedCookies[j].PlayComboHideAnimation();
                         }
                     }
                 }
+            }
+            else
+            {
+                OnMatchingProcessFinished?.Invoke();
             }
         }
 
         private void OnFinishHideAnimationCookie(Cookie cookie)
         {
+            cookie.OnFinishHideAnimation -= OnFinishHideAnimationCookie;
+
+            foreach (MatchCookiesData data in m_MatchDataDictionary.Keys)
+            {
+                for (int i = 0; i < data.MatchCount; i++)
+                {
+                    if (data.MatchedCookies[i] == cookie)
+                    {
+                        int finishAnimtionCount = m_MatchDataDictionary[data] + 1;
+                        m_MatchDataDictionary[data] = finishAnimtionCount;
+                        if (finishAnimtionCount >= data.MatchCount)
+                        {
+                            m_DisapparMatchedCookies.Add(data);
+                            OnDisappearCookiesStepFinished?.Invoke(data);
+
+                            if (m_DisapparMatchedCookies.Count == m_MatchedCookies.Count)
+                            {
+                                OnDisappearCookiesFinished?.Invoke(m_DisapparMatchedCookies);
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void OnFinishComboHideAnimationCookie(Cookie cookie)
+        {
+            cookie.OnFinishComboHideAnimation-= OnFinishComboHideAnimationCookie;
+
             foreach (MatchCookiesData data in m_MatchDataDictionary.Keys)
             {
                 for (int i = 0; i < data.MatchCount; i++)
@@ -192,6 +230,7 @@ namespace Project.Core
                     matchCookiesData.InitializeMatchedCookies();
 
                     m_MatchedCookies.Add(matchCookiesData);
+                    m_CanDoCombo = true;
                 }
             }
         }

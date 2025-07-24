@@ -12,14 +12,23 @@ namespace Project.Core
 
         private Coroutine m_Moving;
 
-        public void Move(Transform target)
+        public bool TryMove(Transform target)
         {
-            if(m_Moving != null)
+            if (transform.position == target.position)
             {
-                StopCoroutine(m_Moving);
+                return false;
             }
+            else
+            {
 
-            StartCoroutine(Moving(target));
+                if (m_Moving != null)
+                {
+                    StopCoroutine(m_Moving);
+                }
+
+                StartCoroutine(Moving(target));
+                return true;
+            }
         }
 
         protected virtual void OnFinishMoving(MovableTile movableTile) { }
