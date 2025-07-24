@@ -13,6 +13,7 @@ namespace Project.Core
 
         public IReadOnlyList<Block> VisibleBlocks => m_VisibleBlocks;
         public Vector2Int OriginalBoardSize => m_OriginalBoardSize;
+        public Vector2Int VisibleBoardSize => m_VisibleBoardSize;
 
         private int m_BlockCount;
 
@@ -114,13 +115,24 @@ namespace Project.Core
             return result;
         }
 
-        public IReadOnlyList<Block> GetBlokcsAtRow(int rowIndex)
+        public IReadOnlyList<Block> GetBlokcsAtRow(int rowIndex, bool isVisible = false)
         {
             List<Block> result = new List<Block>(m_OriginalBoardSize.x);
 
             for (int i = (rowIndex * m_OriginalBoardSize.x); i < (m_OriginalBoardSize.x * (rowIndex + 1)); i++)
             {
-                result.Add(GetBlockById(i));
+                Block block = GetBlockById(i);
+                if (isVisible)
+                {
+                    if (block.IsVisible)
+                    {
+                        result.Add(block);
+                    }
+                }
+                else
+                {
+                    result.Add(block);
+                }
             }
 
             return result;
@@ -130,7 +142,7 @@ namespace Project.Core
         {
             List<Block> result = new List<Block>(m_OriginalBoardSize.x);
 
-            for (int i = columnIndex; i < m_BlockCount; i+= m_OriginalBoardSize.x)
+            for (int i = columnIndex; i < m_BlockCount; i += m_OriginalBoardSize.x)
             {
                 result.Add(GetBlockById(i));
             }
