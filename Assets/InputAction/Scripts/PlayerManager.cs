@@ -32,48 +32,7 @@ public class PlayerManager : MonoBehaviour
     }
     void Update()
     {
-        //var gamepads = Gamepad.all;
-        //if (gamepads.Count > 0)
-        //{
-        //    for (int i = 0; i < gamepads.Count; i++)
-        //    {
-        //        //if (boardManager.isFreeToAll)
-        //        //{
-        //        //    if (i < boardManager.LimitFreeToAll)
-        //        //    {
-        //        //        if (i == 2)
-        //        //        {
-        //        //            boardManager.GeneratePlayerBoard(2);
-        //        //            CheckJoinGame(i);
-        //        //        }
-        //        //        else
-        //        //            CheckJoinGame(i);
-        //        //    }
-        //        //}
-        //        //else
-        //        //{
-        //        //    if (i < boardManager.LimitTeam)
-        //        //    {
-        //        //        CheckJoinGame(i);
-        //        //    }
-
-        //        //}
-        //    }
-
-        //}
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            boardManager.SpawnOneBoard();
-        }
     }
-    //private void CheckJoinGame(int index)
-    //{
-    //    if (Gamepad.all[index].buttonSouth.wasPressedThisFrame ||
-    //                Keyboard.current.enterKey.wasPressedThisFrame)
-    //    {
-    //        JoinGamePad(index);
-    //    }
-    //}
     public void JoinGamePad(int index)
     {
         if (PlayerList.Where(p => p.PlayerID == index).Any())
@@ -85,10 +44,11 @@ public class PlayerManager : MonoBehaviour
         p.GetComponent<Player>().GamepadPlayer = Gamepad.all[index];
         PlayerList.Add(p.GetComponent<Player>());
     }
-
-    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo, Vector3 PositionBoard)
+   
+    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo, PositionBoard));
+
+        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo));//, boardManager.GetWorldPosListByPlayerCount()[BoardNo]));
         boardManager.CheckGameStart(PlayerOnBoardList);
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)
@@ -110,4 +70,17 @@ public class PlayerManager : MonoBehaviour
         return PlayerOnBoardList.Where((pon) => (pon.PlayerNo == playerNumber && pon.BoardNo == boardIndex)).Any();
     }
 
+    #region test
+    public Player JoinGamePadTest(int index)
+    {
+        if (PlayerList.Where(p => p.PlayerID == index).Any())
+            return null;
+
+        var p = SimplePool.Spawn(PlayerPrefab, Vector3.zero, PlayerPrefab.transform.rotation);
+        p.transform.SetParent(PlayerParent, false);
+        p.GetComponent<Player>().PlayerID = index;
+        PlayerList.Add(p.GetComponent<Player>());
+        return p.GetComponent<Player>();
+    }
+    #endregion
 }

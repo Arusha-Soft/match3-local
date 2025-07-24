@@ -16,6 +16,7 @@ public class BoardManager : MonoBehaviour
     public GameObject BoardPrefab;
     public Transform BoardPanel;
     public GameObject player2Panel, player3Panel, player4Panel, player8Panel;
+    public List<Vector3> player2Pos, player3Pos, player4Pos, player8Pos;
     public Text ButtonText;
     public bool isFreeToAll = true;
 
@@ -26,7 +27,7 @@ public class BoardManager : MonoBehaviour
     public int DefaultPlayer = 2;
     public int LimitPlayer = 8;
     public int TeamCount = 4;
-    private int CountPlayer;
+    public int PlayerCount;
     public TeamManager teamManager;
     private int gamePadCount;
 
@@ -40,15 +41,41 @@ public class BoardManager : MonoBehaviour
     }
     public void Init()
     {
+        InitWorldPos(player2Panel, player2Pos);
+        InitWorldPos(player3Panel, player3Pos);
+        InitWorldPos(player4Panel, player4Pos);
+        InitWorldPos(player8Panel, player8Pos);
+
+
         gamePadCount = Gamepad.all.Count;
         if (gamePadCount < 2)
-            CountPlayer = DefaultPlayer;
+            PlayerCount = DefaultPlayer;
         else
-            CountPlayer = gamePadCount;
+            PlayerCount = gamePadCount;
 
         BoardList.Clear();
         SetModeButoon(isFreeToAll);
-        SpawnBoards(CountPlayer);
+        SpawnBoards(PlayerCount);
+    }
+    private void InitWorldPos(GameObject playerPanel,List<Vector3> playerPos)
+    {
+        for (int i = 0; i < playerPanel.transform.childCount; i++)
+        {
+            Transform transform = playerPanel.transform.GetChild(i);
+            playerPos.Add(GetWorldPosition(transform.GetComponent<RectTransform>(), transform.position));
+        }
+
+    }
+    public List<Vector3> GetWorldPosListByPlayerCount()
+    {
+        if (PlayerCount <= 2)
+            return player2Pos;
+        else if (PlayerCount == 3)
+            return player3Pos;
+        else if (PlayerCount == 4)
+            return player4Pos;
+        else 
+            return player8Pos;
     }
     private void SpawnBoards(int count)
     {
@@ -59,11 +86,12 @@ public class BoardManager : MonoBehaviour
     }
     public void SpawnOneBoard()
     {
-        if (CountPlayer > LimitPlayer)
+        if (PlayerCount > LimitPlayer)
             return;
-        CountPlayer++;
-        GenerateBoard(CountPlayer-1);
+        PlayerCount++;
+        GenerateBoard(PlayerCount-1);
     }
+   
     private void GenerateBoard(int id)
     {
         if (BoardList.Where(b => b.BoardID == id).Any())
@@ -87,7 +115,7 @@ public class BoardManager : MonoBehaviour
     }
     private GameObject GetPlayerPanelForPosition()
     {
-        switch (CountPlayer)
+        switch (PlayerCount)
         {
             case 2:
                 return player2Panel;
@@ -165,7 +193,7 @@ public class BoardManager : MonoBehaviour
             CheckJoinGame(i);
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            SpawnOneBoard();
+            SpawnOneBoardTest();
         }
     }
 
@@ -177,4 +205,47 @@ public class BoardManager : MonoBehaviour
             PlayerManager.Instance.JoinGamePad(index);
         }
     }
+
+    private Vector3 GetWorldPosition(RectTransform rectTransform,Vector3 worldPos)
+    {
+        Vector3 worldPosition;
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+           rectTransform,
+            RectTransformUtility.WorldToScreenPoint(null, worldPos),
+            null,
+            out worldPosition
+        );
+        Vector3 pos = worldPosition;
+        pos.z = 0;
+        worldPosition = pos;
+        return worldPosition;
+    }
+
+    #region test
+    public void SpawnOneBoardTest()
+    {
+        Debug.Log(PlayerCount);
+        if (PlayerCount >= LimitPlayer)
+            return;
+        PlayerCount++;
+        GenerateBoardTest(PlayerCount - 1);
+        Player player = PlayerManager.Instance.JoinGamePadTest(PlayerCount-1);
+        if (player == null)
+            return;
+
+        BoardList[PlayerCount - 1].OnClick(BoardList[PlayerCount - 1].gameObject, player.PlayerID, true);
+    }
+    private void GenerateBoardTest(int id)
+    {
+        if (BoardList.Where(b => b.BoardID == id).Any())
+            return;
+
+        var board = Instantiate(BoardPrefab, Vector3.zero, BoardPrefab.transform.rotation);
+        board.transform.SetParent(BoardPanel, false);
+        board.name = id.ToString();
+        board.GetComponent<Board>().BoardID = id;
+        BoardList.Add(board.GetComponent<Board>());
+        ReSizeAllBoard();
+    }
+    #endregion
 }

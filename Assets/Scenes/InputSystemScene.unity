@@ -784,17 +784,44 @@ MonoBehaviour:
   PlayerBoardParentTeam: {fileID: 0}
   PlayerOnBoardList: []
   BoardFreeToAllList: []
+  BoardTeamList: []
   NumberPlayerList: 
+  CursorList: []
   ButtonText: {fileID: 1338940394}
+  isFreeToAll: 1
   playerColors:
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0.03137255, g: 0, b: 0.9882353, a: 1}
-  - {r: 0, g: 0.9882353, b: 0.08235294, a: 1}
-  - {r: 0.9882353, g: 0.45882353, b: 0, a: 1}
-  - {r: 0.9882353, g: 0, b: 0.6862745, a: 1}
-  - {r: 0.654902, g: 0, b: 0.9882353, a: 1}
-  - {r: 0, g: 0.9803922, b: 0.98823535, a: 1}
-  - {r: 0.98823535, g: 0.854902, b: 0, a: 1}
+  - r: 1
+    g: 0
+    b: 0
+    a: 1
+  - r: 0.03137255
+    g: 0
+    b: 0.9882353
+    a: 1
+  - r: 0
+    g: 0.9882353
+    b: 0.08235294
+    a: 1
+  - r: 0.9882353
+    g: 0.45882353
+    b: 0
+    a: 1
+  - r: 0.9882353
+    g: 0
+    b: 0.6862745
+    a: 1
+  - r: 0.654902
+    g: 0
+    b: 0.9882353
+    a: 1
+  - r: 0
+    g: 0.9803922
+    b: 0.98823535
+    a: 1
+  - r: 0.98823535
+    g: 0.854902
+    b: 0
+    a: 1
   DefaultSprite: {fileID: 21300000, guid: dbbf25dbfe12fad48a223f9b7a055e9f, type: 3}
   playerSprites:
   - {fileID: 21300000, guid: b412e62b8e50435478d449e2a2401091, type: 3}
@@ -823,6 +850,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e6c71eb5fedcf494f9f2c0b9b608a9f7, type: 3}
   - {fileID: 21300000, guid: 3fde4c5ebc88e46439148c92f84ce208, type: 3}
   - {fileID: 21300000, guid: 12999a94fddd49a498d9c2d119ec0058, type: 3}
+  LimitFreeToAll: 3
+  LimitTeam: 8
 --- !u!4 &1781601371
 Transform:
   m_ObjectHideFlags: 0
@@ -887,6 +916,10 @@ MonoBehaviour:
   player3Panel: {fileID: 614586432}
   player4Panel: {fileID: 1677166736}
   player8Panel: {fileID: 184382173}
+  player2Pos: []
+  player3Pos: []
+  player4Pos: []
+  player8Pos: []
   ButtonText: {fileID: 1338940394}
   isFreeToAll: 1
   DefaultSprite: {fileID: 21300000, guid: dbbf25dbfe12fad48a223f9b7a055e9f, type: 3}
@@ -896,6 +929,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 89a6007f3b302f2488f33d87dfc24502, type: 3}
   - {fileID: 21300000, guid: 9818a1d84deb0bd41b3e335b7ec5174e, type: 3}
   - {fileID: 21300000, guid: 65254d7bda8ddc449bed243b65c2e727, type: 3}
+  - {fileID: 21300000, guid: 6383e282c6808944b94a6ab79cfb91ab, type: 3}
   - {fileID: 21300000, guid: eeeb638b87df0264c97dbf146bb54d7b, type: 3}
   - {fileID: 21300000, guid: 41ae50bc4586b004b9fb27afe51a1ba7, type: 3}
   playerColors:
@@ -910,6 +944,7 @@ MonoBehaviour:
   DefaultPlayer: 2
   LimitPlayer: 8
   TeamCount: 4
+  PlayerCount: 0
   teamManager: {fileID: 1781601376}
 --- !u!114 &1781601375
 MonoBehaviour:
@@ -1593,7 +1628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 111250936127677204, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -589.5649
+      value: -589.234
       objectReference: {fileID: 0}
     - target: {fileID: 2387304147770930705, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_Name
@@ -1705,7 +1740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5103201317429707731, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -589.5649
+      value: -589.234
       objectReference: {fileID: 0}
     - target: {fileID: 8019488611058523007, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1729,7 +1764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8019488611058523007, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -589.5649
+      value: -589.234
       objectReference: {fileID: 0}
     - target: {fileID: 9180519305762432266, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1753,7 +1788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9180519305762432266, guid: 45c42b21f205b31438f405cbecfbc426, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -589.5649
+      value: -589.234
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1814,7 +1849,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3212281143844725693, guid: 4da0790bf9ef64345901dce9abf1f617, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 959.99994
+      value: 960
       objectReference: {fileID: 0}
     - target: {fileID: 3212281143844725693, guid: 4da0790bf9ef64345901dce9abf1f617, type: 3}
       propertyPath: m_AnchoredPosition.y

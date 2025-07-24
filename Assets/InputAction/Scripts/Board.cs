@@ -27,7 +27,7 @@ public class Board : MonoBehaviour
     void Start()
     {
     }
-    void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect)
+    public void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect)
     {
         if (gameObj != gameObject)
             return;
@@ -41,7 +41,7 @@ public class Board : MonoBehaviour
                 BoardOfImage.SetActive(false);
 
                 iconImage.sprite = BoardManager.Instance.BoardSprites[PlayerNumber];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber, GetWorldPosition());
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber);
             }
             else
             {
@@ -59,9 +59,8 @@ public class Board : MonoBehaviour
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
                 BoardOfImage.SetActive(false);
-                Debug.Log(GetWorldPosition());
                 iconImage.sprite = BoardManager.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID, GetWorldPosition());
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID);
             }
             else
             {
@@ -74,19 +73,5 @@ public class Board : MonoBehaviour
 
         }
         
-    }
-    private Vector3 GetWorldPosition()
-    {
-        Vector3 worldPosition;
-        RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            GetComponent<RectTransform>(),
-            RectTransformUtility.WorldToScreenPoint(null, transform.position),
-            null,
-            out worldPosition
-        );
-        Vector3 pos = worldPosition;
-        pos.z = 0;
-        worldPosition = pos;
-        return worldPosition;
     }
 }

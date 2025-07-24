@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     public GameObject CoreGameParent;
     public GameObject BoardPrefab;
     private Camera camera;
+    private List<GameObject> boardsWorld=new List<GameObject>();
 
     public Sprite SelectSprites;
     void Start()
@@ -32,20 +33,32 @@ public class GameController : MonoBehaviour
         MenuePanel.SetActive(false);
         foreach (var player in PlayerManager.Instance.PlayerList)
             player.gameObject.SetActive(false);
-            
-        List<Vector3> positionList = GetPosition(sortedList.Count);
 
+        //List<Vector3> positionList = GetPosition(sortedList.Count);
+        int playerCount= BoardManager.Instance.PlayerCount;
+        int scale = 22;
+        if (playerCount == 2)
+            scale = 22;
+        else if (playerCount == 3)
+            scale = 19;
+        else if (playerCount == 4)
+            scale = 15;
+        else 
+            scale = 10;
+        List<Vector3> positionList = BoardManager.Instance.GetWorldPosListByPlayerCount();
         for (int i = 0; i < sortedList.Count; i++)
         {
             var board = Instantiate(BoardPrefab, CoreGameParent.transform);
             board.transform.SetParent(CoreGameParent.transform,true);
             board.GetComponent<BoardIdentity>().SetSprite(sortedList[i].ColorNo);
+            if(i == 0 || i==1)
             board.GetComponent<BoardIdentity>().SetInputHandler(sortedList[i].PlayerNo);
             board.GetComponent<BoardIdentity>().Initialize();
-           // board.transform.position = positionList[i];
-            board.transform.position = sortedList[i].PositionBoard;
-            board.transform.localScale *= 20;
+            board.transform.position = positionList[i];
+           // board.transform.localScale *= scale;
+            boardsWorld.Add(board);
         }
+       
     }
 
     private List<Vector3> GetPosition(int count)
