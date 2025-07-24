@@ -220,9 +220,7 @@ namespace Project.Core
         {
             Debug.Log("OnMatchingProcessFinished");
 
-            Cookie[,] cookies;
-            Block[,] blocks;
-            //TakeBoardSnapshot(out cookies, out blocks);
+            RefillBoard();
         }
 
         private void CleanBoard()
@@ -292,7 +290,7 @@ namespace Project.Core
                 }
             }
 
-            if(m_TempCleanCookies.Count <= 0)
+            if (m_TempCleanCookies.Count <= 0)
             {
                 Debug.Log("No move");
                 OnFinishCleanBoard?.Invoke();
@@ -336,7 +334,6 @@ namespace Project.Core
             }
         }
 
-
         private void OnFinishMovingCookieCleanBoard(MovableTile cookie)
         {
             cookie.FinishMoving -= OnFinishMovingCookieCleanBoard;
@@ -346,6 +343,64 @@ namespace Project.Core
             if (m_TempCleanCookies.Count <= 0)
             {
                 OnFinishCleanBoard?.Invoke();
+            }
+        }
+
+        private void RefillBoard()
+        {
+            Cookie[,] cookies;
+            Block[,] blocks;
+            TakeBoardSnapshot(out cookies, out blocks);
+            int xCount = cookies.GetLength(0);
+            int yCount = cookies.GetLength(1);
+            int xOffset = Mathf.Abs((m_BoardData.OriginalBoardSize.x - m_BoardData.VisibleBoardSize.x) / 2);
+            int yOffset = Mathf.Abs((m_BoardData.OriginalBoardSize.y - m_BoardData.VisibleBoardSize.y) / 2);
+            IReadOnlyList<Block> firstRowBlocks = m_BoardData.GetBlokcsAtRow(0);
+            IReadOnlyList<Block> lastColumnBlock = m_BoardData.GetBlocksAtColumn(m_BoardData.OriginalBoardSize.x - 1);
+            IReadOnlyList<Cookie> tempCookieList;
+
+            for (int x = 0; x < xCount; x++)
+            {
+                for (int y = 0; y < yCount; y++)
+                {
+                    tempCookieList = m_BoardData.GetColumnCookiesAtId(blocks[x, y].Id);
+                    if (tempCookieList.Count == 0 || tempCookieList.Count == 1)
+                    {
+                        int startCount = tempCookieList.Count;
+                        for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
+                        {
+                            Cookie cookie = m_CookiePool.Get();
+                            cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
+                            cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            cookie.TryMove(blocks[x, y2].transform);
+                            cookies[x, y2] = cookie;
+                        }
+                        for (int y2 = 1; y2 < 5; y2++)
+                        {
+                            //Cookie cookie = m_CookiePool.Get();
+                            //cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
+                            //cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            //cookie.TryMove(blocks[x, y2].transform);
+                            //cookies[x, y2] = cookie;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            for (int y = 0; y < yCount; y++)
+            {
+                for (int x = 0; x < xCount; x++)
+                {
+                    Cookie cookie = cookies[x, y];
+                    if (cookie == null)
+                    {
+                        cookie = m_CookiePool.Get();
+                        cookie.transform.position = firstRowBlocks[x + xOffset].transform.position;
+                        cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                        cookie.TryMove(blocks[x, y].transform);
+                    }
+                }
             }
         }
 
@@ -378,6 +433,7 @@ namespace Project.Core
 
         private void OnRelease(Cookie cookie)
         {
+            cookie.ResetIt();
             cookie.gameObject.SetActive(false);
         }
         #endregion

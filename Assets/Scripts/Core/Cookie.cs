@@ -18,7 +18,8 @@ namespace Project.Core
         public event Action<Cookie> OnFinishHideAnimation;
         public event Action<Cookie> OnFinishComboHideAnimation;
 
-        private Collider2D m_Collider;
+        private Vector3 m_Scale;
+        private Color m_Color;
 
         public void Init(CookieProperties properties, BoardIdentity owner)
         {
@@ -27,7 +28,8 @@ namespace Project.Core
             m_SpriteRenderer.sprite = properties.Icon;
             name = $"Cookie_{properties.m_CookieName}";
 
-            m_Collider = GetComponent<Collider2D>();
+            m_Scale = transform.localScale;
+            m_Color = m_SpriteRenderer.color;
         }
 
         public virtual void PlayHideAnimation()
@@ -57,9 +59,10 @@ namespace Project.Core
             m_FadeOutAnimation.tween.Restart();
         }
 
-        public void EnableCollider(bool enable)
+        public virtual void ResetIt()
         {
-            m_Collider.enabled = enable;
+            transform.localScale = m_Scale;
+            m_SpriteRenderer.color = m_Color;
         }
     }
 }
