@@ -6,13 +6,18 @@ using UnityEngine.InputSystem;
 
 public class GameController : MonoBehaviour
 {
+    public Canvas canvas;
     public GameObject MenuePanel;
     public GameObject CoreGameParent;
     public GameObject BoardPrefab;
+    private Camera camera;
 
     public Sprite SelectSprites;
     void Start()
     {
+        camera= GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        Vector3 canvasPos = canvas.transform.position;
+        camera.transform.position= new Vector3(canvasPos.x, canvasPos.y, camera.transform.position.z);
         PlayerManager.PlayerOnBoardEvent += OnStartGame;
     }
     private void OnDestroy()
@@ -37,7 +42,9 @@ public class GameController : MonoBehaviour
             board.GetComponent<BoardIdentity>().SetSprite(sortedList[i].ColorNo);
             board.GetComponent<BoardIdentity>().SetInputHandler(sortedList[i].PlayerNo);
             board.GetComponent<BoardIdentity>().Initialize();
-            board.transform.position = positionList[i];
+           // board.transform.position = positionList[i];
+            board.transform.position = sortedList[i].PositionBoard;
+            board.transform.localScale *= 20;
         }
     }
 

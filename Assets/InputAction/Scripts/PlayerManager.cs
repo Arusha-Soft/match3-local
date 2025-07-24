@@ -32,49 +32,50 @@ public class PlayerManager : MonoBehaviour
     }
     void Update()
     {
-        var gamepads = Gamepad.all;
-        if (gamepads.Count > 0)
+        //var gamepads = Gamepad.all;
+        //if (gamepads.Count > 0)
+        //{
+        //    for (int i = 0; i < gamepads.Count; i++)
+        //    {
+        //        //if (boardManager.isFreeToAll)
+        //        //{
+        //        //    if (i < boardManager.LimitFreeToAll)
+        //        //    {
+        //        //        if (i == 2)
+        //        //        {
+        //        //            boardManager.GeneratePlayerBoard(2);
+        //        //            CheckJoinGame(i);
+        //        //        }
+        //        //        else
+        //        //            CheckJoinGame(i);
+        //        //    }
+        //        //}
+        //        //else
+        //        //{
+        //        //    if (i < boardManager.LimitTeam)
+        //        //    {
+        //        //        CheckJoinGame(i);
+        //        //    }
+
+        //        //}
+        //    }
+
+        //}
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            for (int i = 0; i < gamepads.Count; i++)
-            {
-                if (boardManager.isFreeToAll)
-                {
-                    if (i < boardManager.LimitFreeToAll)
-                    {
-                        if (i == 2)
-                        {
-                            boardManager.GeneratePlayerBoard(2);
-                            CheckJoinGame(i);
-                        }
-                        else
-                            CheckJoinGame(i);
-                    }
-                }
-                else
-                {
-                    if (i < boardManager.LimitTeam)
-                    {
-                        CheckJoinGame(i);
-                    }
-
-                }
-            }
-
+            boardManager.SpawnOneBoard();
         }
     }
-    private void CheckJoinGame(int index)
+    //private void CheckJoinGame(int index)
+    //{
+    //    if (Gamepad.all[index].buttonSouth.wasPressedThisFrame ||
+    //                Keyboard.current.enterKey.wasPressedThisFrame)
+    //    {
+    //        JoinGamePad(index);
+    //    }
+    //}
+    public void JoinGamePad(int index)
     {
-        if (Gamepad.all[index].buttonSouth.wasPressedThisFrame ||
-                    Keyboard.current.enterKey.wasPressedThisFrame)
-        {
-            JoinGamePad(index);
-        }
-    }
-    void JoinGamePad(int index)
-    {
-        //if (NumberPlayerList.Contains(index))
-        //    return;
-
         if (PlayerList.Where(p => p.PlayerID == index).Any())
             return;
 
@@ -85,9 +86,9 @@ public class PlayerManager : MonoBehaviour
         PlayerList.Add(p.GetComponent<Player>());
     }
 
-    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
+    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo, Vector3 PositionBoard)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo));
+        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo, PositionBoard));
         boardManager.CheckGameStart(PlayerOnBoardList);
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)

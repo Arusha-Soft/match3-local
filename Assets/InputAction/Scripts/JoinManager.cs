@@ -175,9 +175,9 @@ public class JoinManager : MonoBehaviour
         cursor.GetComponent<Player>().GamepadPlayer = Gamepad.all[index];
     }
 
-    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
+    public void BindPlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo, Vector3 PositionBoard)
     {
-        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo));
+        PlayerOnBoardList.Add(new PlayerOnBoard(PlayerNo, BoardNo, ColorNo, PositionBoard));
         CheckGameStart();
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)

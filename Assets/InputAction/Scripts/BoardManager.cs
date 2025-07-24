@@ -1,7 +1,11 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class BoardManager : MonoBehaviour
@@ -9,26 +13,26 @@ public class BoardManager : MonoBehaviour
     public static BoardManager Instance;
 
     public List<Board> BoardList = new List<Board>();
-    public GameObject FreeToAllPanel, TeamPanel;
     public GameObject BoardPrefab;
-    public Transform PlayerBoardParentFreeToAll;
-    public Transform PlayerBoardParentTeam;
+    public Transform BoardPanel;
+    public GameObject player2Panel, player3Panel, player4Panel, player8Panel;
     public Text ButtonText;
     public bool isFreeToAll = true;
 
     public Sprite DefaultSprite;
-    public Sprite[] playerSprites;
     public Sprite[] BoardSprites;
     public Color[] playerColors;
-    public int LimitFreeToAll = 3;
-    public int LimitTeam = 8;
+
+    public int DefaultPlayer = 2;
+    public int LimitPlayer = 8;
     public int TeamCount = 4;
+    private int CountPlayer;
     public TeamManager teamManager;
+    private int gamePadCount;
+
     private void Awake()
     {
         Instance = this;
-        for (int i = 0; i < TeamCount; i++)
-            teamManager.CreateTeam(i, playerColors[i]);
     }
     void Start()
     {
@@ -36,69 +40,84 @@ public class BoardManager : MonoBehaviour
     }
     public void Init()
     {
+        gamePadCount = Gamepad.all.Count;
+        if (gamePadCount < 2)
+            CountPlayer = DefaultPlayer;
+        else
+            CountPlayer = gamePadCount;
+
         BoardList.Clear();
         SetModeButoon(isFreeToAll);
-        SpawnFreeToAllBoards();
-        //SpawnTeamBoards();
+        SpawnBoards(CountPlayer);
     }
-    private void SpawnFreeToAllBoards()
+    private void SpawnBoards(int count)
     {
-        for (int i = 0; i < LimitFreeToAll - 1; i++)
+        for (int i = 0; i < count; i++)
         {
-            GeneratePlayerBoard(i,PlayerBoardParentFreeToAll);
+            GenerateBoard(i);
         }
     }
-    private void SpawnTeamBoards()
+    public void SpawnOneBoard()
     {
-        for (int i = 0; i < LimitTeam; i++)
-        {
-            GeneratePlayerBoard(i,PlayerBoardParentTeam);
-        }
+        if (CountPlayer > LimitPlayer)
+            return;
+        CountPlayer++;
+        GenerateBoard(CountPlayer-1);
     }
-    private void GeneratePlayerBoard(int id, Transform PlayerBoardParent)
-    {
-        var board = Instantiate(BoardPrefab, Vector3.zero, BoardPrefab.transform.rotation);
-        board.transform.SetParent(PlayerBoardParent, false);
-        board.name = id.ToString();
-        board.GetComponent<Board>().BoardID = id;
-        BoardList.Add(board.GetComponent<Board>());
-    }
-    public void GeneratePlayerBoard(int id)
+    private void GenerateBoard(int id)
     {
         if (BoardList.Where(b => b.BoardID == id).Any())
             return;
 
         var board = Instantiate(BoardPrefab, Vector3.zero, BoardPrefab.transform.rotation);
-        board.transform.SetParent(PlayerBoardParentFreeToAll, false);
+        board.transform.SetParent(BoardPanel, false);
         board.name = id.ToString();
         board.GetComponent<Board>().BoardID = id;
         BoardList.Add(board.GetComponent<Board>());
+        ReSizeAllBoard();
     }
-    private void RemoveBoards()
+    private void ReSizeAllBoard()
     {
-        foreach (var board in BoardList)
-            Destroy(board.gameObject);
-
-        BoardList.Clear();
+        for (int i = 0; i < BoardList.Count; i++)
+        {
+            GameObject playerPanelPosition = GetPlayerPanelForPosition();
+            BoardList[i].transform.localScale = playerPanelPosition.transform.GetChild(i).transform.localScale;
+            BoardList[i].transform.position = playerPanelPosition.transform.GetChild(i).position;
+        }
+    }
+    private GameObject GetPlayerPanelForPosition()
+    {
+        switch (CountPlayer)
+        {
+            case 2:
+                return player2Panel;
+            case 3:
+                return player3Panel;
+            case 4:
+                return player4Panel;
+            default:
+                return player8Panel;
+        }
+        
 
     }
+    //private void RemoveBoards()
+    //{
+    //    foreach (var board in BoardList)
+    //        Destroy(board.gameObject);
+
+    //    BoardList.Clear();
+
+    //}
     public void ToggleButton()
     {
         isFreeToAll = !isFreeToAll;
-
-        RemoveBoards();
-        if (isFreeToAll)
-            SpawnFreeToAllBoards();
-        else
-            SpawnTeamBoards();
 
         PlayerManager.Instance.PlayerOnBoardList.Clear();
         SetModeButoon(isFreeToAll);
     }
     private void SetModeButoon(bool isFreeToAll)
     {
-        FreeToAllPanel.SetActive(isFreeToAll);
-        TeamPanel.SetActive(!isFreeToAll);
         if (isFreeToAll)
         {
             ButtonText.text = "FreeToAll";
@@ -128,15 +147,34 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-    //public void AssignBoardToTeam(int boardId, int teamId)
-    //{
-    //    var board = BoardList.FirstOrDefault(p => p.BoardID == boardId);
-    //    var team = TeamManager.Instance.GetTeamByName(teamId);
-    //    if (board != null && team != null)
-    //        board.JoinTeam(team);
-    //}
+
     void Update()
     {
+        var gamepads = Gamepad.all;
+        if (gamePadCount < gamepads.Count)
+        {
+            int diff = gamepads.Count - gamePadCount;
+            gamePadCount = gamepads.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                SpawnOneBoard();
+            }
+        }
         
+        for (int i = 0; i < gamepads.Count; i++)
+            CheckJoinGame(i);
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            SpawnOneBoard();
+        }
+    }
+
+    private void CheckJoinGame(int index)
+    {
+        if (Gamepad.all[index].buttonSouth.wasPressedThisFrame ||
+                    Keyboard.current.enterKey.wasPressedThisFrame)
+        {
+            PlayerManager.Instance.JoinGamePad(index);
+        }
     }
 }

@@ -5,6 +5,7 @@ public class Board : MonoBehaviour
 {
     public int BoardID;
     public Image iconImage;
+    public GameObject BoardOfImage;
     public Button btn;
 
     public SelectTeam selectTeam;
@@ -37,8 +38,10 @@ public class Board : MonoBehaviour
             {
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
-                iconImage.sprite = BoardManager.Instance.playerSprites[PlayerNumber];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber);
+                BoardOfImage.SetActive(false);
+
+                iconImage.sprite = BoardManager.Instance.BoardSprites[PlayerNumber];
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber, GetWorldPosition());
             }
             else
             {
@@ -55,8 +58,10 @@ public class Board : MonoBehaviour
             {
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
-                iconImage.sprite = BoardManager.Instance.playerSprites[selectTeam.CurrentTeam.TeamID];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID);
+                BoardOfImage.SetActive(false);
+                Debug.Log(GetWorldPosition());
+                iconImage.sprite = BoardManager.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID, GetWorldPosition());
             }
             else
             {
@@ -68,7 +73,20 @@ public class Board : MonoBehaviour
             }
 
         }
-
+        
     }
-
+    private Vector3 GetWorldPosition()
+    {
+        Vector3 worldPosition;
+        RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            GetComponent<RectTransform>(),
+            RectTransformUtility.WorldToScreenPoint(null, transform.position),
+            null,
+            out worldPosition
+        );
+        Vector3 pos = worldPosition;
+        pos.z = 0;
+        worldPosition = pos;
+        return worldPosition;
+    }
 }
