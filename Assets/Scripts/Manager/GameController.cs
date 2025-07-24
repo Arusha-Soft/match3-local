@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour
             board.GetComponent<BoardIdentity>().SetInputHandler(sortedList[i].PlayerNo);
             board.GetComponent<BoardIdentity>().Initialize();
             board.transform.position = positionList[i];
-           // board.transform.localScale *= scale;
+            board.transform.localScale *= scale;
             boardsWorld.Add(board);
         }
        
