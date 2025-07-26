@@ -601,14 +601,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
-    - target: {fileID: 5555980092942374936, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-      propertyPath: m_CleanCookieMoveDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555980092942374936, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-      propertyPath: m_RefillCookieMoveDuration
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7616255748385196848, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

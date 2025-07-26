@@ -24,6 +24,7 @@ namespace Project.Core
 
         public event Action OnFinishMovingCookies;
         public event Action OnFinishCleanBoard;
+        public event Action OnFinishRefilling;
 
         private BoardData m_BoardData;
         private BoardInputHandler m_Input;
@@ -34,6 +35,7 @@ namespace Project.Core
         private List<Block> m_TempBlocks = new List<Block>();
         private List<Cookie> m_TempMovingCookies = new List<Cookie>();
         private List<MovableTile> m_TempCleanCookies = new List<MovableTile>();
+        private List<MovableTile> m_TempRefillCookies = new List<MovableTile>();
         private Action m_OnFinishMoveCookies;
 
         private bool m_IsMoving = false;
@@ -378,8 +380,10 @@ namespace Project.Core
                         for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
                         {
                             Cookie cookie = m_CookiePool.Get();
+                            m_TempRefillCookies.Add(cookie);
                             cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
                             cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            cookie.FinishMoving += OnFinishMovingInRefilling;
                             cookie.TryMove(blocks[x, y2].transform, m_RefillCookieMoveDuration);
                             cookies[x, y2] = cookie;
                         }
@@ -397,8 +401,10 @@ namespace Project.Core
                         if (cookie == null)
                         {
                             cookie = m_CookiePool.Get();
+                            m_TempRefillCookies.Add(cookie);
                             cookie.transform.position = firstRowBlocks[x + xOffset].transform.position;
                             cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            cookie.FinishMoving += OnFinishMovingInRefilling;
                             cookie.TryMove(blocks[x, y].transform, m_RefillCookieMoveDuration);
                         }
                     }
@@ -418,6 +424,18 @@ namespace Project.Core
                 }
 
                 return result;
+            }
+        }
+
+        private void OnFinishMovingInRefilling(MovableTile cookie)
+        {
+            cookie.FinishMoving -= OnFinishMovingInRefilling;
+
+            m_TempRefillCookies.Remove(cookie);
+            if (m_TempRefillCookies.Count <= 0)
+            {
+                Debug.Log("On Finish Refilling");
+                OnFinishRefilling?.Invoke();
             }
         }
 

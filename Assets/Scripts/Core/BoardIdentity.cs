@@ -16,19 +16,23 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_SelectSprite;
         public Sprite[] BoardSprites;
         public Sprite[] SelectSprites;
+
         private void Start()
         {
             Initialize();
         }
+
         public void SetSprite(int spriteIndex)
         {
             m_BoardSprite.sprite = BoardSprites[spriteIndex];
             m_SelectSprite.sprite = SelectSprites[spriteIndex];
         }
+
         public void SetInputHandler(int PlayerNo)
         {
             m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
         }
+
         public void Initialize()
         {
             m_BoardInput.Init();
@@ -36,7 +40,19 @@ namespace Project.Core
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
             m_SelectionBox.Init(m_BoardInput, m_BoardData);
+
+            m_CookiesMatcher.OnMatchFind += OnMatchFind;
+            m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
         }
-        
+
+        private void OnMatchFind()
+        {
+            m_BoardInput.DisableInput();
+        }
+
+        private void OnFinishRefilling()
+        {
+            m_BoardInput.EnableInput();
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace Project.Core
         public event Action<MatchCookiesData> OnDisappearCookiesStepFinished;
         public event Action<List<MatchCookiesData>> OnDisappearCookiesFinished;
         public event Action OnMatchingProcessFinished;
+        public event Action OnMatchFind;
 
         private List<MatchCookiesData> m_DisapparMatchedCookies = new List<MatchCookiesData>();
         private CookiesController m_CookiesController;
@@ -36,6 +37,12 @@ namespace Project.Core
         private void OnFinishMovingCookies()
         {
             FindAllMatchCookies(false);
+
+            if (m_MatchedCookies.Count > 0)
+            {
+                Debug.Log("On Match Find");
+                OnMatchFind?.Invoke();
+            }
         }
 
         private void OnFinishCleanBoard()
@@ -145,7 +152,7 @@ namespace Project.Core
 
         private void OnFinishComboHideAnimationCookie(Cookie cookie)
         {
-            cookie.OnFinishComboHideAnimation-= OnFinishComboHideAnimationCookie;
+            cookie.OnFinishComboHideAnimation -= OnFinishComboHideAnimationCookie;
 
             foreach (MatchCookiesData data in m_MatchDataDictionary.Keys)
             {
