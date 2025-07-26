@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UIElements;
+using static Project.Core.CookiesMatcher;
 using Random = UnityEngine.Random;
 
 namespace Project.Core
@@ -363,20 +364,43 @@ namespace Project.Core
             IReadOnlyList<Block> lastColumnBlock = m_BoardData.GetBlocksAtColumn(m_BoardData.OriginalBoardSize.x - 1);
             IReadOnlyList<Cookie> tempCookieList;
 
-            for (int x = 0; x < xCount; x++)
+            MatchVerticaly();
+            MatchHorizontaly();
+
+            void MatchVerticaly()
             {
-                tempCookieList = GetCookiesAtColumn(x);
-                Debug.Log("AA" + tempCookieList.Count);
-                if (tempCookieList.Count < m_BoardData.VisibleBoardSize.y - 1)
+                for (int x = 0; x < xCount; x++)
                 {
-                    int startCount = tempCookieList.Count;
-                    for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
+                    tempCookieList = GetCookiesAtColumn(x);
+                    if (tempCookieList.Count < m_BoardData.VisibleBoardSize.y - 1)
                     {
-                        Cookie cookie = m_CookiePool.Get();
-                        cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
-                        cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
-                        cookie.TryMove(blocks[x, y2].transform, m_RefillCookieMoveDuration);
-                        cookies[x, y2] = cookie;
+                        int startCount = tempCookieList.Count;
+                        for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
+                        {
+                            Cookie cookie = m_CookiePool.Get();
+                            cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
+                            cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            cookie.TryMove(blocks[x, y2].transform, m_RefillCookieMoveDuration);
+                            cookies[x, y2] = cookie;
+                        }
+                    }
+                }
+            }
+
+            void MatchHorizontaly()
+            {
+                for (int y = 0; y < yCount; y++)
+                {
+                    for (int x = 0; x < xCount; x++)
+                    {
+                        Cookie cookie = cookies[x, y];
+                        if (cookie == null)
+                        {
+                            cookie = m_CookiePool.Get();
+                            cookie.transform.position = firstRowBlocks[x + xOffset].transform.position;
+                            cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                            cookie.TryMove(blocks[x, y].transform, m_RefillCookieMoveDuration);
+                        }
                     }
                 }
             }
@@ -384,7 +408,7 @@ namespace Project.Core
             IReadOnlyList<Cookie> GetCookiesAtColumn(int columnIndex)
             {
                 List<Cookie> result = new List<Cookie>();
-                
+
                 for (int y = 0; y < yCount; y++)
                 {
                     if (cookies[columnIndex, y] != null)
@@ -394,21 +418,6 @@ namespace Project.Core
                 }
 
                 return result;
-            }
-
-            for (int y = 0; y < yCount; y++)
-            {
-                for (int x = 0; x < xCount; x++)
-                {
-                    Cookie cookie = cookies[x, y];
-                    if (cookie == null)
-                    {
-                        cookie = m_CookiePool.Get();
-                        cookie.transform.position = firstRowBlocks[x + xOffset].transform.position;
-                        cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
-                        cookie.TryMove(blocks[x, y].transform, m_RefillCookieMoveDuration);
-                    }
-                }
             }
         }
 
