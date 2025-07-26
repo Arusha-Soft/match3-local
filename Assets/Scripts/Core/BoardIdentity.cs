@@ -12,10 +12,14 @@ namespace Project.Core
         [SerializeField] private CookiesController m_CookieGenerator;
         [SerializeField] private CookiesMatcher m_CookiesMatcher;
         [SerializeField] private SelectionBox m_SelectionBox;
+        [SerializeField] private BoardScore m_BoardScore;
+        [SerializeField] private BoardFuse m_BoardFuse;
+
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
         public Sprite[] BoardSprites;
         public Sprite[] SelectSprites;
+
 
         private void Start()
         {
@@ -43,11 +47,15 @@ namespace Project.Core
 
             m_CookiesMatcher.OnMatchFind += OnMatchFind;
             m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
+
+            m_BoardFuse.StartWorking();
         }
 
-        private void OnMatchFind()
+        private void OnMatchFind(bool isPowerup)
         {
             m_BoardInput.DisableInput();
+            m_BoardScore.SetScore(m_BoardScore.Score + 1);
+            m_BoardFuse.ResetIt();
         }
 
         private void OnFinishRefilling()

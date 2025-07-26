@@ -829,6 +829,7 @@ MonoBehaviour:
   m_MatchCount: 5
   m_ComboMatchCount: 4
   m_MatchActions:
+  - {fileID: 11400000, guid: a515b70012c802545801fef09114b741, type: 2}
   - {fileID: 11400000, guid: 61092e1581e97a644810210edf756952, type: 2}
   - {fileID: 11400000, guid: f63bca8e755b1b94ba90a5822cba89d6, type: 2}
   - {fileID: 11400000, guid: 4c888e85ce9dbb043a75d28bfd72252f, type: 2}
@@ -891,6 +892,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FuseRenderer: {fileID: 3097375665029568242}
+  m_FuseDuration: 20
+  m_DefaultValue: 1
 --- !u!1 &2570723808485777793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,6 +1894,8 @@ MonoBehaviour:
   m_CookieGenerator: {fileID: 5555980092942374936}
   m_CookiesMatcher: {fileID: 5335112399562351405}
   m_SelectionBox: {fileID: 2031378112663229674}
+  m_BoardScore: {fileID: 3668368104479219587}
+  m_BoardFuse: {fileID: 8160435421108010060}
   m_BoardSprite: {fileID: 6723839559062931808}
   m_SelectSprite: {fileID: 135384362471557190}
   BoardSprites:

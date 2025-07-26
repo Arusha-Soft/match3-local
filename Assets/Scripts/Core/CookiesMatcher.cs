@@ -18,7 +18,7 @@ namespace Project.Core
         public event Action<MatchCookiesData> OnDisappearCookiesStepFinished;
         public event Action<List<MatchCookiesData>> OnDisappearCookiesFinished;
         public event Action OnMatchingProcessFinished;
-        public event Action OnMatchFind;
+        public event Action<bool> OnMatchFind;
 
         private List<MatchCookiesData> m_DisapparMatchedCookies = new List<MatchCookiesData>();
         private CookiesController m_CookiesController;
@@ -40,8 +40,19 @@ namespace Project.Core
 
             if (m_MatchedCookies.Count > 0)
             {
-                Debug.Log("On Match Find");
-                OnMatchFind?.Invoke();
+                bool isPowerup = false;
+
+                for (int i = 0; i < m_MatchedCookies.Count; i++)
+                {
+                    if (m_MatchedCookies[i].MatchAction.IsPowerup())
+                    {
+                        isPowerup = true;
+                        break;
+                    }
+                }
+
+                Debug.Log("On Match Find. Is Power-up: " + isPowerup);
+                OnMatchFind?.Invoke(isPowerup);
             }
         }
 
@@ -215,6 +226,7 @@ namespace Project.Core
                         IsHorizontal = isHorizontal,
                         MatchCookieProperties = m_MatchActions[j].TargetCookie,
                         AllCookies = cookies,
+                        MatchAction = m_MatchActions[j],
                         Score = matchScore,
                         MatchCount = m_MatchActions[j].MatchCount,
                         ColumnOrRowIndex = clolumnOrRowIndex
@@ -230,6 +242,7 @@ namespace Project.Core
                         IsHorizontal = isHorizontal,
                         MatchCookieProperties = m_MatchActions[j].TargetCookie,
                         AllCookies = cookies,
+                        MatchAction = m_MatchActions[j],
                         Score = comboScore,
                         MatchCount = m_ComboMatchCount,
                         ColumnOrRowIndex = clolumnOrRowIndex
@@ -248,6 +261,7 @@ namespace Project.Core
             public bool IsHorizontal;
             public CookieProperties MatchCookieProperties;
             public List<Cookie> AllCookies; // list of cookies which have some match
+            public MatchAction MatchAction;
             public int Score;
             public int MatchCount;
             public int ColumnOrRowIndex;
