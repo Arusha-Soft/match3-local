@@ -17,6 +17,10 @@ namespace Project.Core
         [SerializeField] private Cookie m_CookiePrefab;
         [SerializeField] private Transform m_CookieParent;
 
+        [Header("Settigns")]
+        [SerializeField] private float m_CleanCookieMoveDuration = 0.2f;
+        [SerializeField] private float m_RefillCookieMoveDuration = 0.2f;
+
         public event Action OnFinishMovingCookies;
         public event Action OnFinishCleanBoard;
 
@@ -278,7 +282,7 @@ namespace Project.Core
                     {
                         cookie.FinishMoving += OnFinishMovingCookieCleanBoard;
 
-                        if (cookie.TryMove(blocks[x, y].transform))
+                        if (cookie.TryMove(blocks[x, y].transform, m_CleanCookieMoveDuration))
                         {
                             m_TempCleanCookies.Add(cookie);
                         }
@@ -361,31 +365,35 @@ namespace Project.Core
 
             for (int x = 0; x < xCount; x++)
             {
-                for (int y = 0; y < yCount; y++)
+                tempCookieList = GetCookiesAtColumn(x);
+                Debug.Log("AA" + tempCookieList.Count);
+                if (tempCookieList.Count < m_BoardData.VisibleBoardSize.y - 1)
                 {
-                    tempCookieList = m_BoardData.GetColumnCookiesAtId(blocks[x, y].Id);
-                    if (tempCookieList.Count == 0 || tempCookieList.Count == 1)
+                    int startCount = tempCookieList.Count;
+                    for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
                     {
-                        int startCount = tempCookieList.Count;
-                        for (int y2 = (m_BoardData.VisibleBoardSize.y - 1) - startCount; y2 >= 0; y2--)
-                        {
-                            Cookie cookie = m_CookiePool.Get();
-                            cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
-                            cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
-                            cookie.TryMove(blocks[x, y2].transform);
-                            cookies[x, y2] = cookie;
-                        }
-                        for (int y2 = 1; y2 < 5; y2++)
-                        {
-                            //Cookie cookie = m_CookiePool.Get();
-                            //cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
-                            //cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
-                            //cookie.TryMove(blocks[x, y2].transform);
-                            //cookies[x, y2] = cookie;
-                        }
-                        break;
+                        Cookie cookie = m_CookiePool.Get();
+                        cookie.transform.position = lastColumnBlock[y2 + yOffset].transform.position;
+                        cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
+                        cookie.TryMove(blocks[x, y2].transform, m_RefillCookieMoveDuration);
+                        cookies[x, y2] = cookie;
                     }
                 }
+            }
+
+            IReadOnlyList<Cookie> GetCookiesAtColumn(int columnIndex)
+            {
+                List<Cookie> result = new List<Cookie>();
+                
+                for (int y = 0; y < yCount; y++)
+                {
+                    if (cookies[columnIndex, y] != null)
+                    {
+                        result.Add(cookies[columnIndex, y]);
+                    }
+                }
+
+                return result;
             }
 
             for (int y = 0; y < yCount; y++)
@@ -398,7 +406,7 @@ namespace Project.Core
                         cookie = m_CookiePool.Get();
                         cookie.transform.position = firstRowBlocks[x + xOffset].transform.position;
                         cookie.Init(GetRandomCookieProperty(), m_BoardIdentity);
-                        cookie.TryMove(blocks[x, y].transform);
+                        cookie.TryMove(blocks[x, y].transform, m_RefillCookieMoveDuration);
                     }
                 }
             }
