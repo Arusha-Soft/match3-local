@@ -10,16 +10,27 @@ namespace Project.Core
 
         public event Action<MovableTile> FinishMoving;
 
+        private float m_Duration;
         private Coroutine m_Moving;
 
-        public void Move(Transform target)
+        public bool TryMove(Transform target, float duration = 0)
         {
-            if(m_Moving != null)
+            m_Duration = duration <= 0 ? m_MoveDuration : duration;
+            if (transform.position == target.position)
             {
-                StopCoroutine(m_Moving);
+                return false;
             }
+            else
+            {
 
-            StartCoroutine(Moving(target));
+                if (m_Moving != null)
+                {
+                    StopCoroutine(m_Moving);
+                }
+
+                StartCoroutine(Moving(target));
+                return true;
+            }
         }
 
         protected virtual void OnFinishMoving(MovableTile movableTile) { }
@@ -30,7 +41,7 @@ namespace Project.Core
             Vector3 startPosition = transform.position;
             while (transform.position != target.position)
             {
-                value += Time.deltaTime / m_MoveDuration;
+                value += Time.deltaTime / m_Duration;
                 transform.position = Vector3.Lerp(startPosition, target.position, value);
                 yield return null;
             }

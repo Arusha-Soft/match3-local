@@ -8,6 +8,7 @@ namespace Project.Core
         [SerializeField] protected CookieProperties m_TargetCookie;
         [SerializeField] private int m_MatchCount;
         [SerializeField] private int m_MatchScore;
+        [SerializeField] private bool m_IsPowerup;
 
         public CookieProperties TargetCookie => m_TargetCookie;
         public int MatchCount => m_MatchCount;
@@ -23,6 +24,9 @@ namespace Project.Core
             score = m_MatchScore;
             return TryMatch(cookies, matchCount);
         }
+
+        public bool IsPowerup()
+            => m_IsPowerup;
 
         protected abstract bool TryMatch(IReadOnlyList<Cookie> cookies, int matchCount);
     }

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 namespace Project.Core
@@ -14,6 +15,11 @@ namespace Project.Core
 
         public BoardIdentity Owner { private set; get; }
         public CookieProperties Properties { private set; get; }
+        public event Action<Cookie> OnFinishHideAnimation;
+        public event Action<Cookie> OnFinishComboHideAnimation;
+
+        private Vector3 m_Scale;
+        private Color m_Color;
 
         public void Init(CookieProperties properties, BoardIdentity owner)
         {
@@ -21,12 +27,20 @@ namespace Project.Core
             Owner = owner;
             m_SpriteRenderer.sprite = properties.Icon;
             name = $"Cookie_{properties.m_CookieName}";
+
+            m_Scale = transform.localScale;
+            m_Color = m_SpriteRenderer.color;
         }
 
         public virtual void PlayHideAnimation()
         {
             m_BlinkAnimation.tween.onComplete = () =>
             {
+                m_ScaleDownAnimation.tween.onComplete = () =>
+                {
+                    OnFinishHideAnimation?.Invoke(this);
+                };
+
                 m_ScaleDownAnimation.tween.Restart();
             };
 
@@ -37,7 +51,18 @@ namespace Project.Core
         {
             m_ScaleDownAnimation.tween.Pause();
             m_BlinkAnimation.tween.Pause();
+
+            m_FadeOutAnimation.tween.onComplete = () =>
+            {
+                OnFinishComboHideAnimation?.Invoke(this);
+            };
             m_FadeOutAnimation.tween.Restart();
+        }
+
+        public virtual void ResetIt()
+        {
+            transform.localScale = m_Scale;
+            m_SpriteRenderer.color = m_Color;
         }
     }
 }

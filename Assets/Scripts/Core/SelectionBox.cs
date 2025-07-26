@@ -74,7 +74,7 @@ namespace Project.Core
             if (block.IsVisible)
             {
                 m_TargetMoveBlock = block;
-                Move(m_TargetMoveBlock.transform);
+                TryMove(m_TargetMoveBlock.transform);
             }
         }
 
