@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507569a4f5772c140b3deeacaad75ce1, type: 3}
+  m_Name: PlayerProperty_04
+  m_EditorClassIdentifier: 
+  <Number>k__BackingField: 4
+  <PlayerName>k__BackingField: Player 4
+  <BoardTheme>k__BackingField: {fileID: 21300000, guid: 6383e282c6808944b94a6ab79cfb91ab, type: 3}
+  <AttackTheme>k__BackingField: {fileID: 21300000, guid: d820e842ab50ed841ab8cfe3e931690e, type: 3}
+  <Pin>k__BackingField: {fileID: 21300000, guid: e6c71eb5fedcf494f9f2c0b9b608a9f7, type: 3}
+  <Arrow>k__BackingField: {fileID: 21300000, guid: 65a7ba794abeeaa41bd2987619421cb7, type: 3}
