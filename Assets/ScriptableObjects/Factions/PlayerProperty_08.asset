@@ -15,6 +15,6 @@ MonoBehaviour:
   <Number>k__BackingField: 8
   <PlayerName>k__BackingField: Player 8
   <BoardTheme>k__BackingField: {fileID: 21300000, guid: 65254d7bda8ddc449bed243b65c2e727, type: 3}
-  <AttackTheme>k__BackingField: {fileID: 21300000, guid: d820e842ab50ed841ab8cfe3e931690e, type: 3}
+  <AttackTheme>k__BackingField: {fileID: 21300000, guid: 01d51890cd6a48b4395514bc9598f395, type: 3}
   <Pin>k__BackingField: {fileID: 21300000, guid: 33c11fa60816edf468f21c7bdbfc4db6, type: 3}
   <Arrow>k__BackingField: {fileID: 21300000, guid: 271a9abc3d97aad47ae78f63353c1baf, type: 3}

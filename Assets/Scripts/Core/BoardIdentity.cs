@@ -1,3 +1,4 @@
+using Project.Factions;
 using Project.InputHandling;
 using TMPro;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace Project.Core
 {
     public class BoardIdentity : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private BoardInputHandler m_BoardInput;
         [SerializeField] private BoardData m_BoardData;
         [SerializeField] private CookiesController m_CookieGenerator;
@@ -14,12 +16,13 @@ namespace Project.Core
         [SerializeField] private SelectionBox m_SelectionBox;
         [SerializeField] private BoardScore m_BoardScore;
         [SerializeField] private BoardFuse m_BoardFuse;
-
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
+
         public Sprite[] BoardSprites;
         public Sprite[] SelectSprites;
 
+        private PlayerProperty m_Player;
 
         private void Start()
         {
@@ -49,6 +52,14 @@ namespace Project.Core
             m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
 
             m_BoardFuse.StartWorking();
+        }
+
+        public void SetPlayer(PlayerProperty player)
+        {
+            m_Player = player;
+
+            m_BoardSprite.sprite = player.BoardTheme;
+            m_SelectSprite.sprite = player.AttackTheme;
         }
 
         private void OnMatchFind(bool isPowerup)
