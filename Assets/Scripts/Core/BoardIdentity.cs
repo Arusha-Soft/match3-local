@@ -16,19 +16,32 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_SelectSprite;
         public Sprite[] BoardSprites;
         public Sprite[] SelectSprites;
+
+        public bool m_isFreeToAllMode;
+        public int m_playerNo;
+        public int m_boardNo;
+        public int m_colorNo;
+        public int m_teamNo;
         private void Start()
         {
            
         }
-        public void SetSprite(int spriteIndex)
+        public void SetData(bool isFreeToAllMode,int playerNo, int boardNo, int colorNo, int teamNo)
         {
-            m_BoardSprite.sprite = BoardSprites[spriteIndex];
-            m_SelectSprite.sprite = SelectSprites[spriteIndex];
+            m_isFreeToAllMode = isFreeToAllMode;
+            m_playerNo = playerNo;
+            m_boardNo = boardNo;
+            m_colorNo = colorNo;
+            m_teamNo = teamNo;
         }
-        public void SetInputHandler(int PlayerNo)
+        public void SetBoardInitialize()
         {
-            m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
+            m_BoardSprite.sprite = BoardSprites[m_colorNo];
+            m_SelectSprite.sprite = SelectSprites[m_colorNo];
+            if (m_playerNo == 0 || m_playerNo == 1)             //mina test remove it
+                m_BoardInput.m_gamepad = Gamepad.all[m_playerNo];
         }
+        
         public void Initialize()
         {
             m_BoardInput.Init();

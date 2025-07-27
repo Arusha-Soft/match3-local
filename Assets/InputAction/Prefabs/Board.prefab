@@ -206,7 +206,6 @@ MonoBehaviour:
   CurrentTeam:
     TeamID: 0
     color: {r: 0, g: 0, b: 0, a: 0}
-    img: {fileID: 0}
 --- !u!222 &6999215661296434546
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -345,7 +344,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoardID: 0
-  iconImage: {fileID: 5705000888730033375}
+  BoardImage: {fileID: 5705000888730033375}
+  SelectImage: {fileID: 1620653580975953364}
   BoardOfImage: {fileID: 8390086038105923152}
   btn: {fileID: 8970626559165758125}
   selectTeam: {fileID: 3730527001001982034}

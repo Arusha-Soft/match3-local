@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UI;
 
 public class Board : MonoBehaviour
 {
     public int BoardID;
-    public Image iconImage;
+    public Image BoardImage;
+    public Image SelectImage;
     public GameObject BoardOfImage;
     public Button btn;
 
@@ -19,13 +21,17 @@ public class Board : MonoBehaviour
     }
     private void OnEnable()
     {
-        if (BoardManager.Instance.isFreeToAll)
-            selectTeam.gameObject.SetActive(false);
-        else
-            selectTeam.gameObject.SetActive(true);
     }
     void Start()
     {
+    }
+    public void SetSelectTeamActive(bool isFreeToAll)
+    {
+        selectTeam.gameObject.SetActive(!isFreeToAll);
+    }
+    public void SetBoardState(bool isSelect)
+    {
+        BoardOfImage.SetActive(!isSelect);
     }
     public void OnClick(GameObject gameObj, int PlayerNumber, bool isSelect)
     {
@@ -38,17 +44,19 @@ public class Board : MonoBehaviour
             {
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
-                BoardOfImage.SetActive(false);
 
-                iconImage.sprite = BoardManager.Instance.BoardSprites[PlayerNumber];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber);
+                SetBoardState(true);
+
+                BoardImage.sprite = BoardManager.Instance.BoardSprites[PlayerNumber];
+                SelectImage.sprite = BoardManager.Instance.SelectSprites[PlayerNumber];
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber, PlayerNumber);
             }
             else
             {
                 if (!PlayerManager.Instance.CheckPlayerAndBoard(PlayerNumber, BoardID))
                     return;
 
-                iconImage.sprite = BoardManager.Instance.DefaultSprite;
+                SetBoardState(false);
                 PlayerManager.Instance.UnBindPlayerOnBoard(PlayerNumber, BoardID);
             }
         }
@@ -58,16 +66,17 @@ public class Board : MonoBehaviour
             {
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
-                BoardOfImage.SetActive(false);
-                iconImage.sprite = BoardManager.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
-                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID);
+                SetBoardState(true);
+                BoardImage.sprite = BoardManager.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
+                SelectImage.sprite = BoardManager.Instance.SelectSprites[selectTeam.CurrentTeam.TeamID];
+                PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID, selectTeam.CurrentTeam.TeamID);
             }
             else
             {
                 if (!PlayerManager.Instance.CheckPlayerAndBoard(PlayerNumber, BoardID))
                     return;
 
-                iconImage.sprite = BoardManager.Instance.DefaultSprite;
+                SetBoardState(false);
                 PlayerManager.Instance.UnBindPlayerOnBoard(PlayerNumber, BoardID);
             }
 

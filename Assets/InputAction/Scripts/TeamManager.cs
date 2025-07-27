@@ -6,10 +6,16 @@ public class TeamManager : MonoBehaviour
 {
     public static TeamManager Instance;
     private int currentTeamIndex=0;
-    
+    public int TeamCount = 4;
+    public Color[] playerColors;
+
     private void Awake()
     {
         Instance = this;
+        for(int i = 0; i < TeamCount; i++) 
+        {
+            CreateTeam(i, playerColors[i]);
+        }
     }
 
     public List<Team> teams = new List<Team>();
