@@ -204,6 +204,7 @@ public class BoardManager : MonoBehaviour
         board.transform.SetParent(BoardPanel, false);
         board.name = id.ToString();
         board.GetComponent<Board>().BoardID = id;
+        board.GetComponent<Board>().SetSelectTeamActive(isFreeToAll);
         BoardList.Add(board.GetComponent<Board>());
         ReSizeAllBoard();
     }
