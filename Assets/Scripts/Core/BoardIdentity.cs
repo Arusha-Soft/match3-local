@@ -1,5 +1,6 @@
 using Project.Factions;
 using Project.InputHandling;
+using Project.Powerups;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,9 +19,11 @@ namespace Project.Core
         [SerializeField] private BoardFuse m_BoardFuse;
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
+        [SerializeField] private SpriteRenderer m_PowerupIcon;
 
-        private PlayerProperty m_Player;
-        private TeamProperty m_Team;
+        [field: SerializeField] public PlayerProperty Player { private set; get; }
+        [field: SerializeField] public TeamProperty Team { private set; get; }
+        [field: SerializeField] public PowerupProperty Powerup { private set; get; }
 
         private void Start()
         {
@@ -48,30 +51,39 @@ namespace Project.Core
 
         public void SetPlayer(PlayerProperty player)
         {
-            m_Player = player;
+            Player = player;
             UpdateBoardTheme();
         }
 
         public void SetTeam(TeamProperty team)
         {
-            m_Team = team;
+            Team = team;
             UpdateBoardTheme();
         }
 
+        public void SetPowerup(PowerupProperty powerup)
+        {
+            Powerup = powerup;
+            m_PowerupIcon.sprite = powerup.Icon;
+        }
+
+        public bool IsTeamMode() =>
+            Team != null;
+
         private void UpdateBoardTheme()
         {
-            if (m_Team == null)
+            if (Team == null)
             {
-                if (m_Player != null)
+                if (Player != null)
                 {
-                    m_BoardSprite.sprite = m_Player.BoardTheme;
-                    m_SelectSprite.sprite = m_Player.AttackTheme;
+                    m_BoardSprite.sprite = Player.BoardTheme;
+                    m_SelectSprite.sprite = Player.AttackTheme;
                 }
             }
             else
             {
-                m_BoardSprite.sprite = m_Team.BoardTheme;
-                m_SelectSprite.sprite = m_Team.AttackTheme;
+                m_BoardSprite.sprite = Team.BoardTheme;
+                m_SelectSprite.sprite = Team.AttackTheme;
             }
         }
 

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PowerupProperty_Splat
   m_EditorClassIdentifier: 
   <PowerupName>k__BackingField: Splat
-  <Icon>k__BackingField: {fileID: 0}
+  <Icon>k__BackingField: {fileID: 21300000, guid: 3fde4c5ebc88e46439148c92f84ce208, type: 3}
