@@ -1,5 +1,6 @@
 using Project.Core;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Project.Factions
@@ -8,10 +9,12 @@ namespace Project.Factions
     {
         [SerializeField] private List<BoardIdentity> m_ActiveBoards;
 
-        private Dictionary<TeamProperty, PlayerProperty> m_PlayerTeams;
+        private Dictionary<TeamProperty, List<BoardIdentity>> m_BoardTeams;
 
         public IReadOnlyList<BoardIdentity> ActiveBoards => m_ActiveBoards;
-        public IReadOnlyDictionary<TeamProperty, PlayerProperty> PlayerTeams => m_PlayerTeams;
+        public IReadOnlyDictionary<TeamProperty, List<BoardIdentity>> PlayerTeams => m_BoardTeams;
+        public IReadOnlyList<TeamProperty> Teams => PlayerTeams == null ? new List<TeamProperty>() : PlayerTeams.Keys.ToList();
+
 
         private void Awake()
         {
@@ -24,11 +27,20 @@ namespace Project.Factions
 
             if (IsTeamMode())
             {
-                m_PlayerTeams = new Dictionary<TeamProperty, PlayerProperty>();
+                m_BoardTeams = new Dictionary<TeamProperty, List<BoardIdentity>>();
 
                 for (int i = 0; i < m_ActiveBoards.Count; i++)
                 {
-                    m_PlayerTeams.TryAdd(m_ActiveBoards[i].Team, m_ActiveBoards[i].Player);
+                    if (m_BoardTeams.TryGetValue(m_ActiveBoards[i].Team, out List<BoardIdentity> players))
+                    {
+                        players.Add(m_ActiveBoards[i]);
+                    }
+                    else
+                    {
+                        List<BoardIdentity> teamPlayers = new List<BoardIdentity>();
+                        teamPlayers.Add(m_ActiveBoards[i]);
+                        m_BoardTeams.Add(m_ActiveBoards[i].Team, teamPlayers);
+                    }
                 }
             }
         }

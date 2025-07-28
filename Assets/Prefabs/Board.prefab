@@ -625,7 +625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5746635373300717298
 Transform:
   m_ObjectHideFlags: 0
@@ -1987,6 +1987,10 @@ MonoBehaviour:
   m_BoardSprite: {fileID: 6723839559062931808}
   m_SelectSprite: {fileID: 135384362471557190}
   m_PowerupIcon: {fileID: 8054171191464541311}
+  <Player>k__BackingField: {fileID: 0}
+  <Team>k__BackingField: {fileID: 0}
+  <Powerup>k__BackingField: {fileID: 0}
+  <AttackTarget>k__BackingField: {fileID: 0}
 --- !u!1 &5155839297197457430
 GameObject:
   m_ObjectHideFlags: 0

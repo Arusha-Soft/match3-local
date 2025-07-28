@@ -24,6 +24,7 @@ namespace Project.Core
         [field: SerializeField] public PlayerProperty Player { private set; get; }
         [field: SerializeField] public TeamProperty Team { private set; get; }
         [field: SerializeField] public PowerupProperty Powerup { private set; get; }
+        [field: SerializeField] public BoardIdentity AttackTarget { private set; get; }
 
         private void Start()
         {
@@ -46,6 +47,8 @@ namespace Project.Core
             m_CookiesMatcher.OnMatchFind += OnMatchFind;
             m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
 
+            UpdateBoardTheme();
+
             m_BoardFuse.StartWorking();
         }
 
@@ -67,6 +70,13 @@ namespace Project.Core
             m_PowerupIcon.sprite = powerup.Icon;
         }
 
+        public void SetAttackTarget(BoardIdentity target)
+        {
+            AttackTarget = target;
+
+            m_SelectSprite.sprite = target.IsTeamMode() ? target.Team.AttackTheme : target.Player.AttackTheme;
+        }
+
         public bool IsTeamMode() =>
             Team != null;
 
@@ -77,13 +87,11 @@ namespace Project.Core
                 if (Player != null)
                 {
                     m_BoardSprite.sprite = Player.BoardTheme;
-                    m_SelectSprite.sprite = Player.AttackTheme;
                 }
             }
             else
             {
                 m_BoardSprite.sprite = Team.BoardTheme;
-                m_SelectSprite.sprite = Team.AttackTheme;
             }
         }
 

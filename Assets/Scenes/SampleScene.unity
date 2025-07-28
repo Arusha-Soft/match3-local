@@ -132,6 +132,10 @@ PrefabInstance:
       value: Board_3
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: caac48320fbf0c04287c34e1a97fe658, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: ce887da8f6eeaf04b9167575d3d95529, type: 2}
@@ -204,6 +208,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_7
       objectReference: {fileID: 0}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: b85acf6f0aabd974081198ef102e3333, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
@@ -294,6 +302,10 @@ PrefabInstance:
       value: Board_6
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: caac48320fbf0c04287c34e1a97fe658, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 56729283df53cb34cabf48fc605ac0f5, type: 2}
@@ -377,6 +389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_5
       objectReference: {fileID: 0}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: c07fc63a00f20ef49bacf1e299ccdbc2, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
@@ -472,6 +488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_2
       objectReference: {fileID: 0}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: caac48320fbf0c04287c34e1a97fe658, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
@@ -694,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0492482c05654e4e8b4232578064f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ChangeTargetAttackDuration: 15
+  m_ChangeTargetAttackDuration: 2
   m_ChangePowerupDuration: 10
   m_Powerups:
   - {fileID: 11400000, guid: 0848bb1f669bced458f32d383c2ff324, type: 2}
@@ -1075,6 +1095,10 @@ PrefabInstance:
       value: Board_4
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: b85acf6f0aabd974081198ef102e3333, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: d57fc003debd3e74fb3dcb60db68db77, type: 2}
@@ -1235,6 +1259,10 @@ PrefabInstance:
       value: Board_1
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: d2897d395f6d4634b8d5ab51cbc78a7e, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: ead4f5114fef0ce4d88883c4db79c00e, type: 2}
@@ -1307,6 +1335,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Team>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: caac48320fbf0c04287c34e1a97fe658, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Player>k__BackingField
       value: 
