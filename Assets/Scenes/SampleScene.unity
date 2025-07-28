@@ -714,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0492482c05654e4e8b4232578064f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ChangeTargetAttackDuration: 2
+  m_ChangeTargetAttackDuration: 15
   m_ChangePowerupDuration: 10
   m_Powerups:
   - {fileID: 11400000, guid: 0848bb1f669bced458f32d383c2ff324, type: 2}

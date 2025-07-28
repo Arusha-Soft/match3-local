@@ -10,10 +10,13 @@ namespace Project.Factions
         [SerializeField] private List<BoardIdentity> m_ActiveBoards;
 
         private Dictionary<TeamProperty, List<BoardIdentity>> m_BoardTeams;
+        private Dictionary<PlayerProperty, BoardIdentity> m_BoardPlayers;
 
         public IReadOnlyList<BoardIdentity> ActiveBoards => m_ActiveBoards;
-        public IReadOnlyDictionary<TeamProperty, List<BoardIdentity>> PlayerTeams => m_BoardTeams;
-        public IReadOnlyList<TeamProperty> Teams => PlayerTeams == null ? new List<TeamProperty>() : PlayerTeams.Keys.ToList();
+        public IReadOnlyDictionary<TeamProperty, List<BoardIdentity>> BoardTeams => m_BoardTeams;
+        public IReadOnlyDictionary<PlayerProperty, BoardIdentity> BoardPlayers => m_BoardPlayers;
+        public IReadOnlyList<TeamProperty> Teams => BoardTeams == null ? new List<TeamProperty>() : BoardTeams.Keys.ToList();
+        public IReadOnlyList<PlayerProperty> Players => m_BoardPlayers.Keys.ToList();
 
 
         private void Awake()
@@ -42,6 +45,13 @@ namespace Project.Factions
                         m_BoardTeams.Add(m_ActiveBoards[i].Team, teamPlayers);
                     }
                 }
+            }
+
+            m_BoardPlayers = new Dictionary<PlayerProperty, BoardIdentity>();
+
+            for (int i = 0; i < m_ActiveBoards.Count; i++)
+            {
+                m_BoardPlayers.Add(m_ActiveBoards[i].Player, m_ActiveBoards[i]);
             }
         }
 

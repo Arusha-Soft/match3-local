@@ -18,7 +18,7 @@ namespace Project.Powerups
         private Coroutine m_PowerupChangeHandling;
         private Coroutine m_TargetAttackHandling;
 
-        private void Awake()
+        private void Start()
         {
             Init();
         }
@@ -59,12 +59,33 @@ namespace Project.Powerups
 
                         freeForAttackTeams.Remove(team);
 
-                        foreach (var item in m_BoardDatas.PlayerTeams[team])
+                        foreach (var item in m_BoardDatas.BoardTeams[team])
                         {
-                            List<BoardIdentity> targets = m_BoardDatas.PlayerTeams[targetAttackTeam];
+                            List<BoardIdentity> targets = m_BoardDatas.BoardTeams[targetAttackTeam];
                             BoardIdentity randomTarget = targets[Random.Range(0, targets.Count)];
                             item.SetAttackTarget(randomTarget);
                         }
+                    }
+                }
+                else
+                {
+                    List<PlayerProperty> allPlayers = m_BoardDatas.Players.ToList();
+                    List<PlayerProperty> shuffledTargets = allPlayers.OrderBy(p => Random.Range(0, 10000)).ToList();
+
+                    for (int i = 0; i < allPlayers.Count; i++)
+                    {
+                        PlayerProperty player = allPlayers[i];
+
+                        if (shuffledTargets[i] == player)
+                        {
+                            int swapIndex = (i + 1) % allPlayers.Count;
+                            PlayerProperty temp = shuffledTargets[i];
+                            shuffledTargets[i] = shuffledTargets[swapIndex];
+                            shuffledTargets[swapIndex] = temp;
+                        }
+
+                        PlayerProperty target = shuffledTargets[i];
+                        m_BoardDatas.BoardPlayers[player].SetAttackTarget(m_BoardDatas.BoardPlayers[target]);
                     }
                 }
             }
