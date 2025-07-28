@@ -19,20 +19,12 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
 
-        public Sprite[] BoardSprites;
-        public Sprite[] SelectSprites;
-
         private PlayerProperty m_Player;
+        private TeamProperty m_Team;
 
         private void Start()
         {
             Initialize();
-        }
-
-        public void SetSprite(int spriteIndex)
-        {
-            m_BoardSprite.sprite = BoardSprites[spriteIndex];
-            m_SelectSprite.sprite = SelectSprites[spriteIndex];
         }
 
         public void SetInputHandler(int PlayerNo)
@@ -57,9 +49,30 @@ namespace Project.Core
         public void SetPlayer(PlayerProperty player)
         {
             m_Player = player;
+            UpdateBoardTheme();
+        }
 
-            m_BoardSprite.sprite = player.BoardTheme;
-            m_SelectSprite.sprite = player.AttackTheme;
+        public void SetTeam(TeamProperty team)
+        {
+            m_Team = team;
+            UpdateBoardTheme();
+        }
+
+        private void UpdateBoardTheme()
+        {
+            if (m_Team == null)
+            {
+                if (m_Player != null)
+                {
+                    m_BoardSprite.sprite = m_Player.BoardTheme;
+                    m_SelectSprite.sprite = m_Player.AttackTheme;
+                }
+            }
+            else
+            {
+                m_BoardSprite.sprite = m_Team.BoardTheme;
+                m_SelectSprite.sprite = m_Team.AttackTheme;
+            }
         }
 
         private void OnMatchFind(bool isPowerup)
