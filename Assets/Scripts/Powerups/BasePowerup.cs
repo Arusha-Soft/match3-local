@@ -10,7 +10,7 @@ namespace Project.Powerups
     {
         [SerializeField] private float m_TeamPowerupUseColdDown = 30f;
 
-        public PowerupProperty Powreup;
+        public PowerupProperty Powerup;
 
         public event Action<BasePowerup> OnFinishPowerup;
 

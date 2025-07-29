@@ -1297,7 +1297,7 @@ PrefabInstance:
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Powerup>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: 1aac43af5521d494d8e29b187c7eb9d9, type: 2}
+      objectReference: {fileID: 11400000, guid: 0848bb1f669bced458f32d383c2ff324, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <AttackTarget>k__BackingField
       value: 

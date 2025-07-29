@@ -9,14 +9,20 @@ namespace Project.Core
 
         public void ApplyPowerup(BoardIdentity attacker, BoardIdentity defender, PowerupProperty powerup)
         {
+            GetPowreup<BasePowerup>(powerup).DoAction(attacker, defender);
+        }
+
+        public T GetPowreup<T>(PowerupProperty property) where T : BasePowerup
+        {
             for (int i = 0; i < m_Powerups.Length; i++)
             {
-                if (m_Powerups[i].Powreup == powerup)
+                if (m_Powerups[i].Powerup == property)
                 {
-                    m_Powerups[i].DoAction(attacker, defender);
-                    break;
+                    return m_Powerups[i] as T;
                 }
             }
+
+            return null;
         }
     }
 }

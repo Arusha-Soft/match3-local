@@ -37,6 +37,8 @@ namespace Project.Core
         public BoardData BoardData => m_BoardData;
         public CookiesController CookiesController => m_CookieGenerator;
         public SelectionBox SelectionBox => m_SelectionBox;
+        public BoardPowerup BoardPowerup => m_BoardPowerup;
+
 
         private void Start()
         {
