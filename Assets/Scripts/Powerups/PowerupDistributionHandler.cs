@@ -13,7 +13,7 @@ namespace Project.Powerups
         [SerializeField] private float m_ChangePowerupDuration = 10;
         [SerializeField] private PowerupProperty[] m_Powerups;
 
-        [SerializeField] private BoardsData m_BoardDatas;
+        private BoardsController Controller => BoardsController.Instance;
 
         private Coroutine m_PowerupChangeHandling;
         private Coroutine m_TargetAttackHandling;
@@ -41,11 +41,11 @@ namespace Project.Powerups
 
             void ChangeTargetAttack()
             {
-                bool isTeamMode = m_BoardDatas.IsTeamMode();
+                bool isTeamMode = Controller.IsTeamMode();
 
                 if (isTeamMode)
                 {
-                    List<TeamProperty> freeForAttackTeams = m_BoardDatas.Teams.ToList();
+                    List<TeamProperty> freeForAttackTeams = Controller.Teams.ToList();
 
                     for (int i = freeForAttackTeams.Count - 1; i >= 0; i--)
                     {
@@ -54,14 +54,14 @@ namespace Project.Powerups
 
                         while (team == targetAttackTeam)
                         {
-                            targetAttackTeam = m_BoardDatas.Teams[Random.Range(0, m_BoardDatas.Teams.Count)];
+                            targetAttackTeam = Controller.Teams[Random.Range(0, Controller.Teams.Count)];
                         }
 
                         freeForAttackTeams.Remove(team);
 
-                        foreach (var item in m_BoardDatas.BoardTeams[team])
+                        foreach (var item in Controller.BoardTeams[team])
                         {
-                            List<BoardIdentity> targets = m_BoardDatas.BoardTeams[targetAttackTeam];
+                            List<BoardIdentity> targets = Controller.BoardTeams[targetAttackTeam];
                             BoardIdentity randomTarget = targets[Random.Range(0, targets.Count)];
                             item.SetAttackTarget(randomTarget);
                         }
@@ -69,7 +69,7 @@ namespace Project.Powerups
                 }
                 else
                 {
-                    List<PlayerProperty> allPlayers = m_BoardDatas.Players.ToList();
+                    List<PlayerProperty> allPlayers = Controller.Players.ToList();
                     List<PlayerProperty> shuffledTargets = allPlayers.OrderBy(p => Random.Range(0, 10000)).ToList();
 
                     for (int i = 0; i < allPlayers.Count; i++)
@@ -85,7 +85,7 @@ namespace Project.Powerups
                         }
 
                         PlayerProperty target = shuffledTargets[i];
-                        m_BoardDatas.BoardPlayers[player].SetAttackTarget(m_BoardDatas.BoardPlayers[target]);
+                        Controller.BoardPlayers[player].SetAttackTarget(Controller.BoardPlayers[target]);
                     }
                 }
             }
@@ -106,15 +106,20 @@ namespace Project.Powerups
                 List<PowerupProperty> temp = new List<PowerupProperty>();
                 temp.AddRange(m_Powerups);
 
-                for (int i = 0; i < m_BoardDatas.ActiveBoards.Count; i++)
+                for (int i = 0; i < Controller.ActiveBoards.Count; i++)
                 {
+                    if (!Controller.ActiveBoards[i].IsAvailableUsePowerup)
+                    {
+                        continue;
+                    }
+
                     if (temp.Count <= 0)
                     {
                         temp.AddRange(m_Powerups);
                     }
 
                     PowerupProperty powerup = temp[Random.Range(0, temp.Count)];
-                    m_BoardDatas.ActiveBoards[i].SetPowerup(powerup);
+                    Controller.ActiveBoards[i].SetPowerup(powerup);
                     temp.Remove(powerup);
                 }
             }

@@ -38,6 +38,8 @@ namespace Project.Core
         private List<MovableTile> m_TempRefillCookies = new List<MovableTile>();
         private Action m_OnFinishMoveCookies;
 
+        private Coroutine m_MoveHandling;
+
         private bool m_IsMoving = false;
         private int m_OnMovingCookieCount = 0;
 
@@ -58,11 +60,29 @@ namespace Project.Core
             m_CookiesMatcher.OnDisappearCookiesFinished += OnDisappearCookiesFinished;
             m_CookiesMatcher.OnMatchingProcessFinished += OnMatchingProcessFinished;
 
-            StartCoroutine(MoveHandling());
+            EnableMoveHandling();
             FillBoard();
         }
 
         #region Movement
+
+        public void EnableMoveHandling()
+        {
+            if (m_MoveHandling == null)
+            {
+                m_MoveHandling = StartCoroutine(MoveHandling());
+            }
+        }
+
+        public void DisableMoveHandling()
+        {
+            if(m_MoveHandling != null)
+            {
+                StopCoroutine(m_MoveHandling);
+                m_MoveHandling = null;
+            }
+        }
+
         private IEnumerator MoveHandling()
         {
             while (true)

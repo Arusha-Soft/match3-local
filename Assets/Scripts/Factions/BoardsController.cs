@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace Project.Factions
 {
-    public class BoardsData : MonoBehaviour
+    public class BoardsController : MonoBehaviour
     {
         [SerializeField] private List<BoardIdentity> m_ActiveBoards;
 
         private Dictionary<TeamProperty, List<BoardIdentity>> m_BoardTeams;
         private Dictionary<PlayerProperty, BoardIdentity> m_BoardPlayers;
+
+        public static BoardsController Instance { private set; get; }
 
         public IReadOnlyList<BoardIdentity> ActiveBoards => m_ActiveBoards;
         public IReadOnlyDictionary<TeamProperty, List<BoardIdentity>> BoardTeams => m_BoardTeams;
@@ -18,9 +20,17 @@ namespace Project.Factions
         public IReadOnlyList<TeamProperty> Teams => BoardTeams == null ? new List<TeamProperty>() : BoardTeams.Keys.ToList();
         public IReadOnlyList<PlayerProperty> Players => m_BoardPlayers.Keys.ToList();
 
-
         private void Awake()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(this);
+            }
+
             Init(m_ActiveBoards);
         }
 

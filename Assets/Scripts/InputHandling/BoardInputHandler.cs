@@ -16,6 +16,7 @@ namespace Project.InputHandling
         private bool m_IsInitialized = false;
         private Coroutine m_Checking;
         private BoardInputAction m_InputActions;
+        public BoardInputAction CurrentInputActions { private set; get; }
         public Gamepad m_gamepad;
 
         public void Init()
@@ -28,10 +29,21 @@ namespace Project.InputHandling
             m_InputActions = new BoardInputAction();
             m_InputActions.Enable();
 
+            CurrentInputActions = m_InputActions;
+
             m_IsInitialized = true;
             EnableInput();
         }
 
+        public void RebindInputAction(BoardInputAction inputActions)
+        {
+            CurrentInputActions = inputActions;
+        }
+
+        public void ResetInputActtion()
+        {
+            CurrentInputActions = m_InputActions;
+        }
 
         public void EnableInput()
         {
@@ -65,14 +77,14 @@ namespace Project.InputHandling
                 if (m_IsInitialized)
                 {
 
-                    m_InputValue = m_InputActions.Board.Move.ReadValue<Vector2>();
+                    m_InputValue = CurrentInputActions.Board.Move.ReadValue<Vector2>();
 
                     IsUp = m_InputValue.y > 0;
                     IsDown = m_InputValue.y < 0;
                     IsRight = m_InputValue.x > 0;
                     IsLeft = m_InputValue.x < 0;
 
-                    SelectIsPressed = m_InputActions.Board.Select.IsPressed();
+                    SelectIsPressed = CurrentInputActions.Board.Select.IsPressed();
 
                     //TODO uncomment this lines
                     //if (m_gamepad == null)

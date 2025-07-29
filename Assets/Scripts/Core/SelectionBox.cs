@@ -68,6 +68,17 @@ namespace Project.Core
             }
         }
 
+        public void DoMoveForce(int blockId)
+        {
+            Block block = m_BoardData.GetBlockById(blockId);
+            if (block.IsVisible)
+            {
+                transform.position = block.transform.position;
+                CurrentBlockId = block.Id;
+                m_TargetMoveBlock = null;
+            }
+        }
+
         private void DoMove(int blockId)
         {
             Block block = m_BoardData.GetBlockById(blockId);

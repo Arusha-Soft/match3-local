@@ -1,9 +1,11 @@
+using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 namespace Project.Core
 {
@@ -17,14 +19,25 @@ namespace Project.Core
         [SerializeField] private SelectionBox m_SelectionBox;
         [SerializeField] private BoardScore m_BoardScore;
         [SerializeField] private BoardFuse m_BoardFuse;
+        [SerializeField] private BoardPowerup m_BoardPowerup;
+
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
         [SerializeField] private SpriteRenderer m_PowerupIcon;
+
+        [Header("Settings")]
+        [SerializeField] private Color m_ColdDownAttackColor;
 
         [field: SerializeField] public PlayerProperty Player { private set; get; }
         [field: SerializeField] public TeamProperty Team { private set; get; }
         [field: SerializeField] public PowerupProperty Powerup { private set; get; }
         [field: SerializeField] public BoardIdentity AttackTarget { private set; get; }
+        public bool IsUnderAttack { private set; get; } = false;
+        public bool IsAvailableUsePowerup { private set; get; } = true;
+
+        public BoardInputHandler BoardInput => m_BoardInput;
+        public CookiesController CookiesController => m_CookieGenerator;
+        public SelectionBox SelectionBox => m_SelectionBox;
 
         private void Start()
         {
@@ -36,9 +49,15 @@ namespace Project.Core
             m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
         }
 
-        public void Initialize()
+        [ContextMenu("Init Input")]
+        private void InitInput()
         {
             m_BoardInput.Init();
+        }
+
+        public void Initialize()
+        {
+            //m_BoardInput.Init(); TODO uncomment this line
             m_BoardData.Init(m_SelectionBox, this);
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
@@ -77,6 +96,19 @@ namespace Project.Core
             m_SelectSprite.sprite = target.IsTeamMode() ? target.Team.AttackTheme : target.Player.AttackTheme;
         }
 
+        public void SetUnderAttack(bool isUnderAttack)
+        {
+            IsUnderAttack = isUnderAttack;
+        }
+
+        public void SetIsAvailableToUsePowerup(bool isAvailableUsePowerup)
+        {
+            IsAvailableUsePowerup = isAvailableUsePowerup;
+
+            m_SelectSprite.color = isAvailableUsePowerup ? Color.white : m_ColdDownAttackColor;
+            m_PowerupIcon.gameObject.SetActive(isAvailableUsePowerup);
+        }
+
         public bool IsTeamMode() =>
             Team != null;
 
@@ -95,11 +127,28 @@ namespace Project.Core
             }
         }
 
+        [ContextMenu("Applay Powerup")]
+        private void ApplyPowerup()
+        {
+            if (Powerup == null)
+            {
+                return;
+            }
+
+            Debug.Log($"ApplyPowerup: Attacker: {this} / Defender: {AttackTarget} / Powerup: {Powerup.PowerupName}");
+            m_BoardPowerup.ApplyPowerup(this, AttackTarget, Powerup);
+        }
+
         private void OnMatchFind(bool isPowerup)
         {
             m_BoardInput.DisableInput();
             m_BoardScore.SetScore(m_BoardScore.Score + 1);
             m_BoardFuse.ResetIt();
+
+            if (isPowerup)
+            {
+                ApplyPowerup();
+            }
         }
 
         private void OnFinishRefilling()

@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_3
       objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
       value: 
@@ -208,6 +212,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_7
       objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
       value: 
@@ -273,17 +281,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
---- !u!114 &255928216 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 26636008}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &285573289 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6317506229404826328, guid: 315d63b79c6c244418ca722f1e99e935, type: 3}
@@ -300,6 +297,10 @@ PrefabInstance:
     - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_Name
       value: Board_6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
@@ -389,6 +390,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board_5
       objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
       value: 
@@ -454,28 +459,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
---- !u!114 &526459536 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 1735492161}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &554051267 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 67912118}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &661736400
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -487,6 +470,10 @@ PrefabInstance:
     - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_Name
       value: Board_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
@@ -674,17 +661,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &841760689 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 661736400}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &854886159
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &854886160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,8 +690,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0492482c05654e4e8b4232578064f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ChangeTargetAttackDuration: 15
-  m_ChangePowerupDuration: 10
+  m_ChangeTargetAttackDuration: 10
+  m_ChangePowerupDuration: 15
   m_Powerups:
   - {fileID: 11400000, guid: 0848bb1f669bced458f32d383c2ff324, type: 2}
   - {fileID: 11400000, guid: fc84eabf94670bb47bc9f3a1de6567bc, type: 2}
@@ -723,7 +699,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b250f0e2312d5a4fb775a5a04dc214c, type: 2}
   - {fileID: 11400000, guid: 1aac43af5521d494d8e29b187c7eb9d9, type: 2}
   - {fileID: 11400000, guid: e1d16d586afd90842af578013a8077e0, type: 2}
-  m_BoardDatas: {fileID: 1714851234}
 --- !u!4 &854886161
 Transform:
   m_ObjectHideFlags: 0
@@ -996,28 +971,6 @@ Transform:
   - {fileID: 863193605}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1412900616 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 428396158}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1587313031 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-  m_PrefabInstance: {fileID: 308712686}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810a77009fb296948b62b521c565f771, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1598958062 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
@@ -1061,12 +1014,6 @@ MonoBehaviour:
   m_ActiveBoards:
   - {fileID: 314075975}
   - {fileID: 1598958062}
-  - {fileID: 841760689}
-  - {fileID: 255928216}
-  - {fileID: 526459536}
-  - {fileID: 1412900616}
-  - {fileID: 1587313031}
-  - {fileID: 554051267}
 --- !u!4 &1714851235
 Transform:
   m_ObjectHideFlags: 0
@@ -1093,6 +1040,10 @@ PrefabInstance:
     - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_Name
       value: Board_4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Team>k__BackingField
@@ -1343,6 +1294,14 @@ PrefabInstance:
       propertyPath: <Player>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 790c4ac3c91b7634b8e0a71509e0aa26, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Powerup>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b250f0e2312d5a4fb775a5a04dc214c, type: 2}
+    - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <AttackTarget>k__BackingField
+      value: 
+      objectReference: {fileID: 1598958062}
     - target: {fileID: 7616255748385196848, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.58457
