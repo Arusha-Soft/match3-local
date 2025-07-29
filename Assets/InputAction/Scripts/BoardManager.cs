@@ -15,14 +15,9 @@ public class BoardManager : MonoBehaviour
     public Text ButtonText;
     public bool isFreeToAll = true;
 
-    //public GameObject DefaultBoard;
-    public Sprite[] BoardSprites;
-    public Sprite[] SelectSprites;
-
     public int DefaultPlayer = 2;
     public int LimitPlayer = 8;
     public int PlayerCount;
-    public TeamManager teamManager;
     private int gamePadCount;
 
     private void Awake()

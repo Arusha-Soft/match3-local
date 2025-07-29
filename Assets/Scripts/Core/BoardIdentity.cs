@@ -23,6 +23,12 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_SelectSprite;
         [SerializeField] private SpriteRenderer m_PowerupIcon;
 
+        public bool m_isFreeToAllMode;
+        public int m_playerNo;
+        public int m_boardNo;
+        public int m_colorNo;
+        public int m_teamNo;
+
         [Header("Settings")]
         [SerializeField] private Color m_ColdDownAttackColor;
 
@@ -43,7 +49,7 @@ namespace Project.Core
 
         private void Start()
         {
-            Initialize();
+            //Initialize();
         }
 
         public void SetInputHandler(int PlayerNo)
@@ -56,7 +62,23 @@ namespace Project.Core
         {
             m_BoardInput.Init();
         }
+        public void SetData(bool isFreeToAllMode, int playerNo, int boardNo, int colorNo, int teamNo)
+        {
+            m_isFreeToAllMode = isFreeToAllMode;
+            m_playerNo = playerNo;
+            m_boardNo = boardNo;
+            m_colorNo = colorNo;
+            m_teamNo = teamNo;
+        }
+        public void SetBoardInitialize(Sprite boardSprite, Sprite selectSprite)
+        {
+            m_BoardSprite.sprite = boardSprite;
+            m_SelectSprite.sprite = selectSprite;
+            if (m_playerNo == 0 || m_playerNo == 1)             //mina test remove it
+                m_BoardInput.m_gamepad = Gamepad.all[m_playerNo];
 
+            InitInput();
+        }
         public void Initialize()
         {
             //m_BoardInput.Init(); TODO uncomment this line

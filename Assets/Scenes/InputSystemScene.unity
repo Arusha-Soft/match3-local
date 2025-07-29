@@ -992,11 +992,28 @@ MonoBehaviour:
   CoreGameParent: {fileID: 1319816421}
   BoardPrefab: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
   boardManager: {fileID: 1781601374}
-  SelectSprites: {fileID: 21300000, guid: b8b0fb0c349727f4d9be3d7089d3eb43, type: 3}
   player2Panel: {fileID: 374646807}
   player3Panel: {fileID: 614586432}
   player4Panel: {fileID: 1677166736}
   player8Panel: {fileID: 184382173}
+  BoardSprites:
+  - {fileID: 21300000, guid: 6cdf622f9007f364d83f39dafc655e65, type: 3}
+  - {fileID: 21300000, guid: b8b0fb0c349727f4d9be3d7089d3eb43, type: 3}
+  - {fileID: 21300000, guid: 89a6007f3b302f2488f33d87dfc24502, type: 3}
+  - {fileID: 21300000, guid: 9818a1d84deb0bd41b3e335b7ec5174e, type: 3}
+  - {fileID: 21300000, guid: 65254d7bda8ddc449bed243b65c2e727, type: 3}
+  - {fileID: 21300000, guid: 6383e282c6808944b94a6ab79cfb91ab, type: 3}
+  - {fileID: 21300000, guid: eeeb638b87df0264c97dbf146bb54d7b, type: 3}
+  - {fileID: 21300000, guid: 41ae50bc4586b004b9fb27afe51a1ba7, type: 3}
+  SelectSprites:
+  - {fileID: 21300000, guid: c1be40d21518bc4449ba0c26273174c3, type: 3}
+  - {fileID: 21300000, guid: 1c7be19b86ff911448cabc8c21247797, type: 3}
+  - {fileID: 21300000, guid: 2380050313ff60441802f2244427aa83, type: 3}
+  - {fileID: 21300000, guid: 55a2fe94d8afe1a4b80560a561a80491, type: 3}
+  - {fileID: 21300000, guid: 01d51890cd6a48b4395514bc9598f395, type: 3}
+  - {fileID: 21300000, guid: d820e842ab50ed841ab8cfe3e931690e, type: 3}
+  - {fileID: 21300000, guid: 0f3f9242d7bf3ff4daba9194fe83447f, type: 3}
+  - {fileID: 21300000, guid: 1653867e7a753764d9508760918c9d78, type: 3}
   currentOrientation: 1
 --- !u!1 &1809349261
 GameObject:

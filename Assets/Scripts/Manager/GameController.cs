@@ -13,17 +13,23 @@ public class GameController : MonoBehaviour
     private Camera camera;
     private List<GameObject> boardsWorld=new List<GameObject>();
     private List<Vector3> originalWorldSizeSpriteRender= new List<Vector3>();
-    public Sprite SelectSprites;
     public GameObject player2Panel, player3Panel, player4Panel, player8Panel;
+    public Sprite[] BoardSprites;
+    public Sprite[] SelectSprites;
 
     private float previousAspect = -1f;
     private float aspectCheckTimer = 0f;
     private float aspectStableTime = 0.2f;
     private bool isChangeing = false;
+    public static GameController Instance;
     public enum Orientation
     {
         Portrait,
         Landscape
+    }
+    private void Awake()
+    {
+        Instance = this;
     }
     public Orientation currentOrientation= Orientation.Landscape;
     void Start()
@@ -51,7 +57,7 @@ public class GameController : MonoBehaviour
             var board = Instantiate(BoardPrefab, CoreGameParent.transform);
             board.transform.SetParent(CoreGameParent.transform,true);
             board.GetComponent<BoardIdentity>().SetData(boardManager.isFreeToAll,sortedList[i].PlayerNo, sortedList[i].BoardNo, sortedList[i].ColorNo, sortedList[i].TeamNo);
-            board.GetComponent<BoardIdentity>().SetBoardInitialize();
+            board.GetComponent<BoardIdentity>().SetBoardInitialize(BoardSprites[sortedList[i].ColorNo], SelectSprites[sortedList[i].ColorNo]);
             board.GetComponent<BoardIdentity>().Initialize();
             boardsWorld.Add(board);
             originalWorldSizeSpriteRender.Add(board.transform.GetComponentInChildren<Renderer>().bounds.size);

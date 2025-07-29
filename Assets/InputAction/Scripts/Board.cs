@@ -47,8 +47,8 @@ public class Board : MonoBehaviour
 
                 SetBoardState(true);
 
-                BoardImage.sprite = BoardManager.Instance.BoardSprites[PlayerNumber];
-                SelectImage.sprite = BoardManager.Instance.SelectSprites[PlayerNumber];
+                BoardImage.sprite = GameController.Instance.BoardSprites[PlayerNumber];
+                SelectImage.sprite = GameController.Instance.SelectSprites[PlayerNumber];
                 PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, PlayerNumber, PlayerNumber);
             }
             else
@@ -67,8 +67,8 @@ public class Board : MonoBehaviour
                 if (PlayerManager.Instance.CheckBoardDontUse(BoardID))
                     return;
                 SetBoardState(true);
-                BoardImage.sprite = BoardManager.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
-                SelectImage.sprite = BoardManager.Instance.SelectSprites[selectTeam.CurrentTeam.TeamID];
+                BoardImage.sprite = GameController.Instance.BoardSprites[selectTeam.CurrentTeam.TeamID];
+                SelectImage.sprite = GameController.Instance.SelectSprites[selectTeam.CurrentTeam.TeamID];
                 PlayerManager.Instance.BindPlayerOnBoard(PlayerNumber, BoardID, selectTeam.CurrentTeam.TeamID, selectTeam.CurrentTeam.TeamID);
             }
             else

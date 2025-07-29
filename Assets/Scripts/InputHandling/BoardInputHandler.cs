@@ -15,7 +15,7 @@ namespace Project.InputHandling
         private Vector2 m_InputValue;
         private bool m_IsInitialized = false;
         private Coroutine m_Checking;
-        private BoardInputAction m_InputActions;
+       // private BoardInputAction m_InputActions;
         public BoardInputAction CurrentInputActions { private set; get; }
         public Gamepad m_gamepad;
 
@@ -26,10 +26,10 @@ namespace Project.InputHandling
                 return;
             }
 
-            m_InputActions = new BoardInputAction();
-            m_InputActions.Enable();
+            //m_InputActions = new BoardInputAction();
+            //m_InputActions.Enable();
 
-            CurrentInputActions = m_InputActions;
+           // CurrentInputActions = m_InputActions;
 
             m_IsInitialized = true;
             EnableInput();
@@ -42,7 +42,7 @@ namespace Project.InputHandling
 
         public void ResetInputActtion()
         {
-            CurrentInputActions = m_InputActions;
+          //  CurrentInputActions = m_InputActions;
         }
 
         public void EnableInput()
@@ -77,53 +77,53 @@ namespace Project.InputHandling
                 if (m_IsInitialized)
                 {
 
-                    m_InputValue = CurrentInputActions.Board.Move.ReadValue<Vector2>();
+                    //m_InputValue = CurrentInputActions.Board.Move.ReadValue<Vector2>();
 
-                    IsUp = m_InputValue.y > 0;
-                    IsDown = m_InputValue.y < 0;
-                    IsRight = m_InputValue.x > 0;
-                    IsLeft = m_InputValue.x < 0;
+                    //IsUp = m_InputValue.y > 0;
+                    //IsDown = m_InputValue.y < 0;
+                    //IsRight = m_InputValue.x > 0;
+                    //IsLeft = m_InputValue.x < 0;
 
-                    SelectIsPressed = CurrentInputActions.Board.Select.IsPressed();
+                    //SelectIsPressed = CurrentInputActions.Board.Select.IsPressed();
 
                     //TODO uncomment this lines
-                    //if (m_gamepad == null)
-                    //    return;
+                    if (m_gamepad != null)
+                    {
+                        if (m_gamepad.leftStick.up.wasPressedThisFrame)
+                        {
+                            IsUp = true;
+                            IsDown = false;
+                            IsLeft = false;
+                            IsRight = false;
+                        }
+                        if (m_gamepad.leftStick.down.wasPressedThisFrame)
+                        {
+                            IsUp = false;
+                            IsDown = true;
+                            IsLeft = false;
+                            IsRight = false;
+                        }
+                        if (m_gamepad.leftStick.left.wasPressedThisFrame)
+                        {
+                            IsUp = false;
+                            IsDown = false;
+                            IsLeft = true;
+                            IsRight = false;
+                        }
+                        if (m_gamepad.leftStick.right.wasPressedThisFrame)
+                        {
+                            IsUp = false;
+                            IsDown = false;
+                            IsLeft = false;
+                            IsRight = true;
+                        }
 
-                    //if (m_gamepad.leftStick.up.wasPressedThisFrame)
-                    //{
-                    //    IsUp = true;
-                    //    IsDown = false;
-                    //    IsLeft = false;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.down.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = true;
-                    //    IsLeft = false;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.left.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = false;
-                    //    IsLeft = true;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.right.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = false;
-                    //    IsLeft = false;
-                    //    IsRight = true;
-                    //}
 
-
-                    //if (m_gamepad.aButton.isPressed)
-                    //    SelectIsPressed = true;
-                    //else
-                    //    SelectIsPressed = false;
+                        if (m_gamepad.aButton.isPressed)
+                            SelectIsPressed = true;
+                        else
+                            SelectIsPressed = false;
+                    }
                 }
 
                 yield return null;
