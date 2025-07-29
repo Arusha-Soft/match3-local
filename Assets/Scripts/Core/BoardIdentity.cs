@@ -2,10 +2,8 @@ using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 namespace Project.Core
 {
@@ -36,6 +34,7 @@ namespace Project.Core
         public bool IsAvailableUsePowerup { private set; get; } = true;
 
         public BoardInputHandler BoardInput => m_BoardInput;
+        public BoardData BoardData => m_BoardData;
         public CookiesController CookiesController => m_CookieGenerator;
         public SelectionBox SelectionBox => m_SelectionBox;
 
@@ -58,7 +57,7 @@ namespace Project.Core
         public void Initialize()
         {
             //m_BoardInput.Init(); TODO uncomment this line
-            m_BoardData.Init(m_SelectionBox, this);
+            m_BoardData.Init(this);
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
             m_SelectionBox.Init(m_BoardInput, m_BoardData);

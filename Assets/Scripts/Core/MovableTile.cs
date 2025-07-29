@@ -32,6 +32,11 @@ namespace Project.Core
             }
         }
 
+        public void ForceMove(Transform target)
+        {
+            transform.position = target.position;
+        }
+
         protected virtual void OnFinishMoving(MovableTile movableTile) { }
 
         private IEnumerator Moving(Transform target)

@@ -1297,7 +1297,7 @@ PrefabInstance:
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Powerup>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: e1d16d586afd90842af578013a8077e0, type: 2}
+      objectReference: {fileID: 11400000, guid: 1aac43af5521d494d8e29b187c7eb9d9, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <AttackTarget>k__BackingField
       value: 
@@ -1353,10 +1353,6 @@ PrefabInstance:
     - target: {fileID: 7616255748385196848, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8077348710243039560, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
-      propertyPath: m_Duration
-      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

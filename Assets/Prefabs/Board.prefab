@@ -491,6 +491,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1407246629248734195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8371970924875244930}
+  - component: {fileID: 4099649370416533125}
+  m_Layer: 0
+  m_Name: Scramble
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8371970924875244930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407246629248734195}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4525272396595880378}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4099649370416533125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407246629248734195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa761a8ea189f6e4f9292c377843f1e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TeamPowerupUseColdDown: 30
+  Powreup: {fileID: 11400000, guid: 1aac43af5521d494d8e29b187c7eb9d9, type: 2}
+  m_Duration: 5
+  m_ChangeDuration: 0.1
 --- !u!1 &1453010121262219811
 GameObject:
   m_ObjectHideFlags: 0
@@ -2684,6 +2732,7 @@ Transform:
   m_Children:
   - {fileID: 6298591267691099294}
   - {fileID: 8232590708141183561}
+  - {fileID: 8371970924875244930}
   m_Father: {fileID: 7616255748385196848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &328946574177833317
@@ -2701,6 +2750,7 @@ MonoBehaviour:
   m_Powerups:
   - {fileID: 4695838396754864661}
   - {fileID: 8077348710243039560}
+  - {fileID: 4099649370416533125}
 --- !u!1 &7002690526040861375
 GameObject:
   m_ObjectHideFlags: 0

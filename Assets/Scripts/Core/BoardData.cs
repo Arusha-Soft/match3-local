@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.XR.Oculus.Input;
 using UnityEngine;
 
 namespace Project.Core
@@ -25,7 +24,7 @@ namespace Project.Core
         private List<RaycastHit2D> m_VerticalHitBuffer;
         private List<RaycastHit2D> m_HorizontalHitBuffer;
 
-        public void Init(SelectionBox selectionBox, BoardIdentity boardIdentity)
+        public void Init(BoardIdentity boardIdentity)
         {
             m_BlockDictionary = new Dictionary<int, Block>();
             m_VerticalHitBuffer = new List<RaycastHit2D>(m_HitBuffer);
