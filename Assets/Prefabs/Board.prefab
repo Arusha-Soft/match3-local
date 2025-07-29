@@ -340,11 +340,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5679472356978967984}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -531,16 +531,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 4284791926272874859}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -957,16 +957,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6256968417120563450}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -1680,7 +1680,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -1876,11 +1876,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7397639739339255447}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -2320,12 +2320,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -2608,11 +2608,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6953080686216936085}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -2804,11 +2804,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6220145452505167287}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -3082,12 +3082,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -3278,16 +3278,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6227507434428336626}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -3479,11 +3479,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2416027739317288376}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -3893,16 +3893,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5053452109849685367}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -4438,16 +4438,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1160229609050999679}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -4634,16 +4634,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 4987184182817934579}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -4835,11 +4835,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 4403889145212047094}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -5179,7 +5179,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -5523,11 +5523,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1889450164730975291}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -5806,11 +5806,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6196758146541951140}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -6084,12 +6084,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -6360,16 +6360,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7531651267124885512}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -6648,11 +6648,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1911630086501114493}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -7018,11 +7018,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5916329856062076471}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -7301,11 +7301,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6529739113644008799}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -7584,11 +7584,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7953405822601870097}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -7775,16 +7775,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7422276988424724624}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -8499,11 +8499,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3759110439128373413}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -8869,7 +8869,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -9060,12 +9060,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -9498,11 +9498,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7724178030917654948}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -9694,11 +9694,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 638255984995191336}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -10494,16 +10494,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5127257939811458372}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -10782,7 +10782,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -10973,16 +10973,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2793225515085949632}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -11169,16 +11169,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3975073830163275370}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -11504,7 +11504,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -11668,7 +11668,7 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 0.1
+  duration: 1
   easeType: 6
   easeCurve:
     serializedVersion: 2
@@ -11695,12 +11695,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -11978,16 +11978,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3301003215877869760}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -12179,11 +12179,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5836603723073689734}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -12375,11 +12375,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3708896915106491281}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -12613,12 +12613,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -12809,16 +12809,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2306131200206851179}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -13010,11 +13010,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5972263657448865580}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -13288,16 +13288,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5872322524805665486}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -13576,11 +13576,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1067074356691876576}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -13767,16 +13767,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 4480390469411416039}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -14050,16 +14050,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 4539484324541746237}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -14246,12 +14246,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -14652,11 +14652,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1529240036063324996}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -14843,16 +14843,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2883287724924909293}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -15044,11 +15044,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5766915868035499415}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -15670,16 +15670,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2383181768370121705}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -15866,16 +15866,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 6499339080689649194}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -16067,11 +16067,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1579268862687145617}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -16780,16 +16780,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 7770268117882245445}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -16976,16 +16976,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 1325214432778916056}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -17524,16 +17524,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5053199870690718898}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -17720,16 +17720,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   loopType: 1
-  loops: 5
+  loops: 6
   id: 
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 5044086369017341629}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -17982,11 +17982,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3279357163376589444}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -18265,11 +18265,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 3647822331997804127}
   animationType: 7
   targetType: 7
   forcedTargetType: 0
@@ -18556,11 +18556,11 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
-  target: {fileID: 4873022224822601861}
+  target: {fileID: 2987698720689773545}
   animationType: 7
   targetType: 7
   forcedTargetType: 0

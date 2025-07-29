@@ -9,12 +9,17 @@ namespace Project.Powerups
 
         protected override void DoActionForTeamMode(BoardIdentity attacker, BoardIdentity defender)
         {
-            defender.BoardScore.ChangeScoreWithEffect(m_ChangeAmount);
+            defender.BoardScore.ChangeScoreWithEffect(m_ChangeAmount, OnFinishAnimation);
         }
 
         protected override void DoActionFreeForAllMode(BoardIdentity attacker, BoardIdentity defender)
         {
-            defender.BoardScore.ChangeScoreWithEffect(m_ChangeAmount);
+            defender.BoardScore.ChangeScoreWithEffect(m_ChangeAmount, OnFinishAnimation);
+        }
+
+        private void OnFinishAnimation()
+        {
+            InvokeFinish();
         }
     }
 }

@@ -1,7 +1,6 @@
 using DG.Tweening;
-using System.Runtime.InteropServices;
+using System;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace Project.Core
 {
@@ -12,6 +11,8 @@ namespace Project.Core
         [SerializeField] private DOTweenAnimation[] m_NegativePoints;
 
         [field: SerializeField] public int Score { private set; get; }
+
+        private int m_PlayingCountAnimations = 0;
 
         private void Awake()
         {
@@ -35,25 +36,40 @@ namespace Project.Core
             }
         }
 
-        [ContextMenu("Test Change")]
-        private void TestChange()
-        {
-            ChangeScoreWithEffect(ww);
-        }
-
-        public int ww;
-
-        /// <summary>
-        /// Changes the score and plays tween effects for increasing or decreasing points.
-        /// </summary>
-        public void ChangeScoreWithEffect(int amount)
+        public void ChangeScoreWithEffect(int amount, Action onFinshAnimation)
         {
             int oldScore = Score;
             int newScore = Mathf.Clamp(Score + amount, 0, m_Points.Length);
 
             if (amount < 0) // Decreasing score
             {
+                for (int i = Score + amount; i < Score; i++)
+                {
+                    Debug.Log(i);
+                    if (i < 0)
+                    {
+                        continue;
+                    }
 
+                    m_PlayingCountAnimations++;
+
+                    m_Points[i].SetActive(false);
+                    m_NegativePoints[i].gameObject.SetActive(true);
+                    m_NegativePoints[i].tween.onComplete = () =>
+                    {
+                        m_PlayingCountAnimations--;
+
+                        if (m_PlayingCountAnimations <= 0)
+                        {
+                            Score = newScore;
+                            UpdatePointsVisual();
+                            m_PlayingCountAnimations = 0;
+                            onFinshAnimation?.Invoke();
+                        }
+                    };
+
+                    m_NegativePoints[i].tween.Restart();
+                }
             }
             else if (amount > 0) // Increasing score
             {
@@ -61,25 +77,39 @@ namespace Project.Core
 
                 for (int i = startIndex; i < (amount + startIndex); i++)
                 {
-                    Debug.Log(i);
-                    if(i >= m_PlusPoints.Length)
+                    if (i >= m_PlusPoints.Length)
                     {
                         break;
                     }
+
+                    m_PlayingCountAnimations++;
+
+                    m_PlusPoints[i].gameObject.SetActive(true);
+                    m_PlusPoints[i].tween.onComplete = () =>
+                    {
+                        m_PlayingCountAnimations--;
+
+                        if (m_PlayingCountAnimations <= 0)
+                        {
+                            Score = newScore;
+                            UpdatePointsVisual();
+                            m_PlayingCountAnimations = 0;
+                            onFinshAnimation?.Invoke();
+                        }
+                    };
 
                     m_PlusPoints[i].tween.Restart();
                 }
             }
         }
 
-        /// <summary>
-        /// Updates which point GameObjects are active based on the current score.
-        /// </summary>
         private void UpdatePointsVisual()
         {
             for (int i = 0; i < m_Points.Length; i++)
             {
                 m_Points[i].SetActive(i < Score);
+                m_PlusPoints[i].gameObject.SetActive(false);
+                m_NegativePoints[i].gameObject.SetActive(false);
             }
         }
 

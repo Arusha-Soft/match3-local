@@ -1283,8 +1283,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3668368104479219587, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: ww
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3668368104479219587, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Score>k__BackingField
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_Name
@@ -1301,7 +1305,7 @@ PrefabInstance:
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Powerup>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: e1d16d586afd90842af578013a8077e0, type: 2}
+      objectReference: {fileID: 11400000, guid: 344fc8692834f70418d5de90e8ff7bd9, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <AttackTarget>k__BackingField
       value: 
