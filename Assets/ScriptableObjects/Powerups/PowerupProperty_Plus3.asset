@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PowerupName>k__BackingField: Plus3
   <Icon>k__BackingField: {fileID: 21300000, guid: 2b25c8fc5d80e7d44ae6b8af3be250c6, type: 3}
+  <CanEffectOnAttackerSelf>k__BackingField: 1

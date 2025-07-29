@@ -7,5 +7,6 @@ namespace Project.Powerups
     {
         [field: SerializeField] public string PowerupName { private set; get; }
         [field: SerializeField] public Sprite Icon { private set; get; }
+        [field: SerializeField] public bool CanEffectOnAttackerSelf { private set; get; } = false;
     }
 }

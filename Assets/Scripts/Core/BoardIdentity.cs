@@ -37,6 +37,7 @@ namespace Project.Core
         public BoardData BoardData => m_BoardData;
         public CookiesController CookiesController => m_CookieGenerator;
         public SelectionBox SelectionBox => m_SelectionBox;
+        public BoardScore BoardScore => m_BoardScore;
         public BoardPowerup BoardPowerup => m_BoardPowerup;
 
 
@@ -63,6 +64,7 @@ namespace Project.Core
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
             m_SelectionBox.Init(m_BoardInput, m_BoardData);
+            m_BoardScore.Init();
 
             m_CookiesMatcher.OnMatchFind += OnMatchFind;
             m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;

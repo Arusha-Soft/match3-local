@@ -1282,6 +1282,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3668368104479219587, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
+      propertyPath: <Score>k__BackingField
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5055496792358199237, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: m_Name
       value: Board
@@ -1297,7 +1301,7 @@ PrefabInstance:
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <Powerup>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: 0848bb1f669bced458f32d383c2ff324, type: 2}
+      objectReference: {fileID: 11400000, guid: e1d16d586afd90842af578013a8077e0, type: 2}
     - target: {fileID: 5474050562028658803, guid: 66acaa9cb49211140bfbbd15d44f7508, type: 3}
       propertyPath: <AttackTarget>k__BackingField
       value: 
