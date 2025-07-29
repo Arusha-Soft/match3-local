@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class PlayerOnBoard
@@ -6,11 +7,13 @@ public class PlayerOnBoard
     public int PlayerNo;
     public int BoardNo;
     public int ColorNo;
-    public PlayerOnBoard(int PlayerNo, int BoardNo, int ColorNo)
+    public int TeamNo;
+    public PlayerOnBoard(int playerNo, int boardNo, int colorNo, int teamNo)
     {
-        this.PlayerNo = PlayerNo;
-        this.BoardNo = BoardNo;
-        this.ColorNo = ColorNo;
+        PlayerNo = playerNo;
+        BoardNo = boardNo;
+        ColorNo = colorNo;
+        TeamNo = teamNo;
     }
 
 }

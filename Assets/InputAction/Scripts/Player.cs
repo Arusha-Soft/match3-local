@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
             if (GamepadPlayer.buttonSouth.wasPressedThisFrame || GamepadPlayer.crossButton.wasPressedThisFrame)
             {
                 var theBtn = DetectButton();
+               
                 if (theBtn != null)
                 {
                     if (theBtn.name == "ModeButton")
