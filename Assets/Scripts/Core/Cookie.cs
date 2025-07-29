@@ -32,6 +32,12 @@ namespace Project.Core
             m_Color = m_SpriteRenderer.color;
         }
 
+        public void SetColor(Color color)
+        {
+            m_SpriteRenderer.color = color;
+            m_Color = color;
+        }
+
         public virtual void PlayHideAnimation()
         {
             m_BlinkAnimation.tween.onComplete = () =>

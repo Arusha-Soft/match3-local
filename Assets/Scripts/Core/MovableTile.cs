@@ -22,7 +22,6 @@ namespace Project.Core
             }
             else
             {
-
                 if (m_Moving != null)
                 {
                     StopCoroutine(m_Moving);

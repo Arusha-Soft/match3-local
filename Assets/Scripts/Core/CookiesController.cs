@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.UIElements;
-using static Project.Core.CookiesMatcher;
 using Random = UnityEngine.Random;
 
 namespace Project.Core
@@ -18,13 +16,19 @@ namespace Project.Core
         [SerializeField] private Cookie m_CookiePrefab;
         [SerializeField] private Transform m_CookieParent;
 
-        [Header("Settigns")]
+        [Header("Settings")]
         [SerializeField] private float m_CleanCookieMoveDuration = 0.2f;
         [SerializeField] private float m_RefillCookieMoveDuration = 0.2f;
 
         public event Action OnFinishMovingCookies;
         public event Action OnFinishCleanBoard;
         public event Action OnFinishRefilling;
+
+        public event Action<Cookie> OnGetCookie;
+        public event Action<Cookie> OnReleaseCookie;
+
+        public IReadOnlyList<Cookie> ActiveCookies => m_ActiveCookies;
+        public IReadOnlyList<Cookie> AllCookies => m_AllCookies;
 
         private BoardData m_BoardData;
         private BoardInputHandler m_Input;
@@ -36,6 +40,9 @@ namespace Project.Core
         private List<Cookie> m_TempMovingCookies = new List<Cookie>();
         private List<MovableTile> m_TempCleanCookies = new List<MovableTile>();
         private List<MovableTile> m_TempRefillCookies = new List<MovableTile>();
+        private List<Cookie> m_ActiveCookies = new List<Cookie>();
+        private List<Cookie> m_AllCookies = new List<Cookie>();
+
         private Action m_OnFinishMoveCookies;
 
         private Coroutine m_MoveHandling;
@@ -478,18 +485,23 @@ namespace Project.Core
         private Cookie OnCreate()
         {
             Cookie cookie = Instantiate(m_CookiePrefab, m_CookieParent);
+            m_AllCookies.Add(cookie);
             return cookie;
         }
 
         private void OnGet(Cookie cookie)
         {
             cookie.gameObject.SetActive(true);
+            m_ActiveCookies.Add(cookie);
+            OnGetCookie?.Invoke(cookie);
         }
 
         private void OnRelease(Cookie cookie)
         {
             cookie.ResetIt();
             cookie.gameObject.SetActive(false);
+            m_ActiveCookies.Remove(cookie);
+            OnReleaseCookie?.Invoke(cookie);
         }
         #endregion
     }
