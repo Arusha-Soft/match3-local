@@ -22,6 +22,7 @@ namespace Project.Powerups
         private void Start()
         {
             Controller.InitFinished += Init;
+            GameController.Instance.GameFinished += FinishedCoroutine;
             //Init();
         }
 
@@ -30,7 +31,12 @@ namespace Project.Powerups
             m_PowerupChangeHandling = StartCoroutine(PowerupChangeHandling());
             m_TargetAttackHandling = StartCoroutine(TargetAttackChangeHandling());
         }
-
+        private void FinishedCoroutine()
+        {
+            StopCoroutine(m_PowerupChangeHandling);
+            StopCoroutine(m_TargetAttackHandling);
+        }
+       
         private IEnumerator TargetAttackChangeHandling()
         {
             WaitForSeconds delay = new WaitForSeconds(m_ChangeTargetAttackDuration);

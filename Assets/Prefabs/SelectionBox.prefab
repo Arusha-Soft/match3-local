@@ -101,6 +101,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Id>k__BackingField: 0
-  m_MoveDuration: 0.1
+  m_MoveDuration: 0.2
   m_SelectionBox: {fileID: 6529908109697550598}
   m_DefaultBlockId: 8

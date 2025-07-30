@@ -27,9 +27,9 @@ public class TeamManager : MonoBehaviour
         teams.Add(new Team(id,color));
     }
 
-    public Team GetTeamByName(int id)
+    public string GetTeamByName(int id)
     {
-        return teams.FirstOrDefault(t => t.TeamID == id);
+        return teams.FirstOrDefault(t => t.TeamID == id).TeamName;
     }
     public Team CurrentTeam()
     {

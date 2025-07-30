@@ -1,5 +1,6 @@
 using Project.Core;
 using Project.Factions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,6 +29,9 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
     public Text FinidhedText;
     private List<BoardIdentity> activeBoards=new List<BoardIdentity>();
+    private bool isFinisheGame;
+    public Action GameFinished;
+
     public enum Orientation
     {
         Portrait,
@@ -52,6 +56,7 @@ public class GameController : MonoBehaviour
         playerManager.Init();
         FinishePanel.SetActive(false);
         RemoveWorldBoards();
+        isFinisheGame = false;
 
     }
     private void OnDestroy()
@@ -61,7 +66,7 @@ public class GameController : MonoBehaviour
 
     private void OnStartGame(List<PlayerOnBoard> playerOnBoardList)
     {
-        var sortedList = playerOnBoardList.OrderBy(pon => pon.BoardNo).ToList();
+        var sortedList = playerOnBoardList.OrderBy(pon => pon.boardNo).ToList();
 
         BoardPanel.SetActive(false);
         foreach (var player in playerManager.PlayerList)
@@ -71,10 +76,11 @@ public class GameController : MonoBehaviour
         {
             var board = Instantiate(BoardPrefab, CoreGameParent.transform);
             board.transform.SetParent(CoreGameParent.transform,true);
-            board.GetComponent<BoardIdentity>().SetData(boardManager.isFreeToAll,sortedList[i].PlayerNo, sortedList[i].BoardNo, sortedList[i].ColorNo, sortedList[i].TeamNo);
-            board.GetComponent<BoardIdentity>().SetBoardInitialize(BoardSprites[sortedList[i].ColorNo], SelectSprites[sortedList[i].ColorNo]);
+            board.GetComponent<BoardIdentity>().SetData(boardManager.isFreeToAll,sortedList[i].playerNo, sortedList[i].boardNo, sortedList[i].colorNo, sortedList[i].team);
+            board.GetComponent<BoardIdentity>().SetBoardInitialize(BoardSprites[sortedList[i].colorNo], SelectSprites[sortedList[i].colorNo]);
             board.GetComponent<BoardIdentity>().Initialize();
             board.GetComponentInChildren<BoardFuse>().OnFuseFinished += OnFuseFinished;
+            board.GetComponent<BoardIdentity>().winBoardAction += OnWinBoardAction;
 
             boardsWorld.Add(board);
             originalWorldSizeSpriteRender.Add(board.transform.GetComponentInChildren<Renderer>().bounds.size);
@@ -88,6 +94,7 @@ public class GameController : MonoBehaviour
         foreach (var board in boardsWorld)
             Destroy(board.gameObject);
         boardsWorld.Clear();
+        activeBoards.Clear();
     }
     private void UpdatePositionAndScaleBaseOnWorld()
     {
@@ -208,16 +215,43 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    public void OnFuseFinished(BoardFuse boardFuse)
+    public void OnFuseFinished(BoardIdentity boardIdentity)
     {
-       // FinishedGame($"{boardFuse.name} Lost");
+        boardIdentity.SetDeactiveBoard();
+        var activeboards = activeBoards.Where(board => !board.m_isDeactiveBoard).ToList();
+        if (activeboards.Count <= 1)
+            FinishedGame(null);
+
+        //if(activeboards.Count==1)
+        //     FinishedGame(activeboards[0].gameObject);
+        // else if (activeboards.Count <=0)
+        //     FinishedGame(null);
     }
-    public void FinishedGame(string finishedText)
+    public void OnWinBoardAction(GameObject winBoard)
     {
-        FinidhedText.text = finishedText;
+         FinishedGame(winBoard);
+    }
+    
+    public void FinishedGame(GameObject board)
+    {
+        if (isFinisheGame)
+            return;
+        isFinisheGame = false;
+       
+        if (board != null)
+        {
+            if (boardManager.isFreeToAll)
+                FinidhedText.text = $"{board.GetComponent<BoardIdentity>().Player.PlayerName} win";
+            else
+                FinidhedText.text = $"Team {board.GetComponent<BoardIdentity>().Team.TeamName} win";
+        }
+        else
+            FinidhedText.text = "Time's up";
         FinishePanel.SetActive(true);
         foreach (var player in playerManager.PlayerList)
             player.gameObject.SetActive(true);
+
+        GameFinished?.Invoke();
     }
 
     //private List<Vector3> GetPosition(int count)

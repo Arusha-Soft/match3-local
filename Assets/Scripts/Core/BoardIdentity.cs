@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -23,6 +24,8 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
         [SerializeField] private SpriteRenderer m_PowerupIcon;
+        [SerializeField] private GameObject m_DeactiveBoard;
+        public bool m_isDeactiveBoard=false;
 
         public bool m_isFreeToAllMode;
         public int m_playerNo;
@@ -46,12 +49,12 @@ namespace Project.Core
         public SelectionBox SelectionBox => m_SelectionBox;
         public BoardScore BoardScore => m_BoardScore;
         public BoardPowerup BoardPowerup => m_BoardPowerup;
+        public Action<GameObject> winBoardAction;
 
-
-        //private void Start()
-        //{
-        //    //Initialize();
-        //}
+        private void Start()
+        {
+            //Initialize();
+        }
 
         //public void SetInputHandler(int PlayerNo)
         //{
@@ -63,18 +66,21 @@ namespace Project.Core
         //{
         //    m_BoardInput.Init();
         //}
-        public void SetData(bool isFreeToAllMode, int playerNo, int boardNo, int colorNo, int teamNo)
+        public void SetData(bool isFreeToAllMode, int playerNo, int boardNo, int colorNo, Team team)
         {
             m_isFreeToAllMode = isFreeToAllMode;
             m_playerNo = playerNo;
             m_boardNo = boardNo;
             m_colorNo = colorNo;
-            m_teamNo = teamNo;
+
             var playerProperty=BoardsController.Instance.PlayerPropertyList.Where(pp => pp.Number == playerNo + 1).FirstOrDefault(); 
             if(playerProperty != null) { SetPlayer(playerProperty); }
 
-            var teamProperty = BoardsController.Instance.TeamPropertyList.Where(tp => tp.Number == teamNo + 1).FirstOrDefault();
-            if (teamProperty != null) { SetTeam(teamProperty); }
+            if (!isFreeToAllMode)
+            {
+                var teamProperty = BoardsController.Instance.TeamPropertyList.Where(tp => tp.Number == team.TeamID + 1).FirstOrDefault();
+                if (teamProperty != null) { SetTeam(teamProperty); }
+            }
         }
         public void SetBoardInitialize(Sprite boardSprite, Sprite selectSprite)
         {
@@ -86,6 +92,8 @@ namespace Project.Core
         }
         public void Initialize()
         {
+            m_DeactiveBoard.SetActive(false);
+            m_isDeactiveBoard = false;
             m_BoardInput.Init(); //TODO uncomment this line
             m_BoardData.Init(this);
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
@@ -173,6 +181,8 @@ namespace Project.Core
         {
             m_BoardInput.DisableInput();
             m_BoardScore.SetScore(m_BoardScore.Score + 1);
+            if (m_BoardScore.Score >= 2)
+                winBoardAction?.Invoke(gameObject);
             m_BoardFuse.ResetIt();
 
             if (isPowerup)
@@ -184,6 +194,12 @@ namespace Project.Core
         private void OnFinishRefilling()
         {
             m_BoardInput.EnableInput();
+        }
+        public void SetDeactiveBoard()
+        {
+            m_DeactiveBoard.SetActive(true);
+            m_BoardInput.DisableInput();
+            m_isDeactiveBoard = true;
         }
     }
 }

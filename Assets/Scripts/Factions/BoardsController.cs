@@ -43,10 +43,10 @@ namespace Project.Factions
         public void Init(List<BoardIdentity> activeBoards)
         {
             m_ActiveBoards = activeBoards;
-
             if (IsTeamMode())
             {
                 m_BoardTeams = new Dictionary<TeamProperty, List<BoardIdentity>>();
+                m_BoardTeams.Clear();
 
                 for (int i = 0; i < m_ActiveBoards.Count; i++)
                 {

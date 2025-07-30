@@ -49,29 +49,29 @@ public class PlayerManager : MonoBehaviour
             Destroy(player.gameObject);
         PlayerList.Clear();
     }
-    public void BindPlayerOnBoard(int playerNo, int boardNo, int colorNo,int teamNo)
+    public void BindPlayerOnBoard(int playerNo, int boardNo, int colorNo,Team team)
     {
 
-        PlayerOnBoardList.Add(new PlayerOnBoard(playerNo, boardNo, colorNo, teamNo));
+        PlayerOnBoardList.Add(new PlayerOnBoard(playerNo, boardNo, colorNo, team));
         boardManager.CheckGameStart(PlayerOnBoardList);
     }
     public void UnBindPlayerOnBoard(int playerNumber, int PlayerBoard)
     {
-        var item = PlayerOnBoardList.Where((pon) => pon.PlayerNo == playerNumber).FirstOrDefault();
+        var item = PlayerOnBoardList.Where((pon) => pon.playerNo == playerNumber).FirstOrDefault();
         if (item != null)
             PlayerOnBoardList.Remove(item);
     }
     public bool CheckPlayerOnBoard(int playerNumber)
     {
-        return PlayerOnBoardList.Where(pon => pon.PlayerNo == playerNumber).Any();
+        return PlayerOnBoardList.Where(pon => pon.playerNo == playerNumber).Any();
     }
     public bool CheckBoardDontUse(int boardIndex)
     {
-        return PlayerOnBoardList.Where((pon) => pon.BoardNo == boardIndex).Any();
+        return PlayerOnBoardList.Where((pon) => pon.boardNo == boardIndex).Any();
     }
     public bool CheckPlayerAndBoard(int playerNumber, int boardIndex)
     {
-        return PlayerOnBoardList.Where((pon) => (pon.PlayerNo == playerNumber && pon.BoardNo == boardIndex)).Any();
+        return PlayerOnBoardList.Where((pon) => (pon.playerNo == playerNumber && pon.boardNo == boardIndex)).Any();
     }
 
     #region test
