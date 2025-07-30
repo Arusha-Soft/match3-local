@@ -26,17 +26,17 @@ public class BoardManager : MonoBehaviour
     }
     void Start()
     {
-        Init();
+        
     }
     public void Init()
     {
+        RemoveBoards();
         gamePadCount = Gamepad.all.Count;
         if (gamePadCount < 2)
             PlayerCount = DefaultPlayer;
         else
             PlayerCount = gamePadCount;
 
-        BoardList.Clear();
         SetModeButoon(isFreeToAll);
         SpawnBoards(PlayerCount);
     }
@@ -68,6 +68,12 @@ public class BoardManager : MonoBehaviour
         board.GetComponent<Board>().SetSelectTeamActive(isFreeToAll);
         BoardList.Add(board.GetComponent<Board>());
         ReSizeAllBoard();
+    }
+    private void RemoveBoards()
+    {
+        foreach (var board in BoardList)
+            Destroy(board.gameObject);
+        BoardList.Clear();
     }
     private void ReSizeAllBoard()
     {

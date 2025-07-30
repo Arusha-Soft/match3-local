@@ -12,7 +12,7 @@ namespace Project.Core
 
         public float FuseValue { private set; get; }
 
-        public event Action OnFuseFinished;
+        public event Action<BoardFuse> OnFuseFinished;
 
         private Coroutine m_Working;
 
@@ -45,7 +45,7 @@ namespace Project.Core
             m_Working = null;
             SetValue(0);
             Debug.Log("On Fuse Finished");
-            OnFuseFinished?.Invoke();
+            OnFuseFinished?.Invoke(this);
         }
 
         private void SetValue(float value)

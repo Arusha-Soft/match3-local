@@ -42,6 +42,8 @@ public class Player : MonoBehaviour
                 {
                     if (theBtn.name == "ModeButton")
                         ModeButtonClick(theBtn.gameObject);
+                    else if (theBtn.name == "ResetButton")
+                        ModeButtonClick(theBtn.gameObject);
                     else if (theBtn.name == "SelectTeam")
                         ModeButtonClick(theBtn.gameObject);
                     else

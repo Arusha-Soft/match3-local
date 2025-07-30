@@ -77,11 +77,10 @@ namespace Project.Core
             if (m_playerNo == 0 || m_playerNo == 1)             //mina test remove it
                 m_BoardInput.m_gamepad = Gamepad.all[m_playerNo];
 
-            InitInput();
         }
         public void Initialize()
         {
-            //m_BoardInput.Init(); TODO uncomment this line
+            m_BoardInput.Init(); //TODO uncomment this line
             m_BoardData.Init(this);
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);

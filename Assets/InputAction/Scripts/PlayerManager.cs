@@ -23,12 +23,11 @@ public class PlayerManager : MonoBehaviour
     }
     void Start()
     {
-        Init();
     }
     public void Init()
     {
-        PlayerList.Clear();
-
+        RemovePlayerList();
+        PlayerOnBoardList.Clear();
     }
     void Update()
     {
@@ -38,13 +37,18 @@ public class PlayerManager : MonoBehaviour
         if (PlayerList.Where(p => p.PlayerID == index).Any())
             return;
 
-        var p = SimplePool.Spawn(PlayerPrefab, Vector3.zero, PlayerPrefab.transform.rotation);
+        var p = Instantiate(PlayerPrefab, Vector3.zero, PlayerPrefab.transform.rotation);
         p.transform.SetParent(PlayerParent, false);
         p.GetComponent<Player>().PlayerID = index;
         p.GetComponent<Player>().GamepadPlayer = Gamepad.all[index];
         PlayerList.Add(p.GetComponent<Player>());
     }
-   
+    private void RemovePlayerList()
+    {
+        foreach (var player in PlayerList)
+            Destroy(player.gameObject);
+        PlayerList.Clear();
+    }
     public void BindPlayerOnBoard(int playerNo, int boardNo, int colorNo,int teamNo)
     {
 

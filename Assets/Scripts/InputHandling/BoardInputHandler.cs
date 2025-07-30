@@ -12,11 +12,12 @@ namespace Project.InputHandling
         [field: SerializeField] public bool IsRight { private set; get; }
         [field: SerializeField] public bool SelectIsPressed { private set; get; }
 
-        private Vector2 m_InputValue;
+        //private Vector2 m_InputValue;
         private bool m_IsInitialized = false;
         private Coroutine m_Checking;
        // private BoardInputAction m_InputActions;
-        public BoardInputAction CurrentInputActions { private set; get; }
+       // public BoardInputAction CurrentInputActions { private set; get; }
+        public Gamepad CurrentInputActions { private set; get; }
         public Gamepad m_gamepad;
 
         public void Init()
@@ -29,20 +30,25 @@ namespace Project.InputHandling
             //m_InputActions = new BoardInputAction();
             //m_InputActions.Enable();
 
-           // CurrentInputActions = m_InputActions;
+            // CurrentInputActions = m_InputActions;
+            CurrentInputActions = m_gamepad;
 
             m_IsInitialized = true;
             EnableInput();
         }
 
-        public void RebindInputAction(BoardInputAction inputActions)
+        //public void RebindInputAction(BoardInputAction inputActions)
+        //{
+        //    CurrentInputActions = inputActions;
+        //}
+        public void RebindInputAction(Gamepad inputActions)
         {
+            Debug.Log("mina "+ inputActions);
             CurrentInputActions = inputActions;
         }
-
         public void ResetInputActtion()
         {
-          //  CurrentInputActions = m_InputActions;
+            CurrentInputActions = m_gamepad;// m_InputActions;
         }
 
         public void EnableInput()
@@ -118,11 +124,11 @@ namespace Project.InputHandling
                             IsRight = true;
                         }
 
-
-                        if (m_gamepad.aButton.isPressed)
-                            SelectIsPressed = true;
-                        else
-                            SelectIsPressed = false;
+                        SelectIsPressed = CurrentInputActions.aButton.isPressed;
+                        //if (m_gamepad.aButton.isPressed)
+                        //    SelectIsPressed = true;
+                        //else
+                        //    SelectIsPressed = false;
                     }
                 }
 

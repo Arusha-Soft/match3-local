@@ -2,14 +2,17 @@ using Project.Core;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     public Canvas canvas;
     public GameObject BoardPanel;
+    public GameObject FinishePanel;
     public GameObject CoreGameParent;
     public GameObject BoardPrefab;
     public BoardManager boardManager;
+    public PlayerManager playerManager;
     private Camera camera;
     private List<GameObject> boardsWorld=new List<GameObject>();
     private List<Vector3> originalWorldSizeSpriteRender= new List<Vector3>();
@@ -22,6 +25,7 @@ public class GameController : MonoBehaviour
     private float aspectStableTime = 0.2f;
     private bool isChangeing = false;
     public static GameController Instance;
+    public Text FinidhedText;
     public enum Orientation
     {
         Portrait,
@@ -34,10 +38,19 @@ public class GameController : MonoBehaviour
     public Orientation currentOrientation= Orientation.Landscape;
     void Start()
     {
+        InitGame();
         camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         PlayerManager.PlayerOnBoardEvent += OnStartGame;
-
         previousAspect = GetAspectRatio();
+    }
+    public void InitGame()
+    {
+        BoardPanel.SetActive(true);
+        boardManager.Init();
+        playerManager.Init();
+        FinishePanel.SetActive(false);
+        RemoveWorldBoards();
+
     }
     private void OnDestroy()
     {
@@ -49,7 +62,7 @@ public class GameController : MonoBehaviour
         var sortedList = playerOnBoardList.OrderBy(pon => pon.BoardNo).ToList();
 
         BoardPanel.SetActive(false);
-        foreach (var player in PlayerManager.Instance.PlayerList)
+        foreach (var player in playerManager.PlayerList)
             player.gameObject.SetActive(false);
 
         for (int i = 0; i < sortedList.Count; i++)
@@ -59,10 +72,18 @@ public class GameController : MonoBehaviour
             board.GetComponent<BoardIdentity>().SetData(boardManager.isFreeToAll,sortedList[i].PlayerNo, sortedList[i].BoardNo, sortedList[i].ColorNo, sortedList[i].TeamNo);
             board.GetComponent<BoardIdentity>().SetBoardInitialize(BoardSprites[sortedList[i].ColorNo], SelectSprites[sortedList[i].ColorNo]);
             board.GetComponent<BoardIdentity>().Initialize();
+            board.GetComponentInChildren<BoardFuse>().OnFuseFinished += OnFuseFinished;
+
             boardsWorld.Add(board);
             originalWorldSizeSpriteRender.Add(board.transform.GetComponentInChildren<Renderer>().bounds.size);
         }
         UpdatePositionAndScaleBaseOnWorld();
+    }
+    private void RemoveWorldBoards()
+    {
+        foreach (var board in boardsWorld)
+            Destroy(board.gameObject);
+        boardsWorld.Clear();
     }
     private void UpdatePositionAndScaleBaseOnWorld()
     {
@@ -182,6 +203,17 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+    }
+    public void OnFuseFinished(BoardFuse boardFuse)
+    {
+        FinishedGame($"{boardFuse.name} Lost");
+    }
+    public void FinishedGame(string finishedText)
+    {
+        FinidhedText.text = finishedText;
+        FinishePanel.SetActive(true);
+        foreach (var player in playerManager.PlayerList)
+            player.gameObject.SetActive(true);
     }
 
     //private List<Vector3> GetPosition(int count)
