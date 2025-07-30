@@ -1,4 +1,6 @@
 using Project.Core;
+using Project.Powerups;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +10,9 @@ namespace Project.Factions
     public class BoardsController : MonoBehaviour
     {
         [SerializeField] private List<BoardIdentity> m_ActiveBoards;
+
+        public  List<PlayerProperty> PlayerPropertyList;
+        public List<TeamProperty> TeamPropertyList;
 
         private Dictionary<TeamProperty, List<BoardIdentity>> m_BoardTeams;
         private Dictionary<PlayerProperty, BoardIdentity> m_BoardPlayers;
@@ -19,6 +24,7 @@ namespace Project.Factions
         public IReadOnlyDictionary<PlayerProperty, BoardIdentity> BoardPlayers => m_BoardPlayers;
         public IReadOnlyList<TeamProperty> Teams => BoardTeams == null ? new List<TeamProperty>() : BoardTeams.Keys.ToList();
         public IReadOnlyList<PlayerProperty> Players => m_BoardPlayers.Keys.ToList();
+        public Action InitFinished;
 
         private void Awake()
         {
@@ -31,7 +37,7 @@ namespace Project.Factions
                 Destroy(this);
             }
 
-            Init(m_ActiveBoards);
+            //Init(m_ActiveBoards);
         }
 
         public void Init(List<BoardIdentity> activeBoards)
@@ -63,6 +69,8 @@ namespace Project.Factions
             {
                 m_BoardPlayers.Add(m_ActiveBoards[i].Player, m_ActiveBoards[i]);
             }
+
+            InitFinished?.Invoke();
         }
 
         public bool IsTeamMode() => m_ActiveBoards[0].IsTeamMode();

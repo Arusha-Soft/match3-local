@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -47,21 +48,21 @@ namespace Project.Core
         public BoardPowerup BoardPowerup => m_BoardPowerup;
 
 
-        private void Start()
-        {
-            //Initialize();
-        }
+        //private void Start()
+        //{
+        //    //Initialize();
+        //}
 
-        public void SetInputHandler(int PlayerNo)
-        {
-            m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
-        }
+        //public void SetInputHandler(int PlayerNo)
+        //{
+        //    m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
+        //}
 
-        [ContextMenu("Init Input")]
-        private void InitInput()
-        {
-            m_BoardInput.Init();
-        }
+        //[ContextMenu("Init Input")]
+        //private void InitInput()
+        //{
+        //    m_BoardInput.Init();
+        //}
         public void SetData(bool isFreeToAllMode, int playerNo, int boardNo, int colorNo, int teamNo)
         {
             m_isFreeToAllMode = isFreeToAllMode;
@@ -69,6 +70,11 @@ namespace Project.Core
             m_boardNo = boardNo;
             m_colorNo = colorNo;
             m_teamNo = teamNo;
+            var playerProperty=BoardsController.Instance.PlayerPropertyList.Where(pp => pp.Number == playerNo + 1).FirstOrDefault(); 
+            if(playerProperty != null) { SetPlayer(playerProperty); }
+
+            var teamProperty = BoardsController.Instance.TeamPropertyList.Where(tp => tp.Number == teamNo + 1).FirstOrDefault();
+            if (teamProperty != null) { SetTeam(teamProperty); }
         }
         public void SetBoardInitialize(Sprite boardSprite, Sprite selectSprite)
         {

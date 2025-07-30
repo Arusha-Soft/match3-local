@@ -1,4 +1,5 @@
 using Project.Core;
+using Project.Factions;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,6 +27,7 @@ public class GameController : MonoBehaviour
     private bool isChangeing = false;
     public static GameController Instance;
     public Text FinidhedText;
+    private List<BoardIdentity> activeBoards=new List<BoardIdentity>();
     public enum Orientation
     {
         Portrait,
@@ -76,7 +78,9 @@ public class GameController : MonoBehaviour
 
             boardsWorld.Add(board);
             originalWorldSizeSpriteRender.Add(board.transform.GetComponentInChildren<Renderer>().bounds.size);
+            activeBoards.Add(board.GetComponent<BoardIdentity>());
         }
+        BoardsController.Instance.Init(activeBoards);
         UpdatePositionAndScaleBaseOnWorld();
     }
     private void RemoveWorldBoards()
@@ -206,7 +210,7 @@ public class GameController : MonoBehaviour
     }
     public void OnFuseFinished(BoardFuse boardFuse)
     {
-        FinishedGame($"{boardFuse.name} Lost");
+       // FinishedGame($"{boardFuse.name} Lost");
     }
     public void FinishedGame(string finishedText)
     {

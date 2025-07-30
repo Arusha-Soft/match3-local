@@ -43,7 +43,6 @@ namespace Project.InputHandling
         //}
         public void RebindInputAction(Gamepad inputActions)
         {
-            Debug.Log("mina "+ inputActions);
             CurrentInputActions = inputActions;
         }
         public void ResetInputActtion()

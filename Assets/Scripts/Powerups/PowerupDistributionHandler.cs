@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 namespace Project.Powerups
 {
@@ -20,7 +21,8 @@ namespace Project.Powerups
 
         private void Start()
         {
-            Init();
+            Controller.InitFinished += Init;
+            //Init();
         }
 
         public void Init()
