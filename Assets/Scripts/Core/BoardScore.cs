@@ -11,28 +11,26 @@ namespace Project.Core
         [SerializeField] private DOTweenAnimation[] m_NegativePoints;
 
         [field: SerializeField] public int Score { private set; get; }
+        public event Action OnReachMaxScore;
 
         private int m_PlayingCountAnimations = 0;
+        private int m_MaxScore;
 
-        private void Awake()
-        {
-            for (int i = 0; i < m_Points.Length; i++)
-            {
-                m_Points[i].SetActive(i <= Score - 1);
-            }
-        }
         public void Init()
         {
-            //SetScore(0);
+            m_MaxScore = m_Points.Length;
+
+            SetScore(0);
         }
 
         public void SetScore(int score)
         {
             Score = score;
+            UpdatePointsVisual();
 
-            for (int i = 0; i < m_Points.Length; i++)
+            if(Score >= m_MaxScore)
             {
-                m_Points[i].SetActive(i <= score - 1);
+                OnReachMaxScore?.Invoke();
             }
         }
 
@@ -61,8 +59,7 @@ namespace Project.Core
 
                         if (m_PlayingCountAnimations <= 0)
                         {
-                            Score = newScore;
-                            UpdatePointsVisual();
+                            SetScore(newScore);
                             m_PlayingCountAnimations = 0;
                             onFinshAnimation?.Invoke();
                         }
@@ -91,8 +88,7 @@ namespace Project.Core
 
                         if (m_PlayingCountAnimations <= 0)
                         {
-                            Score = newScore;
-                            UpdatePointsVisual();
+                            SetScore(newScore);
                             m_PlayingCountAnimations = 0;
                             onFinshAnimation?.Invoke();
                         }

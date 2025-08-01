@@ -2,6 +2,9 @@ using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,8 +28,11 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BlankBoard;
         [SerializeField] private SpriteRenderer m_FuseIcon;
 
+        [SerializeField] private TextMeshPro m_Text;
+
         [Header("Settings")]
         [SerializeField] private Color m_ColdDownAttackColor;
+        [SerializeField] private int m_ColdDownTimerDuration = 3;
 
         [field: SerializeField] public PlayerProperty Player { private set; get; }
         [field: SerializeField] public TeamProperty Team { private set; get; }
@@ -34,6 +40,9 @@ namespace Project.Core
         [field: SerializeField] public BoardIdentity AttackTarget { private set; get; }
         public bool IsUnderAttack { private set; get; } = false;
         public bool IsAvailableUsePowerup { private set; get; } = true;
+
+        public event Action<BoardIdentity> OnWin;
+        public event Action<BoardIdentity> OnLose;
 
         public BoardInputHandler BoardInput => m_BoardInput;
         public BoardData BoardData => m_BoardData;
@@ -49,20 +58,27 @@ namespace Project.Core
 
         public void Initialize(BoardInputAction inputActions)
         {
-            m_BoardInput.Init(inputActions);
-            m_BoardData.Init(this);
-            m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
-            m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
-            m_SelectionBox.Init(m_BoardInput, m_BoardData);
-            m_BoardScore.Init();
+            StartCoroutine(ColdDown(() =>
+            {
+                m_BoardScore.OnReachMaxScore += OnReachMaxScore;
+                m_BoardFuse.OnFuseFinished += OnFuseFinished;
 
-            m_CookiesMatcher.OnMatchFind += OnMatchFind;
-            m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
+                m_BoardInput.Init(inputActions);
+                m_BoardData.Init(this);
+                m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
+                m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
+                m_SelectionBox.Init(m_BoardInput, m_BoardData);
+                m_BoardScore.Init();
 
-            UpdateBoardTheme();
+                m_CookiesMatcher.OnMatchFind += OnMatchFind;
+                m_CookieGenerator.OnFinishRefilling += OnFinishRefilling;
 
-            m_FuseIcon.gameObject.SetActive(true);
-            m_BoardFuse.StartWorking();
+                UpdateBoardTheme();
+
+                m_FuseIcon.gameObject.SetActive(true);
+                m_PowerupIcon.gameObject.SetActive(true);
+                m_BoardFuse.StartWorking();
+            }));
         }
 
         public void SetPlayer(PlayerProperty player)
@@ -123,6 +139,27 @@ namespace Project.Core
             }
         }
 
+        private IEnumerator ColdDown(Action onFinishColdDown)
+        {
+            int timer = m_ColdDownTimerDuration;
+            WaitForSeconds delay = new WaitForSeconds(1f);
+
+            m_Text.gameObject.SetActive(true);
+
+            while (timer > 0)
+            {
+                m_Text.text = $"{timer}";
+                yield return delay;
+                timer--;
+            }
+
+            m_Text.text = "GO!";
+            delay = new WaitForSeconds(1f / 2f);
+            yield return delay;
+            m_Text.gameObject.SetActive(false);
+            onFinishColdDown?.Invoke();
+        }
+
         [ContextMenu("Applay Powerup")]
         private void ApplyPowerup()
         {
@@ -150,6 +187,50 @@ namespace Project.Core
         private void OnFinishRefilling()
         {
             m_BoardInput.EnableInput();
+        }
+
+        private void OnReachMaxScore()
+        {
+            Debug.Log($"{name} Is Win");
+            OnWin?.Invoke(this);
+        }
+
+        private void OnFuseFinished()
+        {
+            Debug.Log($"{name} Is Lose");
+            OnLose?.Invoke(this);
+        }
+
+        private void DoWin()
+        {
+            StopBoard();
+            m_Text.text = "WIN!!";
+        }
+
+        private void DoLose()
+        {
+            StopBoard();
+            m_Text.text = "LOSE";
+        }
+
+        private void DoTimerOver()
+        {
+
+        }
+
+        private void StopBoard()
+        {
+            m_BoardScore.OnReachMaxScore -= OnReachMaxScore;
+            m_BoardFuse.OnFuseFinished -= OnFuseFinished;
+
+            m_BoardInput.DisableInput();
+            m_CookieGenerator.DisableMoveHandling();
+            m_SelectionBox.Stop();
+
+            m_CookiesMatcher.OnMatchFind -= OnMatchFind;
+            m_CookieGenerator.OnFinishRefilling -= OnFinishRefilling;
+
+            m_PowerupIcon.gameObject.SetActive(false);
         }
     }
 }

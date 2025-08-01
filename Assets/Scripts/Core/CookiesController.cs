@@ -265,14 +265,6 @@ namespace Project.Core
             Block[,] blocks;
             TakeBoardSnapshot(out cookies, out blocks);
 
-            //for (int y = 0; y < cookies.GetLength(1); y++)
-            //{
-            //    for (int x = 0; x < cookies.GetLength(0); x++)
-            //    {
-            //        Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
-            //    }
-            //}
-
             int xCount = cookies.GetLength(0);
             int yCount = cookies.GetLength(1);
 
@@ -326,19 +318,8 @@ namespace Project.Core
 
             if (m_TempCleanCookies.Count <= 0)
             {
-                Debug.Log("No move");
                 OnFinishCleanBoard?.Invoke();
             }
-
-            //Debug.Log("////////////////////////////////////////////////////////////////");
-
-            //for (int y = 0; y < cookies.GetLength(1); y++)
-            //{
-            //    for (int x = 0; x < cookies.GetLength(0); x++)
-            //    {
-            //        Debug.Log($"X:{x} Y:{y} / {cookies[x, y]}");
-            //    }
-            //}
         }
 
         private void TakeBoardSnapshot(out Cookie[,] cookies, out Block[,] blocks)

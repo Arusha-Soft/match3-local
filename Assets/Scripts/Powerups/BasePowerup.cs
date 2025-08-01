@@ -16,10 +16,12 @@ namespace Project.Powerups
 
         protected BoardsController Controller => BoardsController.Instance;
 
+        private BoardIdentity m_Attacker;
         private BoardIdentity m_Defender;
 
         public void DoAction(BoardIdentity attacker, BoardIdentity defender)
         {
+            m_Attacker = attacker;
             m_Defender = defender;
 
             if (!attacker.IsAvailableUsePowerup)
@@ -41,6 +43,7 @@ namespace Project.Powerups
             }
             else
             {
+                attacker.SetIsAvailableToUsePowerup(false);
                 DoActionFreeForAllMode(attacker, defender);
             }
 
@@ -54,6 +57,10 @@ namespace Project.Powerups
         protected void InvokeFinish()
         {
             Debug.Log($"On finish powerup: {this}");
+            if (!Controller.IsTeamMode())
+            {
+                m_Attacker.SetIsAvailableToUsePowerup(true);
+            }
             m_Defender.SetUnderAttack(false);
             OnFinishPowerup?.Invoke(this);
         }

@@ -53,6 +53,7 @@ namespace Project.InputHandling
             board.name = $"Board_{m_PlayersCount}";
             board.transform.SetParent(GetEmptyPoint());
             board.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            board.transform.localScale = Vector3.one;
 
             PlayerPointer playerPointer = Instantiate(m_PlayerPointerPrefab);
             playerPointer.Init(m_PlayerProperties[m_PlayersCount], inputActions);
@@ -76,6 +77,7 @@ namespace Project.InputHandling
                 {
                     player.Item4 = selectedBoard;
                     player.Item4.SetPlayer(playerPointer.PlayerProperty);
+                    player.Item3.transform.SetParent(selectedBoard.transform);
                     m_Players[device] = player;
                     break;
                 }
@@ -94,6 +96,7 @@ namespace Project.InputHandling
                 {
                     player.Item4.SetPlayer(null);
                     player.Item4 = null;
+                    player.Item3.transform.SetParent(null);
                     m_Players[device] = player;
                     break;
                 }
@@ -121,8 +124,10 @@ namespace Project.InputHandling
             {
                 Transform selectTransform = selectedList[index];
 
-                m_Boards[i].transform.SetParent(selectTransform);
-                m_Boards[i].transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                BoardIdentity board = m_Boards[i];
+                board.transform.SetParent(selectTransform);
+                board.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                board.transform.localScale = Vector3.one;
 
                 index++;
             }

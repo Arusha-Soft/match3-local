@@ -29,6 +29,16 @@ namespace Project.Core
             m_Checking = StartCoroutine(CheckAndMove());
         }
 
+        public void Stop()
+        {
+            if(m_Checking != null)
+            {
+                StopCoroutine(m_Checking);
+            }
+
+            m_SelectionBox.SetActive(false);
+        }
+
         private IEnumerator CheckAndMove()
         {
             while (true)
