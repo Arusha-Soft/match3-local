@@ -18,11 +18,6 @@ namespace Project.Powerups
         private Coroutine m_PowerupChangeHandling;
         private Coroutine m_TargetAttackHandling;
 
-        private void Start()
-        {
-            Init();
-        }
-
         public void Init()
         {
             m_PowerupChangeHandling = StartCoroutine(PowerupChangeHandling());

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: PowerupProperty_Blind
   m_EditorClassIdentifier: 
   <PowerupName>k__BackingField: Blind
-  <Icon>k__BackingField: {fileID: 21300000, guid: 16ccb211580f3674f809a5658591edfc, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: ae72871acfed8e5439a196fae073884c, type: 3}
+  <CanEffectOnAttackerSelf>k__BackingField: 0

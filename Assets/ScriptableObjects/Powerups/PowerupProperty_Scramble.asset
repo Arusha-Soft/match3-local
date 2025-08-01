@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: PowerupProperty_Scramble
   m_EditorClassIdentifier: 
   <PowerupName>k__BackingField: Scramble
-  <Icon>k__BackingField: {fileID: 21300000, guid: 4a7002e57834c6043846d4cfa097aaeb, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: d95d1d7ccd660604bbae3545edb21365, type: 3}
+  <CanEffectOnAttackerSelf>k__BackingField: 0

@@ -22,6 +22,8 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BoardSprite;
         [SerializeField] private SpriteRenderer m_SelectSprite;
         [SerializeField] private SpriteRenderer m_PowerupIcon;
+        [SerializeField] private SpriteRenderer m_BlankBoard;
+        [SerializeField] private SpriteRenderer m_FuseIcon;
 
         [Header("Settings")]
         [SerializeField] private Color m_ColdDownAttackColor;
@@ -59,12 +61,15 @@ namespace Project.Core
 
             UpdateBoardTheme();
 
+            m_FuseIcon.gameObject.SetActive(true);
             m_BoardFuse.StartWorking();
         }
 
         public void SetPlayer(PlayerProperty player)
         {
             Player = player;
+
+            m_BlankBoard.gameObject.SetActive(player == null);
             UpdateBoardTheme();
         }
 

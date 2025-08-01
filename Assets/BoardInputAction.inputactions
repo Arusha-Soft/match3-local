@@ -164,9 +164,36 @@
             "id": "77e548de-c4d2-4be0-88f1-0b0d49615923",
             "actions": [
                 {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "341296e1-7611-4e2b-a258-ab06e7435520",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Join",
                     "type": "Button",
-                    "id": "931d5893-74ee-43c5-81ee-a1cb3a1dcdeb",
+                    "id": "1d6e3f0b-dcf1-4c09-9a1f-31a924babda4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Select",
+                    "type": "Button",
+                    "id": "cfa6a1ca-b779-4a97-829d-c027648cc734",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Deselect",
+                    "type": "Button",
+                    "id": "6a2ce6b5-2d7b-47c1-818c-4456c3db668d",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -175,8 +202,140 @@
             ],
             "bindings": [
                 {
+                    "name": "Keyboard",
+                    "id": "64311ebf-0557-4ee5-8d98-27fbd67d2aed",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "fc90f91f-aafc-4f4e-98cd-2cd89bd17b3f",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "61ee8620-39ba-417c-bc5d-9f201dc55107",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "2fcc026e-2841-42e7-86ef-992bc40d32f3",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "1f8bc7a9-be14-4448-91da-cabf2b77c595",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Gamepad",
+                    "id": "7c92b988-75c8-40f1-80f6-858992a3001c",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "059a02a9-0157-402d-9d0d-132b886f12c1",
+                    "path": "<Joystick>/stick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "96354d26-71bf-4aaa-b95a-048989936a1d",
+                    "path": "<Joystick>/stick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "7f3f03ae-458f-4a09-a682-727dc1c881de",
+                    "path": "<Joystick>/stick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e92384e3-d21f-4390-8f93-7d25b3333fb7",
+                    "path": "<Joystick>/stick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
-                    "id": "7d22caab-cf57-42df-8973-bcd5e2bcfc0c",
+                    "id": "5abb3d97-b6ed-4e0c-840e-da5a342e96db",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8dcc7d3-6a4b-4cda-81fa-c46d40dee644",
+                    "path": "<HID::Microntek              USB Joystick          >/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d2c89806-d3a2-44d6-a6f8-46ab406902fa",
                     "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
@@ -187,12 +346,34 @@
                 },
                 {
                     "name": "",
-                    "id": "649e2b61-45d6-4d83-953f-d944b6505e0a",
+                    "id": "695f158a-92fd-4a82-96e9-5036dcfefec0",
                     "path": "<HID::Microntek              USB Joystick          >/button3",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "900efd12-5975-4852-80ee-dbb46d95a274",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Deselect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a66a5aec-fc50-4e19-ba73-cbdc0240ec86",
+                    "path": "<HID::Microntek              USB Joystick          >/button2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Deselect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

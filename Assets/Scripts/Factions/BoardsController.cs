@@ -30,8 +30,6 @@ namespace Project.Factions
             {
                 Destroy(this);
             }
-
-            Init(m_ActiveBoards);
         }
 
         public void Init(List<BoardIdentity> activeBoards)
