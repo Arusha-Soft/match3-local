@@ -40,26 +40,14 @@ namespace Project.Core
         public BoardScore BoardScore => m_BoardScore;
         public BoardPowerup BoardPowerup => m_BoardPowerup;
 
-
-        private void Start()
-        {
-            Initialize();
-        }
-
         public void SetInputHandler(int PlayerNo)
         {
             m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
         }
 
-        [ContextMenu("Init Input")]
-        private void InitInput()
+        public void Initialize(BoardInputAction inputActions)
         {
-            m_BoardInput.Init();
-        }
-
-        public void Initialize()
-        {
-            //m_BoardInput.Init(); TODO uncomment this line
+            m_BoardInput.Init(inputActions);
             m_BoardData.Init(this);
             m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
             m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);

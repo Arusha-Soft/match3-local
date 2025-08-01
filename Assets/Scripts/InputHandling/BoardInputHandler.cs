@@ -19,14 +19,14 @@ namespace Project.InputHandling
         public BoardInputAction CurrentInputActions { private set; get; }
         public Gamepad m_gamepad;
 
-        public void Init()
+        public void Init(BoardInputAction inputActions)
         {
             if (m_IsInitialized)
             {
                 return;
             }
 
-            m_InputActions = new BoardInputAction();
+            m_InputActions = inputActions;
             m_InputActions.Enable();
 
             CurrentInputActions = m_InputActions;
@@ -76,7 +76,6 @@ namespace Project.InputHandling
             {
                 if (m_IsInitialized)
                 {
-
                     m_InputValue = CurrentInputActions.Board.Move.ReadValue<Vector2>();
 
                     IsUp = m_InputValue.y > 0;
@@ -85,45 +84,6 @@ namespace Project.InputHandling
                     IsLeft = m_InputValue.x < 0;
 
                     SelectIsPressed = CurrentInputActions.Board.Select.IsPressed();
-
-                    //TODO uncomment this lines
-                    //if (m_gamepad == null)
-                    //    return;
-
-                    //if (m_gamepad.leftStick.up.wasPressedThisFrame)
-                    //{
-                    //    IsUp = true;
-                    //    IsDown = false;
-                    //    IsLeft = false;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.down.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = true;
-                    //    IsLeft = false;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.left.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = false;
-                    //    IsLeft = true;
-                    //    IsRight = false;
-                    //}
-                    //if (m_gamepad.leftStick.right.wasPressedThisFrame)
-                    //{
-                    //    IsUp = false;
-                    //    IsDown = false;
-                    //    IsLeft = false;
-                    //    IsRight = true;
-                    //}
-
-
-                    //if (m_gamepad.aButton.isPressed)
-                    //    SelectIsPressed = true;
-                    //else
-                    //    SelectIsPressed = false;
                 }
 
                 yield return null;
