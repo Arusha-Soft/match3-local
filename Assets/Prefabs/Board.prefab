@@ -4437,6 +4437,7 @@ MonoBehaviour:
   - {fileID: 56703284612371256}
   - {fileID: 3523665349837632882}
   <Score>k__BackingField: 0
+  cahnge: 0
 --- !u!114 &8160435421108010060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11997,7 +11998,7 @@ MonoBehaviour:
   targetGO: {fileID: 0}
   tweenTargetIsTargetGO: 1
   delay: 0
-  duration: 1
+  duration: 0.1
   easeType: 6
   easeCurve:
     serializedVersion: 2

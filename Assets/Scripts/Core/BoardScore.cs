@@ -28,7 +28,7 @@ namespace Project.Core
             Score = score;
             UpdatePointsVisual();
 
-            if(Score >= m_MaxScore)
+            if (Score >= m_MaxScore)
             {
                 OnReachMaxScore?.Invoke();
             }
@@ -37,67 +37,73 @@ namespace Project.Core
         public void ChangeScoreWithEffect(int amount, Action onFinshAnimation)
         {
             int oldScore = Score;
-            int newScore = Mathf.Clamp(Score + amount, 0, m_Points.Length);
+            int newScore = Mathf.Clamp(Score + amount, 0, m_MaxScore);
 
-            if (amount < 0) // Decreasing score
+            if (amount < 0)
             {
-                for (int i = Score + amount; i < Score; i++)
+                if (newScore == 0)
                 {
-                    Debug.Log(i);
-                    if (i < 0)
-                    {
-                        continue;
-                    }
+                    SetScore(0);
+                    onFinshAnimation?.Invoke();
+                    return;
+                }
 
+                for (int i = Score - 1; i >= newScore; i--)
+                {
+                    if (i < 0 || i >= m_NegativePoints.Length)
+                        continue;
+
+                    int index = i;
                     m_PlayingCountAnimations++;
 
-                    m_Points[i].SetActive(false);
-                    m_NegativePoints[i].gameObject.SetActive(true);
-                    m_NegativePoints[i].tween.onComplete = () =>
+                    m_Points[index].SetActive(false);
+                    m_NegativePoints[index].gameObject.SetActive(true);
+
+                    m_NegativePoints[index].tween.onComplete = () =>
                     {
                         m_PlayingCountAnimations--;
-
-                        if (m_PlayingCountAnimations <= 0)
+                        if (m_PlayingCountAnimations == 0)
                         {
                             SetScore(newScore);
-                            m_PlayingCountAnimations = 0;
                             onFinshAnimation?.Invoke();
                         }
                     };
 
-                    m_NegativePoints[i].tween.Restart();
+                    m_NegativePoints[index].tween.Restart();
                 }
             }
-            else if (amount > 0) // Increasing score
+            else if (amount > 0)
             {
-                int startIndex = Score;
-
-                for (int i = startIndex; i < (amount + startIndex); i++)
+                if (Score >= m_MaxScore)
                 {
-                    if (i >= m_PlusPoints.Length)
-                    {
-                        break;
-                    }
+                    onFinshAnimation?.Invoke();
+                    return;
+                }
 
+                int startIndex = Score;
+                int endIndex = Mathf.Min(startIndex + amount, m_MaxScore);
+
+                for (int i = startIndex; i < endIndex; i++)
+                {
+                    int index = i;
                     m_PlayingCountAnimations++;
 
-                    m_PlusPoints[i].gameObject.SetActive(true);
-                    m_PlusPoints[i].tween.onComplete = () =>
+                    m_PlusPoints[index].gameObject.SetActive(true);
+                    m_PlusPoints[index].tween.onComplete = () =>
                     {
                         m_PlayingCountAnimations--;
-
-                        if (m_PlayingCountAnimations <= 0)
+                        if (m_PlayingCountAnimations == 0)
                         {
                             SetScore(newScore);
-                            m_PlayingCountAnimations = 0;
                             onFinshAnimation?.Invoke();
                         }
                     };
 
-                    m_PlusPoints[i].tween.Restart();
+                    m_PlusPoints[index].tween.Restart();
                 }
             }
         }
+
 
         private void UpdatePointsVisual()
         {
