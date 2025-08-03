@@ -1,11 +1,15 @@
 using Project.Core;
 using Project.Factions;
 using Project.Powerups;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
+using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Project.InputHandling
 {
@@ -23,12 +27,18 @@ namespace Project.InputHandling
         [SerializeField] private PlayerProperty[] m_PlayerProperties;
         [SerializeField] private List<SpawnPoints> m_BoardSpawnPoints;
         [SerializeField] private GameMode m_GameMode = GameMode.FreeForAll;
+        [SerializeField] private float m_ReloadDelay = 3f;
+        [SerializeField] private TextMeshPro m_StatusText;
 
         private BoardInputAction m_InputAction;
 
         private Dictionary<InputDevice, (BoardInputAction, InputUser, PlayerPointer, BoardIdentity)> m_Players = new Dictionary<InputDevice, (BoardInputAction, InputUser, PlayerPointer, BoardIdentity)>();
         private int m_PlayersCount = 0;
         private List<BoardIdentity> m_Boards = new List<BoardIdentity>();
+        private List<BoardIdentity> m_WinnerBoards = new List<BoardIdentity>();
+        private List<BoardIdentity> m_LoserBoards = new List<BoardIdentity>();
+
+        private BoardsController Controller => BoardsController.Instance;
 
         private void Start()
         {
@@ -67,8 +77,6 @@ namespace Project.InputHandling
             playerPointer.Init(m_PlayerProperties[m_PlayersCount], inputActions);
             playerPointer.OnSelectBoard += OnSelectBoard;
             playerPointer.OnDeselectBoard += OnDeselectBoard;
-
-            //board.Initialize(inputActions);
 
             m_Boards.Add(board);
             m_Players.Add(inputDevice, (inputActions, inputUser, playerPointer, null));
@@ -154,6 +162,8 @@ namespace Project.InputHandling
                     (BoardInputAction, InputUser, PlayerPointer, BoardIdentity) player = m_Players[device];
 
                     player.Item4.Initialize(player.Item1);
+                    player.Item4.OnWin += OnWinBoardIdentity;
+                    player.Item4.OnLose += OnLoseBoardIdentity;
                     Destroy(player.Item3.gameObject);
                 }
 
@@ -206,6 +216,92 @@ namespace Project.InputHandling
                 m_Boards[i].SetTeam(isTeamMode ? m_Boards[i].Team : null);
                 m_Boards[i].SetIsTeamMode(isTeamMode);
             }
+        }
+
+        private void OnLoseBoardIdentity(BoardIdentity boardIdentity)
+        {
+            boardIdentity.DoTimerOver();
+            m_LoserBoards.Add(boardIdentity);
+
+            if (m_LoserBoards.Count >= Controller.ActiveBoards.Count)
+            {
+                HandleAllLose();
+            }
+        }
+
+        private void OnWinBoardIdentity(BoardIdentity boardIdentity)
+        {
+            bool isTeamMode = m_GameMode == GameMode.TeamMode;
+            m_WinnerBoards.Add(boardIdentity);
+
+            if (isTeamMode)
+            {
+                foreach (TeamProperty team in Controller.Teams)
+                {
+                    List<BoardIdentity> boardTeams = Controller.BoardTeams[team];
+
+                    bool allExist = m_WinnerBoards.All(winner => boardTeams.Contains(winner));
+                    if (allExist)
+                    {
+                        DoGameDoneTeamMode(team);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                DoGameDoneFreeForAllMode(boardIdentity);
+            }
+        }
+
+        private void DoGameDoneFreeForAllMode(BoardIdentity winner)
+        {
+            winner.DoWin();
+
+            for (int i = 0; i < Controller.ActiveBoards.Count; i++)
+            {
+                if (Controller.ActiveBoards[i] != winner)
+                {
+                    Controller.ActiveBoards[i].DoLose();
+                }
+            }
+
+            Debug.Log($"Winner Player: {winner.Player.PlayerName}");
+            m_StatusText.text = $"Winner Player: {winner.Player.PlayerName}";
+            DoGameFinished();
+        }
+
+        private void DoGameDoneTeamMode(TeamProperty winnerTeam)
+        {
+            List<BoardIdentity> boardTeams = Controller.BoardTeams[winnerTeam];
+
+            for (int i = 0; i < boardTeams.Count; i++)
+            {
+                boardTeams[i].DoWin();
+            }
+
+            Debug.Log($"Winner Team:{winnerTeam.TeamName}");
+            m_StatusText.text = $"Winner Team:{winnerTeam.TeamName}";
+            DoGameFinished();
+        }
+
+        private void HandleAllLose()
+        {
+            Debug.Log("All Players Lose");
+            m_StatusText.text = "All Players Lose";
+            DoGameFinished();
+        }
+
+        private void DoGameFinished()
+        {
+            Debug.Log("Game Finished");
+            StartCoroutine(Reload());
+        }
+
+        private IEnumerator Reload()
+        {
+            yield return new WaitForSeconds(m_ReloadDelay);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

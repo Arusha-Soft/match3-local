@@ -12,6 +12,8 @@ namespace Project.Core
         [SerializeField] private DOTweenAnimation m_BlinkAnimation;
         [SerializeField] private DOTweenAnimation m_ScaleDownAnimation;
         [SerializeField] private DOTweenAnimation m_FadeOutAnimation;
+        [SerializeField] private ParticleSystem m_DestroyEffect;
+        [SerializeField] private float m_DestroyDelay = 0.2f;
 
         public BoardIdentity Owner { private set; get; }
         public CookieProperties Properties { private set; get; }
@@ -69,6 +71,13 @@ namespace Project.Core
         {
             transform.localScale = m_Scale;
             m_SpriteRenderer.color = m_Color;
+        }
+
+        public void DestroyIt()
+        {
+            m_SpriteRenderer.enabled = false;
+            m_DestroyEffect.Play();
+            Destroy(gameObject, m_DestroyDelay);
         }
     }
 }

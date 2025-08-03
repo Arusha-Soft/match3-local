@@ -1,10 +1,9 @@
-using NUnit.Framework;
 using Project.Factions;
 using Project.InputHandling;
 using Project.Powerups;
 using System;
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,11 +28,12 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_FuseIcon;
 
         [SerializeField] private BoardTeamButton m_TeamButton;
-        [SerializeField] private TextMeshPro m_Text;
+        [SerializeField] private BoardText m_Text;
 
         [Header("Settings")]
         [SerializeField] private Color m_ColdDownAttackColor;
         [SerializeField] private int m_ColdDownTimerDuration = 3;
+        [SerializeField] private float m_DestroyDelayInRows = 0.1f;
 
         [field: SerializeField] public PlayerProperty Player { private set; get; }
         [field: SerializeField] public TeamProperty Team { private set; get; }
@@ -138,6 +138,63 @@ namespace Project.Core
             m_TeamButton.gameObject.SetActive(isTeamMode);
         }
 
+        public void DoWin()
+        {
+            StopBoard();
+            m_Text.gameObject.SetActive(true);
+            m_Text.SetText("WIN!!");
+            m_Text.PlayAnimation();
+        }
+
+        public void DoLose()
+        {
+            StopBoard();
+            m_Text.gameObject.SetActive(true);
+            m_Text.SetText("LOSE");
+            m_Text.PlayAnimation();
+        }
+
+        [ContextMenu("A")]
+        public void DoTimerOver()
+        {
+            StopBoard();
+
+            StartCoroutine(TimerOverAction());
+        }
+
+        private IEnumerator TimerOverAction()
+        {
+            WaitForSeconds delay = new WaitForSeconds(m_DestroyDelayInRows);
+
+            float rowCount = m_BoardData.OriginalBoardSize.y;
+            IReadOnlyList<Block> blocks;
+            IReadOnlyList<Cookie> cookies;
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                blocks = m_BoardData.GetBlokcsAtRow(i, true);
+                if (blocks.Count <= 0)
+                {
+                    continue;
+                }
+
+                cookies = m_BoardData.GetRowCookiesAtId(blocks[0].Id);
+
+                for (int j = 0; j < cookies.Count; j++)
+                {
+                    cookies[j].DestroyIt();
+                }
+
+                yield return delay;
+            }
+
+            yield return delay;
+
+            m_Text.gameObject.SetActive(true);
+            m_Text.PlayAnimation();
+            m_Text.SetText("Time Over");
+        }
+
         private void UpdateBoardTheme()
         {
             if (Team == null)
@@ -164,12 +221,12 @@ namespace Project.Core
 
             while (timer > 0)
             {
-                m_Text.text = $"{timer}";
+                m_Text.SetText($"{timer}");
                 yield return delay;
                 timer--;
             }
 
-            m_Text.text = "GO!";
+            m_Text.SetText("GO!");
             delay = new WaitForSeconds(1f / 2f);
             yield return delay;
             m_Text.gameObject.SetActive(false);
@@ -215,23 +272,6 @@ namespace Project.Core
         {
             Debug.Log($"{name} Is Lose");
             OnLose?.Invoke(this);
-        }
-
-        private void DoWin()
-        {
-            StopBoard();
-            m_Text.text = "WIN!!";
-        }
-
-        private void DoLose()
-        {
-            StopBoard();
-            m_Text.text = "LOSE";
-        }
-
-        private void DoTimerOver()
-        {
-
         }
 
         private void StopBoard()
