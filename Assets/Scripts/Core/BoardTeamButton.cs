@@ -8,6 +8,7 @@ namespace Project.Core
 
     public class BoardTeamButton : Button2D
     {
+        [SerializeField] private BoardIdentity m_Owner;
         [SerializeField] private SpriteRenderer m_TeamButton;
         [SerializeField] private TextMeshPro m_TeamName;
         [SerializeField] private TeamProperty[] m_Teams;
@@ -19,8 +20,7 @@ namespace Project.Core
         {
             m_SelectedTeam = m_Teams[0];
 
-            m_TeamButton.color = m_SelectedTeam.Color;
-            m_TeamName.text = m_SelectedTeam.TeamName;
+            UpdateTeam(m_SelectedTeam);
 
             m_Index = 1;
         }
@@ -29,8 +29,7 @@ namespace Project.Core
         {
             m_SelectedTeam = m_Teams[m_Index];
 
-            m_TeamButton.color = m_SelectedTeam.Color;
-            m_TeamName.text = m_SelectedTeam.TeamName;
+            UpdateTeam(m_SelectedTeam);
 
             m_Index++;
 
@@ -38,6 +37,14 @@ namespace Project.Core
             {
                 m_Index = 0;
             }
+        }
+
+        private void UpdateTeam(TeamProperty teamProperty)
+        {
+            m_TeamButton.color = teamProperty.Color;
+            m_TeamName.text = teamProperty.TeamName;
+
+            m_Owner.SetTeam(teamProperty);
         }
     }
 }

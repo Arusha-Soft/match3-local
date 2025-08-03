@@ -2766,6 +2766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3e5a99fbdb5da74681625107124505e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Owner: {fileID: 5474050562028658803}
   m_TeamButton: {fileID: 2792389028118501428}
   m_TeamName: {fileID: 4014101717624978830}
   m_Teams:
@@ -9837,6 +9838,7 @@ MonoBehaviour:
   m_PowerupIcon: {fileID: 8054171191464541311}
   m_BlankBoard: {fileID: 7682611617394446878}
   m_FuseIcon: {fileID: 3097375665029568242}
+  m_TeamButton: {fileID: 1715668566103187731}
   m_Text: {fileID: 4161720747774636497}
   m_ColdDownAttackColor: {r: 0.047058824, g: 0.047058824, b: 0.047058824, a: 1}
   m_ColdDownTimerDuration: 3

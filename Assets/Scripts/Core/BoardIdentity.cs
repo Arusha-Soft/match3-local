@@ -28,6 +28,7 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BlankBoard;
         [SerializeField] private SpriteRenderer m_FuseIcon;
 
+        [SerializeField] private GameObject m_TeamButton;
         [SerializeField] private TextMeshPro m_Text;
 
         [Header("Settings")]
@@ -40,6 +41,7 @@ namespace Project.Core
         [field: SerializeField] public BoardIdentity AttackTarget { private set; get; }
         public bool IsUnderAttack { private set; get; } = false;
         public bool IsAvailableUsePowerup { private set; get; } = true;
+        public bool IsTeamMode { private set; get; } = false;
 
         public event Action<BoardIdentity> OnWin;
         public event Action<BoardIdentity> OnLose;
@@ -105,7 +107,7 @@ namespace Project.Core
         {
             AttackTarget = target;
 
-            m_SelectSprite.sprite = target.IsTeamMode() ? target.Team.AttackTheme : target.Player.AttackTheme;
+            m_SelectSprite.sprite = target.IsTeamMode ? target.Team.AttackTheme : target.Player.AttackTheme;
         }
 
         public void SetUnderAttack(bool isUnderAttack)
@@ -121,8 +123,11 @@ namespace Project.Core
             m_PowerupIcon.gameObject.SetActive(isAvailableUsePowerup);
         }
 
-        public bool IsTeamMode() =>
-            Team != null;
+        public void SetIsTeamMode(bool isTeamMode)
+        {
+            IsTeamMode = isTeamMode;
+            m_TeamButton.SetActive(isTeamMode);
+        }
 
         private void UpdateBoardTheme()
         {

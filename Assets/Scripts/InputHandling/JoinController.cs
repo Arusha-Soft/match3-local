@@ -58,6 +58,7 @@ namespace Project.InputHandling
             board.name = $"Board_{m_PlayersCount}";
             board.transform.SetParent(GetEmptyPoint());
             board.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            board.SetIsTeamMode(m_GameMode == GameMode.TeamMode);
             board.transform.localScale = Vector3.one;
 
             PlayerPointer playerPointer = Instantiate(m_PlayerPointerPrefab);
@@ -183,7 +184,7 @@ namespace Project.InputHandling
 
         private void OnClickModeButton(Button2D button)
         {
-            GameMode gameMode = m_GameMode == GameMode.FreeForAll ? GameMode.TeamMode : GameMode.TeamMode;
+            GameMode gameMode = m_GameMode == GameMode.FreeForAll ? GameMode.TeamMode : GameMode.FreeForAll;
             ChangeGameMode(gameMode);
         }
 
@@ -194,7 +195,15 @@ namespace Project.InputHandling
                 return;
             }
 
+            m_ModeText.text = m_GameMode == GameMode.FreeForAll ? "Free For All" : "Teams";
+
             m_GameMode = gameMode;
+            bool isTeamMode = m_GameMode == GameMode.TeamMode;
+
+            for (int i = 0; i < m_Boards.Count; i++)
+            {
+                m_Boards[i].SetIsTeamMode(isTeamMode);
+            }
         }
     }
 

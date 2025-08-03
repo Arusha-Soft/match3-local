@@ -63,6 +63,6 @@ namespace Project.Factions
             }
         }
 
-        public bool IsTeamMode() => m_ActiveBoards[0].IsTeamMode();
+        public bool IsTeamMode() => m_ActiveBoards[0].IsTeamMode;
     }
 }
