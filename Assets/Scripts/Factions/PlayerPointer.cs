@@ -2,6 +2,7 @@ using Project.Core;
 using Project.InputHandling;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,7 @@ namespace Project.Factions
     {
         [SerializeField] private SpriteRenderer m_Number;
         [SerializeField] private SpriteRenderer m_Arrow;
+        [SerializeField] private Transform m_RayPoint;
         [SerializeField] private float m_MoveSpeed;
         [SerializeField] private Vector2 m_MinMoveLimit = new Vector2(-10, -10);
         [SerializeField] private Vector2 m_MaxMoveLimit = new Vector2(10, 10);
@@ -35,11 +37,13 @@ namespace Project.Factions
 
             EnableMoving();
 
-            m_InputActions.Game.Select.performed += OnSelectClicked;
+            m_InputActions.Game.Click.performed += OnClick;
             m_InputActions.Game.Deselect.performed += OnDeselectClicked;
+
+            m_InputActions.Game.Click.Enable();
         }
 
-        private void EnableMoving()
+        public void EnableMoving()
         {
             if (m_Moving == null)
             {
@@ -51,7 +55,7 @@ namespace Project.Factions
             }
         }
 
-        private void DisableMoving()
+        public void DisableMoving()
         {
             if (m_Moving != null)
             {
@@ -79,7 +83,7 @@ namespace Project.Factions
             }
         }
 
-        private void OnSelectClicked(InputAction.CallbackContext context)
+        private void OnSelectClicked()
         {
             if (m_CurrentBoard != null)
             {
@@ -94,23 +98,58 @@ namespace Project.Factions
             EnableMoving();
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnClick(InputAction.CallbackContext obj)
         {
-            if (collision.TryGetComponent<BlankBoard>(out BlankBoard blankBoard))
+            List<Collider2D> results = new List<Collider2D>();
+            ContactFilter2D contactFilter = new ContactFilter2D()
             {
-                m_CurrentBoard = blankBoard.Owner;
-            }
-        }
+                useTriggers = true,
+            };
 
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (collision.TryGetComponent<BlankBoard>(out BlankBoard blankBoard))
+            Physics2D.OverlapPoint(m_RayPoint.position, contactFilter, results);
+
+            for (int i = results.Count - 1; i >= 0; i--)
             {
-                if (blankBoard.Owner == m_CurrentBoard)
+                if (results[i] == null)
                 {
-                    m_CurrentBoard = null;
+                    continue;
+                }
+
+                if (results[i].gameObject == this.gameObject)
+                {
+                    results.Remove(results[i]);
                 }
             }
+
+            float minDistance = float.MaxValue;
+            Collider2D collider = results.Count > 0 ? results[0] : null;
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                float distance = Vector3.Distance(m_RayPoint.transform.position, results[i].transform.position);
+
+                if (distance < minDistance)
+                {
+                    collider = results[i];
+                    minDistance = distance;
+                }
+            }
+
+            if (collider != null)
+            {
+                if (collider.TryGetComponent<I2DClickable>(out I2DClickable component))
+                {
+                    component.DoClick(this);
+
+                    if (component is BlankBoard blank)
+                    {
+                        m_CurrentBoard = blank.Owner;
+                        OnSelectClicked();
+                    }
+                }
+            }
+
+            results.Clear();
         }
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TeamProperty_03
   m_EditorClassIdentifier: 
   <Number>k__BackingField: 3
-  <TeamName>k__BackingField: Team 3
+  <TeamName>k__BackingField: Green
   <Color>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
   <BoardTheme>k__BackingField: {fileID: 21300000, guid: 89a6007f3b302f2488f33d87dfc24502, type: 3}
   <AttackTheme>k__BackingField: {fileID: 21300000, guid: 2380050313ff60441802f2244427aa83, type: 3}

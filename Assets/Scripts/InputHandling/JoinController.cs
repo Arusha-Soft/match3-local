@@ -2,6 +2,7 @@ using Project.Core;
 using Project.Factions;
 using Project.Powerups;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
@@ -13,12 +14,15 @@ namespace Project.InputHandling
         [Header("References")]
         [SerializeField] private BoardsController m_BoardsController;
         [SerializeField] private PowerupDistributionHandler m_PowerupDistributionHandler;
+        [SerializeField] private Button2D m_ModeButton;
+        [SerializeField] private TextMeshPro m_ModeText;
 
         [Header("Settings")]
         [SerializeField] private BoardIdentity m_BoardPrefab;
         [SerializeField] PlayerPointer m_PlayerPointerPrefab;
         [SerializeField] private PlayerProperty[] m_PlayerProperties;
         [SerializeField] private List<SpawnPoints> m_BoardSpawnPoints;
+        [SerializeField] private GameMode m_GameMode = GameMode.FreeForAll;
 
         private BoardInputAction m_InputAction;
 
@@ -32,6 +36,7 @@ namespace Project.InputHandling
             m_InputAction.Game.Join.Enable();
 
             m_InputAction.Game.Join.performed += OnJoinClicked;
+            m_ModeButton.OnClick += OnClickModeButton;
         }
 
         private void OnJoinClicked(InputAction.CallbackContext input)
@@ -156,17 +161,40 @@ namespace Project.InputHandling
 
         private bool AllBoardsAreSelected()
         {
+            return BoardsSelectedCount() >= m_PlayersCount;
+        }
+
+        private int BoardsSelectedCount()
+        {
+            int result = 0;
+
             foreach (InputDevice device in m_Players.Keys)
             {
                 (BoardInputAction, InputUser, PlayerPointer, BoardIdentity) player = m_Players[device];
 
-                if (player.Item4 == null || player.Item4.Player == null)
+                if (player.Item4 != null && player.Item4.Player != null)
                 {
-                    return false;
+                    result++;
                 }
             }
 
-            return true;
+            return result;
+        }
+
+        private void OnClickModeButton(Button2D button)
+        {
+            GameMode gameMode = m_GameMode == GameMode.FreeForAll ? GameMode.TeamMode : GameMode.TeamMode;
+            ChangeGameMode(gameMode);
+        }
+
+        private void ChangeGameMode(GameMode gameMode)
+        {
+            if(BoardsSelectedCount() > 0) // ignore changing game mode when one or more player allready select a baord
+            {
+                return;
+            }
+
+            m_GameMode = gameMode;
         }
     }
 
@@ -174,5 +202,11 @@ namespace Project.InputHandling
     public struct SpawnPoints
     {
         public List<Transform> Points;
+    }
+
+    public enum GameMode
+    {
+        FreeForAll,
+        TeamMode
     }
 }

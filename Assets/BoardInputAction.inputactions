@@ -248,6 +248,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "e2289a37-f86e-45d1-83e7-4da61d9350d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Select",
                     "type": "Button",
                     "id": "cfa6a1ca-b779-4a97-829d-c027648cc734",
@@ -495,6 +504,39 @@
                     "processors": "",
                     "groups": ";Gamepad_PS5",
                     "action": "Join",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5b4cbb0f-f36a-44fe-96e2-f5886f9afd56",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f5d95ed9-085b-4f15-8d8f-c19b5afca8a7",
+                    "path": "<HID::Microntek              USB Joystick          >/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e580f0fa-ea17-4bdd-9945-385bed1f8d34",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad_PS5",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

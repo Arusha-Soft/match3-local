@@ -336,6 +336,15 @@ namespace Project.InputHandling
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2289a37-f86e-45d1-83e7-4da61d9350d7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Select"",
                     ""type"": ""Button"",
                     ""id"": ""cfa6a1ca-b779-4a97-829d-c027648cc734"",
@@ -588,6 +597,39 @@ namespace Project.InputHandling
                 },
                 {
                     ""name"": """",
+                    ""id"": ""5b4cbb0f-f36a-44fe-96e2-f5886f9afd56"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5d95ed9-085b-4f15-8d8f-c19b5afca8a7"",
+                    ""path"": ""<HID::Microntek              USB Joystick          >/button3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e580f0fa-ea17-4bdd-9945-385bed1f8d34"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad_PS5"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""900efd12-5975-4852-80ee-dbb46d95a274"",
                     ""path"": ""<Keyboard>/b"",
                     ""interactions"": """",
@@ -666,6 +708,7 @@ namespace Project.InputHandling
             m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
             m_Game_Move = m_Game.FindAction("Move", throwIfNotFound: true);
             m_Game_Join = m_Game.FindAction("Join", throwIfNotFound: true);
+            m_Game_Click = m_Game.FindAction("Click", throwIfNotFound: true);
             m_Game_Select = m_Game.FindAction("Select", throwIfNotFound: true);
             m_Game_Deselect = m_Game.FindAction("Deselect", throwIfNotFound: true);
         }
@@ -858,6 +901,7 @@ namespace Project.InputHandling
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
         private readonly InputAction m_Game_Move;
         private readonly InputAction m_Game_Join;
+        private readonly InputAction m_Game_Click;
         private readonly InputAction m_Game_Select;
         private readonly InputAction m_Game_Deselect;
         /// <summary>
@@ -879,6 +923,10 @@ namespace Project.InputHandling
             /// Provides access to the underlying input action "Game/Join".
             /// </summary>
             public InputAction @Join => m_Wrapper.m_Game_Join;
+            /// <summary>
+            /// Provides access to the underlying input action "Game/Click".
+            /// </summary>
+            public InputAction @Click => m_Wrapper.m_Game_Click;
             /// <summary>
             /// Provides access to the underlying input action "Game/Select".
             /// </summary>
@@ -919,6 +967,9 @@ namespace Project.InputHandling
                 @Join.started += instance.OnJoin;
                 @Join.performed += instance.OnJoin;
                 @Join.canceled += instance.OnJoin;
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
@@ -942,6 +993,9 @@ namespace Project.InputHandling
                 @Join.started -= instance.OnJoin;
                 @Join.performed -= instance.OnJoin;
                 @Join.canceled -= instance.OnJoin;
+                @Click.started -= instance.OnClick;
+                @Click.performed -= instance.OnClick;
+                @Click.canceled -= instance.OnClick;
                 @Select.started -= instance.OnSelect;
                 @Select.performed -= instance.OnSelect;
                 @Select.canceled -= instance.OnSelect;
@@ -1063,6 +1117,13 @@ namespace Project.InputHandling
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJoin(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Click" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnClick(InputAction.CallbackContext context);
             /// <summary>
             /// Method invoked when associated input action "Select" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
