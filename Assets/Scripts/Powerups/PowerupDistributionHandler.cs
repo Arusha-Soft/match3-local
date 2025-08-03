@@ -40,47 +40,61 @@ namespace Project.Powerups
 
                 if (isTeamMode)
                 {
-                    List<TeamProperty> freeForAttackTeams = Controller.Teams.ToList();
-
-                    for (int i = freeForAttackTeams.Count - 1; i >= 0; i--)
+                    if (Controller.Teams.Count > 1) //when one team start game don't search for target attack
                     {
-                        TeamProperty team = freeForAttackTeams[i];
-                        TeamProperty targetAttackTeam = team;
+                        List<TeamProperty> freeForAttackTeams = Controller.Teams.ToList();
 
-                        while (team == targetAttackTeam)
+                        for (int i = freeForAttackTeams.Count - 1; i >= 0; i--)
                         {
-                            targetAttackTeam = Controller.Teams[Random.Range(0, Controller.Teams.Count)];
-                        }
+                            TeamProperty team = freeForAttackTeams[i];
+                            TeamProperty targetAttackTeam = team;
 
-                        freeForAttackTeams.Remove(team);
+                            while (team == targetAttackTeam)
+                            {
+                                targetAttackTeam = Controller.Teams[Random.Range(0, Controller.Teams.Count)];
+                            }
 
-                        foreach (var item in Controller.BoardTeams[team])
-                        {
-                            List<BoardIdentity> targets = Controller.BoardTeams[targetAttackTeam];
-                            BoardIdentity randomTarget = targets[Random.Range(0, targets.Count)];
-                            item.SetAttackTarget(randomTarget);
+                            freeForAttackTeams.Remove(team);
+
+                            foreach (var item in Controller.BoardTeams[team])
+                            {
+                                List<BoardIdentity> targets = Controller.BoardTeams[targetAttackTeam];
+                                BoardIdentity randomTarget = targets[Random.Range(0, targets.Count)];
+                                item.SetAttackTarget(randomTarget);
+                            }
                         }
+                    }
+                    else if (Controller.Teams.Count == 1)
+                    {
+                        Controller.BoardTeams[Controller.Teams[0]].ForEach(F => F.SetAttackTarget(null));
                     }
                 }
                 else
                 {
-                    List<PlayerProperty> allPlayers = Controller.Players.ToList();
-                    List<PlayerProperty> shuffledTargets = allPlayers.OrderBy(p => Random.Range(0, 10000)).ToList();
-
-                    for (int i = 0; i < allPlayers.Count; i++)
+                    if (Controller.Players.Count > 1)//when one player start game don't search for target attack
                     {
-                        PlayerProperty player = allPlayers[i];
+                        List<PlayerProperty> allPlayers = Controller.Players.ToList();
+                        List<PlayerProperty> shuffledTargets = allPlayers.OrderBy(p => Random.Range(0, 10000)).ToList();
 
-                        if (shuffledTargets[i] == player)
+                        for (int i = 0; i < allPlayers.Count; i++)
                         {
-                            int swapIndex = (i + 1) % allPlayers.Count;
-                            PlayerProperty temp = shuffledTargets[i];
-                            shuffledTargets[i] = shuffledTargets[swapIndex];
-                            shuffledTargets[swapIndex] = temp;
-                        }
+                            PlayerProperty player = allPlayers[i];
 
-                        PlayerProperty target = shuffledTargets[i];
-                        Controller.BoardPlayers[player].SetAttackTarget(Controller.BoardPlayers[target]);
+                            if (shuffledTargets[i] == player)
+                            {
+                                int swapIndex = (i + 1) % allPlayers.Count;
+                                PlayerProperty temp = shuffledTargets[i];
+                                shuffledTargets[i] = shuffledTargets[swapIndex];
+                                shuffledTargets[swapIndex] = temp;
+                            }
+
+                            PlayerProperty target = shuffledTargets[i];
+                            Controller.BoardPlayers[player].SetAttackTarget(Controller.BoardPlayers[target]);
+                        }
+                    }
+                    else if (Controller.Players.Count == 1)
+                    {
+                        Controller.BoardPlayers[Controller.Players[0]].SetAttackTarget(null);
                     }
                 }
             }
@@ -97,6 +111,34 @@ namespace Project.Powerups
             }
 
             void UpdatePowerups()
+            {
+                bool isTeamMode = Controller.IsTeamMode();
+
+                if (isTeamMode)
+                {
+                    if (Controller.Teams.Count > 1) //when one team start game don't search for target attack
+                    {
+                        SetPowerup();
+                    }
+                    else
+                    {
+                        Controller.BoardTeams[Controller.Teams[0]].ForEach(F => F.SetPowerup(null));
+                    }
+                }
+                else
+                {
+                    if (Controller.Players.Count > 1)
+                    {
+                        SetPowerup();
+                    }
+                    else
+                    {
+                        Controller.BoardPlayers[Controller.Players[0]].SetPowerup(null);
+                    }
+                }
+            }
+
+            void SetPowerup()
             {
                 List<PowerupProperty> temp = new List<PowerupProperty>();
                 temp.AddRange(m_Powerups);

@@ -9838,7 +9838,7 @@ MonoBehaviour:
   m_PowerupIcon: {fileID: 8054171191464541311}
   m_BlankBoard: {fileID: 7682611617394446878}
   m_FuseIcon: {fileID: 3097375665029568242}
-  m_TeamButton: {fileID: 1715668566103187731}
+  m_TeamButton: {fileID: 1315603976044430393}
   m_Text: {fileID: 4161720747774636497}
   m_ColdDownAttackColor: {r: 0.047058824, g: 0.047058824, b: 0.047058824, a: 1}
   m_ColdDownTimerDuration: 3

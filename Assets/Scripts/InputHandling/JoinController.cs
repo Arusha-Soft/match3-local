@@ -37,6 +37,8 @@ namespace Project.InputHandling
 
             m_InputAction.Game.Join.performed += OnJoinClicked;
             m_ModeButton.OnClick += OnClickModeButton;
+
+            ChangeGameMode(GameMode.FreeForAll);
         }
 
         private void OnJoinClicked(InputAction.CallbackContext input)
@@ -190,18 +192,18 @@ namespace Project.InputHandling
 
         private void ChangeGameMode(GameMode gameMode)
         {
-            if(BoardsSelectedCount() > 0) // ignore changing game mode when one or more player allready select a baord
+            if (BoardsSelectedCount() > 0) // ignore changing game mode when one or more player allready select a baord
             {
                 return;
             }
 
-            m_ModeText.text = m_GameMode == GameMode.FreeForAll ? "Free For All" : "Teams";
-
             m_GameMode = gameMode;
+            m_ModeText.text = m_GameMode == GameMode.FreeForAll ? "Free For All" : "Teams";
             bool isTeamMode = m_GameMode == GameMode.TeamMode;
 
             for (int i = 0; i < m_Boards.Count; i++)
             {
+                m_Boards[i].SetTeam(isTeamMode ? m_Boards[i].Team : null);
                 m_Boards[i].SetIsTeamMode(isTeamMode);
             }
         }

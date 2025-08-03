@@ -27,6 +27,8 @@ namespace Project.Factions
 
         private BoardIdentity m_CurrentBoard;
 
+        private bool m_IsInitialized = false;
+
         public void Init(PlayerProperty playerProperty, BoardInputAction inputActions)
         {
             PlayerProperty = playerProperty;
@@ -41,6 +43,25 @@ namespace Project.Factions
             m_InputActions.Game.Deselect.performed += OnDeselectClicked;
 
             m_InputActions.Game.Click.Enable();
+
+            m_IsInitialized = true;
+        }
+
+        private void OnEnable()
+        {
+            if (!m_IsInitialized)
+            {
+                return;
+            }
+
+            m_InputActions.Game.Click.Enable();
+            m_InputActions.Game.Click.performed += OnClick;
+        }
+
+        private void OnDisable()
+        {
+            m_InputActions.Game.Click.Disable();
+            m_InputActions.Game.Click.performed -= OnClick;
         }
 
         public void EnableMoving()

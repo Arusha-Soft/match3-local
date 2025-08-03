@@ -28,7 +28,7 @@ namespace Project.Core
         [SerializeField] private SpriteRenderer m_BlankBoard;
         [SerializeField] private SpriteRenderer m_FuseIcon;
 
-        [SerializeField] private GameObject m_TeamButton;
+        [SerializeField] private BoardTeamButton m_TeamButton;
         [SerializeField] private TextMeshPro m_Text;
 
         [Header("Settings")]
@@ -100,14 +100,17 @@ namespace Project.Core
         public void SetPowerup(PowerupProperty powerup)
         {
             Powerup = powerup;
-            m_PowerupIcon.sprite = powerup.Icon;
+
+            m_PowerupIcon.gameObject.SetActive(powerup != null);
+            m_PowerupIcon.sprite = powerup == null ? null : powerup.Icon;
         }
 
         public void SetAttackTarget(BoardIdentity target)
         {
             AttackTarget = target;
 
-            m_SelectSprite.sprite = target.IsTeamMode ? target.Team.AttackTheme : target.Player.AttackTheme;
+            m_SelectSprite.sprite = target == null ? (IsTeamMode ? Team.AttackTheme : Player.AttackTheme) :
+                (target.IsTeamMode ? target.Team.AttackTheme : target.Player.AttackTheme);
         }
 
         public void SetUnderAttack(bool isUnderAttack)
@@ -126,7 +129,13 @@ namespace Project.Core
         public void SetIsTeamMode(bool isTeamMode)
         {
             IsTeamMode = isTeamMode;
-            m_TeamButton.SetActive(isTeamMode);
+
+            if (isTeamMode)
+            {
+                m_TeamButton.SetTeam(0);
+            }
+
+            m_TeamButton.gameObject.SetActive(isTeamMode);
         }
 
         private void UpdateBoardTheme()
@@ -135,11 +144,13 @@ namespace Project.Core
             {
                 if (Player != null)
                 {
+                    m_SelectSprite.sprite = Player.AttackTheme;
                     m_BoardSprite.sprite = Player.BoardTheme;
                 }
             }
             else
             {
+                m_SelectSprite.sprite = Team.AttackTheme;
                 m_BoardSprite.sprite = Team.BoardTheme;
             }
         }

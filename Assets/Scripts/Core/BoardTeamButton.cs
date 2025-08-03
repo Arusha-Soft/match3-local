@@ -20,7 +20,7 @@ namespace Project.Core
         {
             m_SelectedTeam = m_Teams[0];
 
-            UpdateTeam(m_SelectedTeam);
+            UpdateTeam(m_SelectedTeam, false);
 
             m_Index = 1;
         }
@@ -29,7 +29,7 @@ namespace Project.Core
         {
             m_SelectedTeam = m_Teams[m_Index];
 
-            UpdateTeam(m_SelectedTeam);
+            UpdateTeam(m_SelectedTeam, true);
 
             m_Index++;
 
@@ -39,12 +39,21 @@ namespace Project.Core
             }
         }
 
-        private void UpdateTeam(TeamProperty teamProperty)
+        public void SetTeam(int index)
+        {
+            m_SelectedTeam = m_Teams[index];
+            UpdateTeam(m_SelectedTeam, true);
+        }
+
+        private void UpdateTeam(TeamProperty teamProperty, bool applyToBoard)
         {
             m_TeamButton.color = teamProperty.Color;
             m_TeamName.text = teamProperty.TeamName;
 
-            m_Owner.SetTeam(teamProperty);
+            if (applyToBoard)
+            {
+                m_Owner.SetTeam(teamProperty);
+            }
         }
     }
 }
