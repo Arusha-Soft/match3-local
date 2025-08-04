@@ -151,11 +151,14 @@ namespace Project.InputHandling
             return selectedList[index];
         }
 
+        private int m_StartedBoardCount = 0;
+
         private void TryStartGame()
         {
             if (AllBoardsAreSelected())
             {
-                Debug.Log("Do Start Game");
+                Debug.Log("Do Try Start Game");
+                m_InputAction.Game.Join.Disable();
 
                 foreach (InputDevice device in m_Players.Keys)
                 {
@@ -164,11 +167,10 @@ namespace Project.InputHandling
                     player.Item4.Initialize(player.Item1);
                     player.Item4.OnWin += OnWinBoardIdentity;
                     player.Item4.OnLose += OnLoseBoardIdentity;
+                    player.Item4.OnStart += OnStartBoard;
                     Destroy(player.Item3.gameObject);
+                    m_StartedBoardCount++;
                 }
-
-                m_BoardsController.Init(m_Boards);
-                m_PowerupDistributionHandler.Init();
             }
         }
 
@@ -215,6 +217,20 @@ namespace Project.InputHandling
             {
                 m_Boards[i].SetTeam(isTeamMode ? m_Boards[i].Team : null);
                 m_Boards[i].SetIsTeamMode(isTeamMode);
+            }
+        }
+
+        private void OnStartBoard(BoardIdentity boardIdentity)
+        {
+            m_StartedBoardCount--;
+
+            if (m_StartedBoardCount <= 0)
+            {
+                Debug.Log("Do Try Start Game");
+
+                m_BoardsController.Init(m_Boards);
+                m_PowerupDistributionHandler.Init();
+                m_StartedBoardCount = 0;
             }
         }
 

@@ -4730,7 +4730,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FuseRenderer: {fileID: 3097375665029568242}
-  m_FuseDuration: 50
+  m_FuseDuration: 20
   m_DefaultValue: 1
 --- !u!1 &2491265527427586029
 GameObject:

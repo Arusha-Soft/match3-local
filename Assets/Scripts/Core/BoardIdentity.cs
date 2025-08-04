@@ -42,7 +42,9 @@ namespace Project.Core
         public bool IsUnderAttack { private set; get; } = false;
         public bool IsAvailableUsePowerup { private set; get; } = true;
         public bool IsTeamMode { private set; get; } = false;
+        public bool IsWorking { private set; get; } = false;
 
+        public event Action<BoardIdentity> OnStart;
         public event Action<BoardIdentity> OnWin;
         public event Action<BoardIdentity> OnLose;
 
@@ -52,11 +54,6 @@ namespace Project.Core
         public SelectionBox SelectionBox => m_SelectionBox;
         public BoardScore BoardScore => m_BoardScore;
         public BoardPowerup BoardPowerup => m_BoardPowerup;
-
-        public void SetInputHandler(int PlayerNo)
-        {
-            m_BoardInput.m_gamepad = Gamepad.all[PlayerNo];
-        }
 
         public void Initialize(BoardInputAction inputActions)
         {
@@ -80,6 +77,10 @@ namespace Project.Core
                 m_FuseIcon.gameObject.SetActive(true);
                 m_PowerupIcon.gameObject.SetActive(true);
                 m_BoardFuse.StartWorking();
+
+                IsWorking = true;
+
+                OnStart?.Invoke(this);
             }));
         }
 
@@ -154,7 +155,6 @@ namespace Project.Core
             m_Text.PlayAnimation();
         }
 
-        [ContextMenu("A")]
         public void DoTimerOver()
         {
             StopBoard();
@@ -286,7 +286,10 @@ namespace Project.Core
             m_CookiesMatcher.OnMatchFind -= OnMatchFind;
             m_CookieGenerator.OnFinishRefilling -= OnFinishRefilling;
 
-            m_PowerupIcon.gameObject.SetActive(false);
+            SetAttackTarget(null);
+            SetPowerup(null);
+
+            IsWorking = false;
         }
     }
 }

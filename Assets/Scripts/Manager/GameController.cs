@@ -35,7 +35,7 @@ public class GameController : MonoBehaviour
             var board = Instantiate(BoardPrefab, CoreGameParent.transform);
             board.transform.SetParent(CoreGameParent.transform,true);
             //board.GetComponent<BoardIdentity>().SetSprite(sortedList[i].ColorNo);
-            board.GetComponent<BoardIdentity>().SetInputHandler(sortedList[i].PlayerNo);
+            //board.GetComponent<BoardIdentity>().SetInputHandler(sortedList[i].PlayerNo);
             //board.GetComponent<BoardIdentity>().Initialize();
             board.transform.position = positionList[i];
         }

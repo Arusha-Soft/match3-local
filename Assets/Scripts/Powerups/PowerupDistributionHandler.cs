@@ -58,8 +58,9 @@ namespace Project.Powerups
 
                             foreach (var item in Controller.BoardTeams[team])
                             {
-                                List<BoardIdentity> targets = Controller.BoardTeams[targetAttackTeam];
-                                BoardIdentity randomTarget = targets[Random.Range(0, targets.Count)];
+                                List<BoardIdentity> targets = Controller.BoardTeams[targetAttackTeam].Where(T => T.IsWorking).ToList();
+
+                                BoardIdentity randomTarget = targets.Count > 0 ? targets[Random.Range(0, targets.Count)] : null;
                                 item.SetAttackTarget(randomTarget);
                             }
                         }
@@ -73,7 +74,7 @@ namespace Project.Powerups
                 {
                     if (Controller.Players.Count > 1)//when one player start game don't search for target attack
                     {
-                        List<PlayerProperty> allPlayers = Controller.Players.ToList();
+                        List<PlayerProperty> allPlayers = Controller.Players.Where(P => Controller.BoardPlayers[P].IsWorking).ToList();
                         List<PlayerProperty> shuffledTargets = allPlayers.OrderBy(p => Random.Range(0, 10000)).ToList();
 
                         for (int i = 0; i < allPlayers.Count; i++)
@@ -142,22 +143,30 @@ namespace Project.Powerups
             {
                 List<PowerupProperty> temp = new List<PowerupProperty>();
                 temp.AddRange(m_Powerups);
+                List<BoardIdentity> activeBoards = Controller.ActiveBoards.Where(B => B.IsWorking).ToList();
 
-                for (int i = 0; i < Controller.ActiveBoards.Count; i++)
+                if (activeBoards.Count > 1)
                 {
-                    if (!Controller.ActiveBoards[i].IsAvailableUsePowerup)
+                    for (int i = 0; i < activeBoards.Count; i++)
                     {
-                        continue;
-                    }
+                        if (!activeBoards[i].IsAvailableUsePowerup)
+                        {
+                            continue;
+                        }
 
-                    if (temp.Count <= 0)
-                    {
-                        temp.AddRange(m_Powerups);
-                    }
+                        if (temp.Count <= 0)
+                        {
+                            temp.AddRange(m_Powerups);
+                        }
 
-                    PowerupProperty powerup = temp[Random.Range(0, temp.Count)];
-                    Controller.ActiveBoards[i].SetPowerup(powerup);
-                    temp.Remove(powerup);
+                        PowerupProperty powerup = temp[Random.Range(0, temp.Count)];
+                        activeBoards[i].SetPowerup(powerup);
+                        temp.Remove(powerup);
+                    }
+                }
+                else if(activeBoards.Count == 1)
+                {
+                    activeBoards[0].SetPowerup(null);
                 }
             }
         }
