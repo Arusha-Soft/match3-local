@@ -136,7 +136,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Gamepad_PS5",
+                    "name": "Gamepad_PS5_Xbox",
                     "id": "6e2634f5-683b-4d59-97cf-c02aabe8e3d9",
                     "path": "2DVector",
                     "interactions": "",
@@ -152,7 +152,7 @@
                     "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -163,7 +163,7 @@
                     "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -174,7 +174,7 @@
                     "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -185,7 +185,7 @@
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -218,7 +218,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -387,7 +387,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Gamepad_PS5",
+                    "name": "Gamepad_PS5_Xbox",
                     "id": "8046735f-aa6f-4352-9a8b-5090c8ffae97",
                     "path": "2DVector(mode=2)",
                     "interactions": "",
@@ -403,7 +403,7 @@
                     "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -414,7 +414,7 @@
                     "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -425,7 +425,7 @@
                     "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -436,7 +436,7 @@
                     "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -469,7 +469,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -502,7 +502,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Join",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -535,7 +535,7 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -568,7 +568,7 @@
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad_PS5",
+                    "groups": ";Gamepad_PS5;XBox",
                     "action": "Deselect",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -605,6 +605,17 @@
             "devices": [
                 {
                     "devicePath": "<DualSenseGamepadHID>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "XBox",
+            "bindingGroup": "XBox",
+            "devices": [
+                {
+                    "devicePath": "<XInputController>",
                     "isOptional": false,
                     "isOR": false
                 }

@@ -224,7 +224,7 @@ namespace Project.InputHandling
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Gamepad_PS5"",
+                    ""name"": ""Gamepad_PS5_Xbox"",
                     ""id"": ""6e2634f5-683b-4d59-97cf-c02aabe8e3d9"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -240,7 +240,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -251,7 +251,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -262,7 +262,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -273,7 +273,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -306,7 +306,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -475,7 +475,7 @@ namespace Project.InputHandling
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""Gamepad_PS5"",
+                    ""name"": ""Gamepad_PS5_Xbox"",
                     ""id"": ""8046735f-aa6f-4352-9a8b-5090c8ffae97"",
                     ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
@@ -491,7 +491,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -502,7 +502,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -513,7 +513,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -524,7 +524,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -557,7 +557,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -590,7 +590,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Join"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -623,7 +623,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Click"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -656,7 +656,7 @@ namespace Project.InputHandling
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad_PS5"",
+                    ""groups"": "";Gamepad_PS5;XBox"",
                     ""action"": ""Deselect"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -693,6 +693,17 @@ namespace Project.InputHandling
             ""devices"": [
                 {
                     ""devicePath"": ""<DualSenseGamepadHID>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""XBox"",
+            ""bindingGroup"": ""XBox"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<XInputController>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -1072,6 +1083,19 @@ namespace Project.InputHandling
             {
                 if (m_Gamepad_PS5SchemeIndex == -1) m_Gamepad_PS5SchemeIndex = asset.FindControlSchemeIndex("Gamepad_PS5");
                 return asset.controlSchemes[m_Gamepad_PS5SchemeIndex];
+            }
+        }
+        private int m_XBoxSchemeIndex = -1;
+        /// <summary>
+        /// Provides access to the input control scheme.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputControlScheme" />
+        public InputControlScheme XBoxScheme
+        {
+            get
+            {
+                if (m_XBoxSchemeIndex == -1) m_XBoxSchemeIndex = asset.FindControlSchemeIndex("XBox");
+                return asset.controlSchemes[m_XBoxSchemeIndex];
             }
         }
         /// <summary>
