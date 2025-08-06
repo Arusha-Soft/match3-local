@@ -53,6 +53,7 @@ namespace Project.Core
         public CookiesController CookiesController => m_CookieGenerator;
         public SelectionBox SelectionBox => m_SelectionBox;
         public BoardScore BoardScore => m_BoardScore;
+        public BoardFuse BoardFuse => m_BoardFuse;
         public BoardPowerup BoardPowerup => m_BoardPowerup;
 
         public void Initialize(BoardInputAction inputActions)

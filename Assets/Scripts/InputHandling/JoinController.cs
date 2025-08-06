@@ -1,6 +1,7 @@
 using Project.Core;
 using Project.Factions;
 using Project.Powerups;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Project.InputHandling
 {
@@ -29,6 +29,8 @@ namespace Project.InputHandling
         [SerializeField] private GameMode m_GameMode = GameMode.FreeForAll;
         [SerializeField] private float m_ReloadDelay = 3f;
         [SerializeField] private TextMeshPro m_StatusText;
+
+        public event Action OnGameStarted;
 
         private BoardInputAction m_InputAction;
 
@@ -226,11 +228,13 @@ namespace Project.InputHandling
 
             if (m_StartedBoardCount <= 0)
             {
-                Debug.Log("Do Try Start Game");
+                Debug.Log("On Game Start");
 
                 m_BoardsController.Init(m_Boards);
                 m_PowerupDistributionHandler.Init();
                 m_StartedBoardCount = 0;
+
+                OnGameStarted?.Invoke();
             }
         }
 

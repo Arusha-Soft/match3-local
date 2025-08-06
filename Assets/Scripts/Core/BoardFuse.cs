@@ -15,6 +15,7 @@ namespace Project.Core
         public event Action OnFuseFinished;
 
         private Coroutine m_Working;
+        private bool m_IsForceStopped = false;
 
         public void StartWorking()
         {
@@ -28,8 +29,24 @@ namespace Project.Core
             m_Working = StartCoroutine(Working());
         }
 
+        public void ForceStopWorking()
+        {
+            if(m_Working != null)
+            {
+                StopCoroutine(m_Working);
+                m_Working = null;
+            }
+
+            m_IsForceStopped = true;
+        }
+
         public void ResetIt()
         {
+            if (m_IsForceStopped)
+            {
+                return;
+            }
+
             StartWorking();
         }
 
