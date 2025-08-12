@@ -83,7 +83,7 @@ namespace Project.Core
 
         public void DisableMoveHandling()
         {
-            if(m_MoveHandling != null)
+            if (m_MoveHandling != null)
             {
                 StopCoroutine(m_MoveHandling);
                 m_MoveHandling = null;
@@ -241,7 +241,11 @@ namespace Project.Core
         {
             for (int i = 0; i < data.MatchedCookies.Count; i++)
             {
-                m_CookiePool.Release(data.MatchedCookies[i]);
+                try
+                {
+                    m_CookiePool.Release(data.MatchedCookies[i]);
+                }
+                catch (Exception e) { }
             }
         }
 

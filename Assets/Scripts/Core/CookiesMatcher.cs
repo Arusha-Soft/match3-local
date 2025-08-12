@@ -32,6 +32,15 @@ namespace Project.Core
             m_BoardData = boardData;
             m_CookiesController.OnFinishMovingCookies += OnFinishMovingCookies;
             m_CookiesController.OnFinishCleanBoard += OnFinishCleanBoard;
+            m_CookiesController.OnFinishRefilling += OnFinishRefilling;
+        }
+
+        private void OnFinishRefilling()
+        {
+            FindAllMatchCookies(false);
+            Debug.Log($"Matched Cookies In Normal: {m_MatchedCookies.Count}");
+            FindAllMatchCookies(true);
+            Debug.Log($"Matched Cookies In Combo: {m_MatchedCookies.Count}");
         }
 
         private void OnFinishMovingCookies()
