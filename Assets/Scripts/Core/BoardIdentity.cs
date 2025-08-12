@@ -120,12 +120,15 @@ namespace Project.Core
             IsUnderAttack = isUnderAttack;
         }
 
-        public void SetIsAvailableToUsePowerup(bool isAvailableUsePowerup)
+        public void SetIsAvailableToUsePowerup(bool isAvailableUsePowerup, bool displayInVisual = true)
         {
             IsAvailableUsePowerup = isAvailableUsePowerup;
 
-            m_SelectSprite.color = isAvailableUsePowerup ? Color.white : m_ColdDownAttackColor;
-            m_PowerupIcon.gameObject.SetActive(isAvailableUsePowerup);
+            if (displayInVisual)
+            {
+                m_SelectSprite.color = isAvailableUsePowerup ? Color.white : m_ColdDownAttackColor;
+                m_PowerupIcon.gameObject.SetActive(isAvailableUsePowerup);
+            }
         }
 
         public void SetIsTeamMode(bool isTeamMode)

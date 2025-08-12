@@ -8,13 +8,14 @@ namespace Project.Powerups
         {
             defender.SelectionBox.DoMoveForce(attacker.SelectionBox.CurrentBlockId);
             defender.BoardInput.RebindInputAction(attacker.BoardInput.CurrentInputActions);
-            defender.CookiesController.DisableMoveHandling();
+            defender.SetPowerup(null);
+            defender.SetIsAvailableToUsePowerup(false, false);
         }
 
         protected override void OnEndPowerup(BoardIdentity attacker, BoardIdentity defender, bool isTeammode)
         {
             defender.BoardInput.ResetInputActtion();
-            defender.CookiesController.EnableMoveHandling();
+            defender.SetIsAvailableToUsePowerup(true);
         }
     }
 }
