@@ -1,3 +1,4 @@
+using Project.InputHandling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,16 @@ namespace Project.Core
         private List<MatchCookiesData> m_DisapparMatchedCookies = new List<MatchCookiesData>();
         private CookiesController m_CookiesController;
         private BoardData m_BoardData;
+        private BoardInputHandler m_BoardInputHandler;
 
         private bool m_CanDoCombo = false;
 
-        public void Init(CookiesController cookiesController, BoardData boardData)
+        public void Init(CookiesController cookiesController, BoardData boardData, BoardInputHandler inputHandler)
         {
             m_CookiesController = cookiesController;
             m_BoardData = boardData;
+            m_BoardInputHandler = inputHandler;
+
             m_CookiesController.OnFinishMovingCookies += OnFinishMovingCookies;
             m_CookiesController.OnFinishCleanBoard += OnFinishCleanBoard;
             m_CookiesController.OnFinishRefilling += OnFinishRefilling;
@@ -45,6 +49,14 @@ namespace Project.Core
 
         private void OnFinishMovingCookies()
         {
+            if (m_BoardInputHandler.IsDown ||
+                m_BoardInputHandler.IsUp ||
+                m_BoardInputHandler.IsLeft ||
+                m_BoardInputHandler.IsRight)
+            {
+                return;
+            }
+
             FindAllMatchCookies(false);
 
             if (m_MatchedCookies.Count > 0)

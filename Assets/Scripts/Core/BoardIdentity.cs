@@ -66,7 +66,7 @@ namespace Project.Core
                 m_BoardInput.Init(inputActions);
                 m_BoardData.Init(this);
                 m_CookieGenerator.Init(m_BoardData, m_BoardInput, m_SelectionBox, this, m_CookiesMatcher);
-                m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData);
+                m_CookiesMatcher.Init(m_CookieGenerator, m_BoardData, m_BoardInput);
                 m_SelectionBox.Init(m_BoardInput, m_BoardData);
                 m_BoardScore.Init();
 
