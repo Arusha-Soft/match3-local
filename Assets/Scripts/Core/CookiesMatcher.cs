@@ -258,6 +258,11 @@ namespace Project.Core
                 }
                 else if (includeCombo && m_MatchActions[j].TryMatch(cookies, out int comboScore, m_ComboMatchCount))
                 {
+                    if (cookies.Count > m_ComboMatchCount)
+                    {
+                        return;
+                    }
+
                     MatchCookiesData matchCookiesData = new MatchCookiesData()
                     {
                         IsHorizontal = isHorizontal,
